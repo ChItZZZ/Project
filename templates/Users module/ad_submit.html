@@ -13,6 +13,8 @@
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+
     <style>
         body, html {
             width: 100%;
@@ -133,24 +135,22 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-6">
-                            <label for="num" style="margin-top: 10px">广告数量</label>
+                        <div class="col-md-6" style="margin-top: 30px">
+                            <label for="num">广告数量</label>
                             <input type="number" class="form-control" id="num" placeholder="" name="adv_count">
                         </div>
+                        <div style="clear: both"></div>
                     </div>
                     <div class="form-group">
-
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label for="inputNode">每条价格</label>
-                            <!--<textarea class="form-control" id="inputNode" rows="3" style="margin-bottom: 30px"
-                                      name="adv_more"></textarea>-->
-                            <input type="number" class="form-control" id="cost" name="cost">
+                        <div class="col-md-6">
+                            <label for="cost">每条价格</label>
+                            <input type="number" class="form-control" id="cost" name="cost" title="建议价格"
+                                   data-container="body" data-toggle="popover" data-placement="right"
+                                   data-content="$123">
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-12">
+                        <div class="col-md-12" style="margin-top: 10px">
                             <label for="allmap">广告播放位置</label>
                             <div id="allmap" style="overflow:hidden;zoom:1;position:relative;margin-left: 40px;">
                                 <div id="map"
@@ -198,6 +198,7 @@
 <script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
 <script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
 <script src="/static/js/bootstrap-filestyle.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
 <script>
     // 百度地图API功能
     var map = new BMap.Map('map');
@@ -262,6 +263,15 @@
         //alert(document.getElementById('location').value);
         document.getElementById('form1').submit()
     }
+
+</script>
+<script>
+    $(document).ready(function () {
+        $("[data-toggle='popover']").popover();
+        $("#cost").blur(function () {
+            $(this).popover("hide");
+        })
+    });
 </script>
 </body>
 </html>
