@@ -48,7 +48,7 @@
         </nav>
     </div>
     <!-- Main content -->
-    <div class="content col-1 light-gray-bg">
+    <div class="content col-1 " style="background: whitesmoke">
         <nav class="top-nav-container " style="padding-bottom: 50px">
             <div class="row pull-right">
                 <nav class="top-nav col-lg-12 col-md-12 ">
@@ -61,78 +61,99 @@
                 </nav>
             </div>
         </nav>
-        <div class="indivisual-info ">
-            <div class="indivisual-left col-md-5">
-                <div class=""><img src="/static/image/ID_card/{{ card_pic }}"></div>
-                <div class="username">
-                    <p>{{ name }}</p>
-                    <p style="font-size: 18px">{{ user_ID }}</p>
-                </div>
-                <div class="icon" style="margin-left: 40px">
+        <div class="indivisual white-bg" style="padding: 30px 30px 100px 30px ; border-radius: 10px;
+         position: relative;
+         margin: 20px;
+         box-shadow: 0px 0px 1px 1px rgba(161, 159, 159, 0.1);" >
 
-                    <i class="fa fa-credit-card fa-2x" data-toggle="tooltip" data-placement="bottom"
-                       data-title="收款银行：建设银行(XXXX)"></i>
-                    <i class="fa fa-user fa-2x" data-toggle="tooltip" data-placement="bottom"
-                       data-title="身份已验证"></i>
-                    <i class="fa fa-mobile fa-2x" data-toggle="tooltip" data-placement="bottom"
-                       data-title="已绑定手机***********"></i>
-                    <i class="fa fa-key fa-2x" data-toggle="tooltip" data-placement="bottom"
-                       data-title="您的交易密码已设置"></i>
+            <div class="white-bg home-item" style="padding-top: 15px" ><p style="font-size: 22px;padding: 0 10px"><i class="glyphicon glyphicon-user light-gray-bg"></i> 用户信息</p></div>
+            <div class="indivisual-info " style="padding: 0px 50px 20px 50px;border-bottom: 1px dotted lightgray">
+
+                <div class="white-bg">
+                    <div class="indivisual-left col-md-5">
+                        <div class=""><img src="/static/image/ID_card/{{ card_pic }}"></div>
+                        <div class="username">
+                            <p>{{ name }}</p>
+                            <p style="font-size: 18px">{{ user_ID }}</p>
+                        </div>
+                        <div class="icon" style="margin-left: 40px">
+
+                            <i class="fa fa-credit-card fa-2x" data-toggle="tooltip" data-placement="bottom"
+                               data-title="收款银行：建设银行(XXXX)"></i>
+                            <i class="fa fa-user fa-2x" data-toggle="tooltip" data-placement="bottom"
+                               data-title="身份已验证"></i>
+                            <i class="fa fa-mobile fa-2x" data-toggle="tooltip" data-placement="bottom"
+                               data-title="已绑定手机***********"></i>
+                            <i class="fa fa-key fa-2x" data-toggle="tooltip" data-placement="bottom"
+                               data-title="您的交易密码已设置"></i>
+                        </div>
+                    </div>
                 </div>
+                <div class="indivisual-right col-md-7" style="padding-top: 70px">
+                    <div class=" col-md-8">
+                        <table class="money-table" width="360px" style="margin-left: 50px">
+                            <thead>
+                            <tr>
+                                <!--<th>总收入</th>-->
+                                <th>账户余额</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <!--<td><span><em>￥</em>5000</span></td>-->
+                                <td><span><em>￥</em>{{ account }}</span></td>
+                            </tr>
+                            </tbody>
+                            <tr></tr>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-info">取现</button>
+                    </div>
+                </div>
+                <div style="clear: both;"></div>
             </div>
-            <div class="indivisual-right col-md-7" style="padding-top: 70px">
-                <div class=" col-md-8">
-                    <table class="money-table" width="360px" style="margin-left: 50px">
-                        <thead>
-                        <tr>
-                            <!--<th>总收入</th>-->
-                            <th>账户余额</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <!--<td><span><em>￥</em>5000</span></td>-->
-                            <td><span><em>￥</em>{{ account }}</span></td>
-                        </tr>
-                        </tbody>
-                        <tr></tr>
-                    </table>
-                </div>
-                <div class="col-md-4">
-                    <button class="btn btn-info">取现</button>
-                </div>
-            </div>
-            <div class="indivisual-ad">
-                <table class="table">
-                    <thead>
+
+
+            <div class="home-item" ><p style="font-size: 22px;margin-top: 10px;padding: 0 10px"><i class="fa fa-list"></i> 广告播放记录</p></div>
+
+            <div class="indivisual-ad" style="margin-top: 30px;padding: 0px 20px;">
+                <table class="table table-striped" >
+                    <thead style="background-color: #5bc0de;color: white;border-radius: 5px">
                     <tr>
+                        <th>No.</th>
                         <th>广告id</th>
                         <th>时间</th>
-                        <th>收益</th>
+                        <th>支出</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
+                        <td>1.</td>
                         <td>123u8412213</td>
                         <td>2016.3.5</td>
                         <td>200</td>
                     </tr>
                     <tr>
+                        <td>2.</td>
                         <td>1243u21904</td>
                         <td>2016.3.3</td>
                         <td>300</td>
                     </tr>
                     <tr>
+                        <td>3.</td>
                         <td>1243u21904</td>
                         <td>2016.3.3</td>
                         <td>300</td>
                     </tr>
                     <tr>
+                        <td>4.</td>
                         <td>1243u21904</td>
                         <td>2016.3.3</td>
                         <td>300</td>
                     </tr>
                     <tr>
+                        <td>5.</td>
                         <td>1243u21904</td>
                         <td>2016.3.3</td>
                         <td>300</td>
@@ -156,6 +177,8 @@
                     <li class="col-md-6 li1 on">本周任务</li>
                     <li class="col-md-6 li2">下周任务</li>
                 </ul>
+                <div style="clear: both"></div>
+
             </div>
             <div class="">
 
@@ -172,16 +195,16 @@
 <script>
     $(function () {
         $("[data-toggle='tooltip']").tooltip();
-        $(".indivisual-task .task-title .li2").click(function () {
-            $(".indivisual-task .task-title li").siblings().removeClass("on");
-            $(".indivisual-task .task-title .li2").addClass("on");
+        $(".indivisual-task .task-title li").click(function () {
+            $(this).siblings().removeClass("on");
+            $(this).addClass("on");
 
         })
-        $(".indivisual-task .task-title .li1").click(function () {
-            $(".indivisual-task .task-title li").siblings().removeClass("on");
-            $(".indivisual-task .task-title .li1").addClass("on");
-
-        })
+//        $(".indivisual-task .task-title .li1").click(function () {
+//            $(".indivisual-task .task-title li").siblings().removeClass("on");
+//            $(".indivisual-task .task-title .li1").addClass("on");
+//
+//        })
     });
 </script>
 </body>

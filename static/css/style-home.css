@@ -501,8 +501,8 @@ nav li {
 /*========5.司机个人主页主体============*/
 .indivisual-info {
     padding: 0 30px;
-    background: whitesmoke;
-    height: 173px;
+    /*background: whitesmoke;*/
+    /*height: 173px;*/
 }
 
 .indivisual-left, .indivisual-right {
@@ -564,9 +564,8 @@ nav li {
 
 }
 
-.indivisual-ad .pagination li a{
+.indivisual-ad .pagination li a {
     padding: 10px 15px;
-
 
 }
 
@@ -647,3 +646,9 @@ nav li {
     display: block;
 }
 
+.home-item {
+    padding: 3px;
+    background: whitesmoke;
+    color: black;
+    border-radius: 2px
+}
