@@ -12,4 +12,3 @@ def get_cap_code():
     zero_length = 4 - len(code)
     return '0' * zero_length + code
 
-

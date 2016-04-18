@@ -3,9 +3,9 @@ import os
 from werkzeug.utils import secure_filename
 from model import db
 from model.driver import driver_account
-import hashlib
 from tools.security import get_cap_code
 from ali_config import tool
+from controller.check_per import *
 
 app = current_app
 driver_bp = Blueprint('driver', __name__)
@@ -39,8 +39,8 @@ def check_login():
 
 @driver_bp.route('/check_register', methods=['POST'])
 def check_register():
-    check_code=session['check_code']
-    if check_code!=request.form['check_code']:
+    check_code = session['check_code']
+    if check_code != request.form['check_code']:
         return '<script>alert("验证码错误!");location.href="/driver/register"</script>'
     user_id = request.form['userID']
     phone = request.form['phone']
@@ -62,9 +62,9 @@ def check_register():
 
 
 @driver_bp.route('/home')
+@driver_check_login
 def home():
     driver = session['driver_account']
-
     return render_template('Users module/dri-home.html', name=session['driver_user_name'],
                            account=driver['account_money'], card_pic=driver['card_pic'], user_ID=driver['user_ID'])
 
@@ -81,11 +81,13 @@ def register():
 
 @driver_bp.route('/dri-security.html')
 @driver_bp.route('/security')
+@driver_check_login
 def security():
     return render_template('Users module/dri-security.html')
 
 
 @driver_bp.route('/get_check_code/<int:phone>')
+@driver_check_login
 def get_check_code(phone):
     check_code = get_cap_code()
     session['check_code'] = check_code

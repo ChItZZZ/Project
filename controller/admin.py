@@ -5,6 +5,7 @@ from model.admin import admin_account
 from model.adv import adv_info, adv_account
 from model.driver import driver_account
 from tools.LBS import *
+from controller.check_per import admin_check_login
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -12,6 +13,7 @@ admin_bp = Blueprint('admin', __name__)
 @admin_bp.route('/')
 @admin_bp.route('/home')
 @admin_bp.route('/index.html')
+@admin_check_login
 def index():
     return render_template('Management module/index.html', name=session['admin_account_name'])
 
@@ -38,11 +40,13 @@ def check_login():
 
 
 @admin_bp.route('/show_drivers')
+@admin_check_login
 def show_drivers():
     return render_template('Management module/drivers.html')
 
 
 @admin_bp.route('/drivers_ajax')
+@admin_check_login
 def drivers_ajax():
     drivers = driver_account.query.all()
     ajax = []
@@ -57,6 +61,7 @@ def drivers_ajax():
 
 
 @admin_bp.route('/show_driver/<int:ID>')
+@admin_check_login
 def show_driver(ID):
     if ID == None:
         return redirect(url_for('admin.show_drivers'))
@@ -68,6 +73,7 @@ def show_driver(ID):
 
 
 @admin_bp.route('/check_driver', methods=['GET'])
+@admin_check_login
 def check_driver():
     phone = request.args['phone']
     flag = bool(int(request.args['flag']))
@@ -78,11 +84,13 @@ def check_driver():
 
 
 @admin_bp.route('/show_advs')
+@admin_check_login
 def show_advs():
     return render_template('Management module/ads.html')
 
 
 @admin_bp.route('/advs_ajax')
+@admin_check_login
 def advs_ajax():
     advs = adv_info.query.all()
     ajax = []
@@ -100,6 +108,7 @@ def advs_ajax():
 
 
 @admin_bp.route('/adv/<int:adv_ID>')
+@admin_check_login
 def show_adv(adv_ID):
     if adv_ID == None:
         return redirect(url_for('admin.show_advs'))
@@ -116,11 +125,13 @@ def show_adv(adv_ID):
 
 
 @admin_bp.route('/show_advters')
+@admin_check_login
 def show_advters():
     return render_template('Management module/adusers.html')
 
 
 @admin_bp.route('/advters_ajax')
+@admin_check_login
 def advters_ajax():
     advters = adv_account.query.all()
     ajax = []
@@ -135,6 +146,7 @@ def advters_ajax():
 
 
 @admin_bp.route('/show_advter/<int:account_ID>')
+@admin_check_login
 def show_advter(account_ID):
     if account_ID == None:
         return redirect(url_for('admin.show_advters'))
@@ -146,6 +158,7 @@ def show_advter(account_ID):
 
 
 @admin_bp.route('/check_advter', methods=['GET'])
+@admin_check_login
 def check_advter():
     account_ID = request.args['account_ID']
     flag = bool(int(request.args['flag']))

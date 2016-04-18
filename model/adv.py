@@ -1,5 +1,6 @@
 from app_config import db
 import hashlib
+import time
 
 
 class adv_info(db.Model):
@@ -55,5 +56,9 @@ class adv_record(db.Model):
     record_ID = db.Column('record_ID', db.Integer, primary_key=True, nullable=False, autoincrement=True)
     adv_ID = db.Column('adv_ID', db.Integer, nullable=False)
     driver_account_ID = db.Column('driver_account_ID', db.Integer, nullable=False)
-    payment = db.Column('payment', db.DECIMAL(6, 3), nullable=False)
     play_time = db.Column('play_time', db.DateTime, nullable=False)
+
+    def __init__(self, adv_ID, driver_account_ID):
+        self.adv_ID = adv_ID
+        self.driver_account_ID = driver_account_ID
+        self.play_time = time.localtime()
