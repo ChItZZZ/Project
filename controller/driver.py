@@ -6,6 +6,8 @@ from model.driver import driver_account
 from tools.security import get_cap_code
 from ali_config import tool
 from controller.check_per import *
+from model.adv import adv_record, adv_info
+import json
 
 app = current_app
 driver_bp = Blueprint('driver', __name__)
@@ -83,7 +85,7 @@ def register():
 @driver_bp.route('/security')
 @driver_check_login
 def security():
-    return render_template('Users module/dri-security.html')
+    return render_template('Users module/dri-security.html', name=session['driver_user_name'])
 
 
 @driver_bp.route('/get_check_code/<int:phone>')
@@ -93,3 +95,23 @@ def get_check_code(phone):
     session['check_code'] = check_code
     tool.send_register_message(phone, check_code)
     return "success"
+
+
+@driver_bp.route('/get_records/')
+def get_records():
+    account_ID = session['driver_account_id']
+    records = adv_record.query.filter_by(driver_account_ID=account_ID).all()
+    ajax = []
+    i = 0
+    for record in records:
+        i += 1
+        dic = {}
+        adv = adv_info.query.filter_by(adv_ID=record.adv_ID).first()
+        dic['NO'] = i
+        dic['adv_text'] = adv.adv_text
+        dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
+        dic['money'] = float(adv.cost.real)
+        ajax.append(dic)
+        if (i == 25):
+            break
+    return json.dumps(ajax)
