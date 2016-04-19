@@ -166,3 +166,8 @@ def check_advter():
     advter.check_flag = flag
     db.session.commit()
     return "success"
+
+
+@admin_bp.route('/advs_history')
+def adv_history():
+    return render_template('Management module/ads_history.html')

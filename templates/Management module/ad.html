@@ -1,313 +1,316 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MovingAD管理平台</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MovingAD管理平台</title>
 
-<link href="/static/css/bootstrap.min.css" rel="stylesheet">
-<link href="/static/css/datepicker3.css" rel="stylesheet">
-<link href="/static/css/bootstrap-table.css" rel="stylesheet">
-<link href="/static/css/styles.css" rel="stylesheet">
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/datepicker3.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-table.css" rel="stylesheet">
+    <link href="/static/css/styles.css" rel="stylesheet">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
 </head>
 
 <body>
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#"><span>MovingAD</span>管理平台</a>
-				<ul class="user-menu">
-					<li class="dropdown pull-right">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> 管理员ID <span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
-							<li><a href="#"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
-							<li><a href="login.html"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div><!-- /.container-fluid -->
-	</nav>
-		
-	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
-	
-		<form role="search">
-			<div class="form-group">
-				<input type="text" class="form-control" placeholder="Search">
-			</div>
-		</form>
-		
-		<ul class="nav menu">
-			<li><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> 主页</a></li>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#"><span>MovingAD</span>管理平台</a>
+            <ul class="user-menu">
+                <li class="dropdown pull-right">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                            class="glyphicon glyphicon-user"></span> 管理员ID <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
+                        <li><a href="login.html"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+
+    <form role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+        </div>
+    </form>
+
+    <ul class="nav menu">
+        <li><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> 主页</a></li>
 
 
-			<li class="parent ">
-				<a href="#">
-					<span class="glyphicon glyphicon-list"></span> 管理操作 <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span> 
-				</a>
-				<ul  id="sub-item-1">
-					<li>
-						<a class="" href="show_drivers">
-							<span class="glyphicon glyphicon-share-alt"></span> 司机用户管理
-						</a>
-					</li>
-					<li>
-						<a class="" href="show_advters">
-							<span class="glyphicon glyphicon-share-alt"></span> 广告商用户管理
-						</a>
-					</li>
-					<li class="active">
-						<a class="" href="show_advs">
-							<span class="glyphicon glyphicon-share-alt"></span> 广告管理
-						</a>
-					</li>
-				</ul>
-			</li>
-			<li class="parent ">
+        <li class="parent ">
             <a href="#">
-                <span class="glyphicon glyphicon-list"></span> 查看记录 <span data-toggle="collapse" href="#sub-item-2"
+                <span class="glyphicon glyphicon-list"></span> 管理操作 <span data-toggle="collapse" href="#sub-item-1"
                                                                           class="icon pull-right"><em
                     class="glyphicon glyphicon-s glyphicon-plus"></em></span>
             </a>
-            <ul  class="children collapse" id="sub-item-2">
+            <ul id="sub-item-1">
                 <li>
-                    <a class="" href="">
-                        <span class="glyphicon glyphicon-share-alt"></span> 司机领取广告记录
+                    <a class="" href="/admin/show_drivers">
+                        <span class="glyphicon glyphicon-share-alt"></span> 司机用户管理
                     </a>
                 </li>
                 <li>
-                    <a class="" href="">
-                        <span class="glyphicon glyphicon-share-alt"></span> 广告被领取记录
+                    <a class="" href="/admin/show_advters">
+                        <span class="glyphicon glyphicon-share-alt"></span> 广告商用户管理
                     </a>
                 </li>
-                
+                <li class="active">
+                    <a class="" href="/admin/show_advs">
+                        <span class="glyphicon glyphicon-share-alt"></span> 广告管理
+                    </a>
+                </li>
             </ul>
         </li>
-		</ul>
-		
-		<div class="attribution">Copyright © 2016 专业方向综合MovingAD项目组 </div>
-		
-	</div><!--/.sidebar-->
-		
-	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">		
-		<div class="row">
-			<ol class="breadcrumb">
-				<li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
-				<li class="active">广告管理</li>
-			</ol>
-		</div><!--/.row-->
-		
-		<div class="row">
-			<div class="col-md-12">
-				<div class="panel panel-default">
-					<div class="panel-heading"> 广告详细信息</div>
-					<div class="panel-body">
-						<form class="form-horizontal" action="" method="post">
-							<fieldset>
-							
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="adid">广告ID</label>
-									<div class="col-md-4">
-									<input id="adid" readonly name="adid" type="text" placeholder="A00001" class="form-control">
-									</div>
-								</div>
-								
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="adtext">广告内容</label>
-									<div class="col-md-4">
-									<textarea class="form-control" readonly id="adtetx" name="adtext" placeholder="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容" rows="10"></textarea>
-									</div>
-								</div>
-							
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="adtime">广告时间</label>
-									<div class="col-md-4">
-										<input id="adtime"  readonly name="adtime" type="text" placeholder="2016年3月到4月每周日全天" class="form-control">
-									</div>
-								</div>
-								
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="adplace">广告地点</label>
-									<div class="col-md-4">
-										<input id="adplace"  readonly name="adplace" type="text" placeholder="同济大学各个校区+地图API" class="form-control">
-										<br>
-										<div style="z-index:9;width:450px;height:340px;border:1px solid gray" id="container"></div>
-									</div>
-									
-									
-									
-								</div>
-								
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="aduser">广告商</label>
-									<div class="col-md-4">
-										<input id="aduser"  readonly name="aduser" type="text" placeholder="G00001" class="form-control">
-									</div>
-								</div>
-								
-								
-								
-								<div class="form-group">
-									<label class="col-md-4 control-label" for="message">备注</label>
-									<div class="col-md-4">
-										<textarea class="form-control" id="message" name="message" placeholder="如需要请输入备注..." rows="3
+    </ul>
+
+    <div class="attribution">Copyright © 2016 专业方向综合MovingAD项目组</div>
+
+</div><!--/.sidebar-->
+
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+            <li class="active">广告管理</li>
+        </ol>
+    </div><!--/.row-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"> 广告详细信息</div>
+                <div class="panel-body">
+                    <form class="form-horizontal" action="" method="post">
+                        <fieldset>
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="adid">广告ID</label>
+                                <div class="col-md-4">
+                                    <input id="adid" readonly name="adid" type="text" placeholder="{{ adv_ID }}"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="adtext">广告内容</label>
+                                <div class="col-md-4">
+                                    <textarea class="form-control" readonly id="adtetx" name="adtext"
+                                              placeholder="{{ text }}" rows="10"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="adtime">广告时间</label>
+                                <div class="col-md-4">
+                                    <input id="adtime" readonly name="adtime" type="text" placeholder="{{ datetime }}"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="adplace">广告地点</label>
+                                <div class="col-md-4">
+                                    <input id="adplace" readonly name="adplace" type="text" placeholder="同济大学各个校区+地图API"
+                                           class="form-control">
+                                    <br>
+                                    <div style="z-index:9;width:450px;height:340px;border:1px solid gray"
+                                         id="container"></div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="aduser">广告商</label>
+                                <div class="col-md-4">
+                                    <input id="aduser" readonly name="aduser" type="text" placeholder="{{ company }}"
+                                           class="form-control">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-md-4 control-label" for="message">备注</label>
+                                <div class="col-md-4">
+										<textarea class="form-control" id="message" name="message"
+                                                  placeholder="如需要请输入备注..." rows="3
 										"></textarea>
-									</div>
-								</div>
-							
-							</fieldset>
-							<script language="javascript" type="text/javascript"> 
-								function show(){ 
-								var ifpass=document.getElementById("test").getElementsByTagName("input")[0].value; 
-								if(ifpass=="yes"){  //审核通过
-									var strS='<button type="button" class="btn btn-default btn-md"><a href="show_drivers"> 返回</a></button>';
-									document.getElementById("change").innerHTML+=strS; 
-								} 
-								else if(ifpass=="tobecheck"){  //没审核
-									var strS='<button type="submit" class="btn btn-default btn-md" id="deleteuser" onclick="deletuser()">删除</button>'; 
-									document.getElementById("change").innerHTML+=strS; 
-								} 
-								else if(ifpass=="no"){  //审核不通过
-									var strS='<button type="submit" class="btn btn-default btn-md" id="yespass" value="yes" onclick="check()">通过</button>&nbsp;<button type="submit" class="btn btn-default btn-md" onclick="check()">不通过</button>&nbsp;<button type="button" class="btn btn-default btn-md"><a href="show_drivers"> 返回</a></button>';
-									document.getElementById("change").innerHTML+=strS; 
-								} 
-								} 
-								
-								function check(){  //获得通过或不通过的值
-									var ifpass= document.getElementById("yespass").value;
-									var ifpass= document.getElementById("nopass").value;
-								}
-								
-								function deleteuser(){
-								  //删除操作相应代码
-								}
-								
-							</script> 
+                                </div>
+                            </div>
 
-							
-							<div id="test">模拟账户状态，数据库中已审核通过的输入yes，没通过输入no，没审核输入tobecheck:<input type="text" name="text" value="" /> 
-							<input type="button" name="submit" value="生成相应按钮" onclick="show()" /> 
-							</div> 
-							
-							<div style="text-align:center" id="change">
+                        </fieldset>
+                        <script language="javascript" type="text/javascript">
+                            function show() {
+                                var ifpass = document.getElementById("test").getElementsByTagName("input")[0].value;
+                                if (ifpass == "yes") {  //审核通过
+                                    var strS = '<button type="button" class="btn btn-default btn-md"><a href="show_drivers"> 返回</a></button>';
+                                    document.getElementById("change").innerHTML += strS;
+                                }
+                                else if (ifpass == "tobecheck") {  //没审核
+                                    var strS = '<button type="submit" class="btn btn-default btn-md" id="deleteuser" onclick="deletuser()">删除</button>';
+                                    document.getElementById("change").innerHTML += strS;
+                                }
+                                else if (ifpass == "no") {  //审核不通过
+                                    var strS = '<button type="submit" class="btn btn-default btn-md" id="yespass" value="yes" onclick="check()">通过</button>&nbsp;<button type="submit" class="btn btn-default btn-md" onclick="check()">不通过</button>&nbsp;<button type="button" class="btn btn-default btn-md"><a href="show_drivers"> 返回</a></button>';
+                                    document.getElementById("change").innerHTML += strS;
+                                }
+                            }
 
-							</div>
-							
-						</form>
-						
-					</div>
+                            function check() {  //获得通过或不通过的值
+                                var ifpass = document.getElementById("yespass").value;
+                                var ifpass = document.getElementById("nopass").value;
+                            }
 
-				</div>
+                            function deleteuser() {
+                                //删除操作相应代码
+                            }
 
-			</div><!--/.col-->
-			
-		</div><!--/.row-->
-	</div>	<!--/.main-->
-		  
+                        </script>
 
-	<script src="/static/js/jquery-1.11.1.min.js"></script>
-	<script src="/static/js/bootstrap.min.js"></script>
-	<script src="/static/js/chart.min.js"></script>
-	<script src="/static/js/chart-data.js"></script>
-	<script src="/static/js/easypiechart.js"></script>
-	<script src="/static/js/easypiechart-data.js"></script>
-	<script src="/static/js/bootstrap-datepicker.js"></script>
-	<script>
-		$('#calendar').datepicker({
-		});
 
-		!function ($) {
-		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
-		        $(this).find('em:first').toggleClass("glyphicon-minus");      
-		    }); 
-		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
-		}(window.jQuery);
+                        <!--<div id="test">模拟账户状态，数据库中已审核通过的输入yes，没通过输入no，没审核输入tobecheck:<input type="text" name="text"
+                                                                                            value=""/>
+                            <input type="button" name="submit" value="生成相应按钮" onclick="show()"/>
+                        </div>-->
 
-		$(window).on('resize', function () {
-		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
-		})
-		$(window).on('resize', function () {
-		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
-		})
-	</script>	
-	
-	<script type="text/javascript">
-            $(function(){
-                $("#carphoto").click(function(){
-                    var width = $(this).width();
-                    if(width==200)
-                    {
-                        $(this).width(400);
-                        $(this).height(250);
-                    }
-                    else
-                    {
-                        $(this).width(200);
-                        $(this).height(150);
-                    }
-                });
-                
-                $("#driverphoto").click(function(){
-                    var width = $(this).width();
-                    if(width==200)
-                    {
-                        $(this).width(400);
-                        $(this).height(250);
-                    }
-                    else
-                    {
-                        $(this).width(200);
-                        $(this).height(150);
-                    }
-                });
-            });
-    </script>
-    
-	<script type="text/javascript">
-		var map = new BMap.Map("container",{mapType: BMAP_NORMAL_MAP});      //设置卫星图为底图
-		map.centerAndZoom(new BMap.Point(121.22258,31.294191),17);                     // 初始化地图,设置中心点坐标和地图级别。
-		map.addControl(new BMap.NavigationControl());  //添加鱼骨控件
-		map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
-		map.setCurrentCity("上海");          // 设置3D地图显示的城市 此项是必须设置的
-		
-		
-		
-		//创建一个范围
-		//创建经纬度数组
-		var secRingCenter = new BMap.Point(121.221915,31.294399);
-		var secRing = [new BMap.Point(121.221834,31.295441),new BMap.Point(121.223326,31.295039),new BMap.Point(121.221852,31.292895),
-		               new BMap.Point(121.220523,31.293851)];
-		//创建多边形
-		var secRingPolygon = new BMap.Polygon(secRing, {strokeColor:"blue", strokeWeight:5, strokeOpacity:0.5});
-		//添加多边形到地图上
-		map.addOverlay(secRingPolygon);
-		//给多边形添加鼠标事件
-		secRingPolygon.addEventListener("mouseover",function(){
-		    secRingPolygon.setStrokeColor("red");
-		    map.addOverlay(secRingLabel);
-		    map.panTo(secRingCenter);
-		});
-		secRingPolygon.addEventListener("mouseout",function(){
-		    secRingPolygon.setStrokeColor("blue");
-		    map.removeOverlay(secRingLabel);
-		});
-		secRingPolygon.addEventListener("click",function(){
-		    map.zoomIn();
-		    secRingPolygon.setStrokeColor("red");
-		    map.setCenter(secRingCenter);
-		});
-		//创建标签
-		var secRingLabel = new BMap.Label("<b>同济大学嘉定校区</b></br>人工草坪足球场塑胶跑道。",{offset: new BMap.Size(-150,0), position: secRingCenter});
-		secRingLabel.setStyle({"z-index":"999999", "padding": "10px","width": "140px","border": "1px solid #ccff00"});
-		
-		var secRingLabel2 = new BMap.Label("操场",{offset: new BMap.Size(10,-30), position: secRingCenter});
-		secRingLabel2.setStyle({"line-height": "20px", "text-align": "center", "width": "80px", "height": "29px", "border": "none", "padding": "2px","background": "url(static/images/place.png) no-repeat",});
-		map.addOverlay(secRingLabel2);
-		
-	</script>
-		    
+                        <div style="text-align:center" id="change">
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div><!--/.col-->
+
+    </div><!--/.row-->
+</div>    <!--/.main-->
+
+
+<script src="/static/js/jquery-1.11.1.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/chart.min.js"></script>
+<script src="/static/js/chart-data.js"></script>
+<script src="/static/js/easypiechart.js"></script>
+<script src="/static/js/easypiechart-data.js"></script>
+<script src="/static/js/bootstrap-datepicker.js"></script>
+<script>
+    $('#calendar').datepicker({});
+
+    !function ($) {
+        $(document).on("click", "ul.nav li.parent > a > span.icon", function () {
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+    })
+    $(window).on('resize', function () {
+        if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+    })
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#carphoto").click(function () {
+            var width = $(this).width();
+            if (width == 200) {
+                $(this).width(400);
+                $(this).height(250);
+            }
+            else {
+                $(this).width(200);
+                $(this).height(150);
+            }
+        });
+
+        $("#driverphoto").click(function () {
+            var width = $(this).width();
+            if (width == 200) {
+                $(this).width(400);
+                $(this).height(250);
+            }
+            else {
+                $(this).width(200);
+                $(this).height(150);
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    var points = "{{ location }}";
+    points = JSON.parse(points);
+    var map = new BMap.Map("container", {mapType: BMAP_NORMAL_MAP});      //设置卫星图为底图
+    x = points[0][0];
+    y = points[0][1];
+    map.centerAndZoom(new BMap.Point(x, y), 12);                     // 初始化地图,设置中心点坐标和地图级别。
+    map.addControl(new BMap.NavigationControl());  //添加鱼骨控件
+    map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
+    map.setCurrentCity("上海");          // 设置3D地图显示的城市 此项是必须设置的
+    //创建一个范围
+    //创建经纬度数组
+    //var secRingCenter = new BMap.Point(121.221915, 31.294399);
+    var secRingCenter = new BMap.Point(points[0][0], points[0][1]);
+    //var secRing = [new BMap.Point(121.221834, 31.295441), new BMap.Point(121.223326, 31.295039), new BMap.Point(121.221852, 31.292895),
+    //    new BMap.Point(121.220523, 31.293851)];
+
+    var secRing = [];
+    for (var i = 0; i < points.length; i++) {
+        point = new BMap.Point(points[i][0], points[i][1]);
+        secRing.push(point)
+    }
+    //创建多边形
+    var secRingPolygon = new BMap.Polygon(secRing, {strokeColor: "blue", strokeWeight: 5, strokeOpacity: 0.5});
+    //添加多边形到地图上
+    map.addOverlay(secRingPolygon);
+    //给多边形添加鼠标事件
+    secRingPolygon.addEventListener("mouseover", function () {
+        secRingPolygon.setStrokeColor("red");
+        map.addOverlay(secRingLabel);
+        map.panTo(secRingCenter);
+    });
+    secRingPolygon.addEventListener("mouseout", function () {
+        secRingPolygon.setStrokeColor("blue");
+        map.removeOverlay(secRingLabel);
+    });
+    secRingPolygon.addEventListener("click", function () {
+        map.zoomIn();
+        secRingPolygon.setStrokeColor("red");
+        map.setCenter(secRingCenter);
+    });
+    //创建标签
+    {#    var secRingLabel = new BMap.Label("<b>同济大学嘉定校区</b></br>人工草坪足球场塑胶跑道。", {#}
+    {#        offset: new BMap.Size(-150, 0),#}
+    {#        position: secRingCenter#}
+    {#    });#}
+    secRingLabel.setStyle({"z-index": "999999", "padding": "10px", "width": "140px", "border": "1px solid #ccff00"});
+
+    var secRingLabel2 = new BMap.Label("操场", {offset: new BMap.Size(10, -30), position: secRingCenter});
+    secRingLabel2.setStyle({
+        "line-height": "20px",
+        "text-align": "center",
+        "width": "80px",
+        "height": "29px",
+        "border": "none",
+        "padding": "2px",
+        "background": "url(../../static/images/place.png) no-repeat",
+    });
+    map.addOverlay(secRingLabel2);
+
+</script>
+
 </body>
 
 </html>
