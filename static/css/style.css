@@ -38,13 +38,14 @@ h1 {
     color: #09F;
 }
 
-.btn-primary{
+.btn-primary {
     border-radius: 2px;
     background-color: #39ADB4;
     border: none;
     color: white;
 }
-.btn-file{
+
+.btn-file {
     border: 1px solid #39ADB4;
     border-radius: 4px;
     background: white;
@@ -56,20 +57,17 @@ h1 {
     -o-transition: all 0.4s;
     transition: all 0.4s;
 }
-.btn-file:hover{
+
+.btn-file:hover {
     background: #5bc0de;
     opacity: .7;
 
-
 }
-
-
 
 /*输入框*/
 .form-control {
     color: #5bc0de;
     border-color: #5bc0de;
-
 
 }
 
@@ -83,7 +81,6 @@ h1 {
     transition: all 0.5s;
 
 }
-
 
 .control-wrapper {
     position: relative;
@@ -132,7 +129,8 @@ h1 {
 .input-icon-container textarea {
     padding-left: 30px;
 }
-#container{
+
+#container {
     border: 0px;
 }
 
@@ -151,7 +149,6 @@ h1 {
 .bg-gray h1 {
     color: rgb(74, 164, 180);
 }
-
 
 .font-size-small {
     font-size: 0.8em;
@@ -230,7 +227,6 @@ h1 {
 
 }
 
-
 /*-------------------------------------
 3. create-account
 ---------------------------------------*/
@@ -248,7 +244,6 @@ h1 {
 .create-account label {
     font-weight: 400;
 }
-
 
 .radio-group {
     margin-top: 30px;
@@ -273,6 +268,7 @@ h1 {
     -o-transition: all 0.3s;
     transition: all 0.3s;
 }
+
 .file input {
     cursor: pointer;
     position: absolute;
@@ -281,12 +277,14 @@ h1 {
     top: 0;
     opacity: 0;
 }
+
 .file:hover {
-    background:white;
+    background: white;
     border-color: #78C3F3;
     color: #1E88C7;
     text-decoration: none;
 }
+
 /*-------------------------------------
 4. forgot-password
 ---------------------------------------*/
@@ -295,4 +293,61 @@ h1 {
     max-width: 550px;
     margin: 0 auto;
     padding: 30px;
+}
+
+/*-------------------------------------
+5. sec-card
+---------------------------------------*/
+.sec-card-li {
+    float: left;
+    margin: 0 77px 15px 0;
+    position: relative;
+    border: 1px solid #c5c5c5;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    height: 180px;
+    width: 260px;;
+}
+
+/*-------------------------------------
+6. sec-find-pay-pwd
+---------------------------------------*/
+
+.step-list li {
+    text-align: center;
+    border: 1px solid darkgray;
+    color: darkgray;
+}
+
+.step-list li .num {
+    font-size: 40px;
+    line-height: 75px;
+    text-align: center;
+    padding-right: 20px;
+}
+
+.step-list li .text {
+    padding-top: 0;
+    position: relative;
+    font-size: 16px;
+    top: -5px;
+}
+
+.step-list .on {
+    color: #5bc0de;
+
+    border: 1px solid #5bc0de;
+}
+
+.step-list .on .text {
+    color: black;
+}
+
+.modify-box{
+    padding: 30px 18px;
+}
+
+.form-group{
+    font-size: 18px;
+    margin-top: 25px;
 }
