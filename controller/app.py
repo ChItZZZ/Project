@@ -51,3 +51,28 @@ def post_adv(adv_ID, driver_account_ID):
     db.session.add(record)
     db.session.commit()
     return '200'
+
+
+@app_bp.route('/get_driver_info/')
+def get_driver_ID(driver_ID):
+    driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
+    return driver.to_json()
+
+
+@app_bp.route('/get_records/')
+def get_records():
+    account_ID = session['driver_account_id']
+    records = adv_record.query.filter_by(driver_account_ID=account_ID).all()
+    ajax = []
+    i = 0
+    for record in records:
+        i += 1
+        dic = {}
+        adv = adv_info.query.filter_by(adv_ID=record.adv_ID).first()
+        dic['adv_text'] = adv.adv_text
+        dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
+        dic['money'] = float(adv.cost.real)
+        ajax.append(dic)
+        if (i == 25):
+            break
+    return json.dumps(ajax)
