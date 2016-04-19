@@ -2,10 +2,11 @@ from flask import request, render_template, session, redirect, url_for, Blueprin
 
 from model import db
 from model.admin import admin_account
-from model.adv import adv_info, adv_account
+from model.adv import adv_info, adv_account, adv_record
 from model.driver import driver_account
 from tools.LBS import *
 from controller.check_per import admin_check_login
+import json
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -142,7 +143,7 @@ def advters_ajax():
         dic["company_name"] = advter.company_name
         dic["check_flag"] = str(advter.check_flag)
         ajax.append(dic)
-    return str(ajax)
+    return json.dumps(ajax)
 
 
 @admin_bp.route('/show_advter/<int:account_ID>')
@@ -169,5 +170,50 @@ def check_advter():
 
 
 @admin_bp.route('/advs_history')
-def adv_history():
+def advs_history():
     return render_template('Management module/ads_history.html')
+
+
+@admin_bp.route('/drivers_history')
+def drivers_history():
+    return render_template('Management module/drivers_history.html')
+
+
+@admin_bp.route('/driver_history/<int:driver_ID>')
+def driver_history(driver_ID):
+    driver = driver_account.query.filter_by(account_ID=driver_ID).first()
+    return render_template('Management module/driver_history.html', account_ID=driver.account_ID, name=driver.user_name,
+                           phone=driver.phone, flag=driver.check_flag)
+
+
+@admin_bp.route('/get_records_by_driver/<int:driver_ID>/')
+def get_records_by_driver(driver_ID):
+    records = adv_record.query.filter_by(driver_account_ID=driver_ID).all()
+    ajax = []
+    for record in records:
+        dic = {}
+        dic['adv_ID'] = record.adv_ID
+        dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
+        ajax.append(dic)
+    return json.dumps(ajax)
+
+
+@admin_bp.route('/adv_history/<int:adv_ID>')
+def adv_history(adv_ID):
+    adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
+    last_time = '{0}至{1}'.format(adv.start_time.strftime('%H:%M:%S'), adv.end_time.strftime('%H:%M:%S'))
+    advter = adv_account.query.filter_by(account_ID=adv.advter_account_ID).first()
+    return render_template('Management module/ad_history.html', adv_ID=adv_ID, last_time=last_time,
+                           company=advter.company_name)
+
+
+@admin_bp.route('/get_records_by_adv/<int:adv_ID>/')
+def get_records_by_adv(adv_ID):
+    records = adv_record.query.filter_by(adv_ID=adv_ID).all()
+    ajax = []
+    for record in records:
+        dic = {}
+        dic['driver_ID'] = record.driver_account_ID
+        dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
+        ajax.append(dic)
+    return json.dumps(ajax)

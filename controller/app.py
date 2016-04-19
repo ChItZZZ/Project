@@ -43,8 +43,10 @@ def check_login():
 
 @app_bp.route('/post_adv/<int:adv_ID>/<int:driver_account_ID>')
 def post_adv(adv_ID, driver_account_ID):
+    driver = driver_account.query.filter_by(account_ID=driver_account_ID).first()
     adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
     adv.amounts -= 1
+    driver.account_money += adv.cost
     record = adv_record(adv_ID, driver_account_ID)
     db.session.add(record)
     db.session.commit()

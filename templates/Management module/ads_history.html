@@ -9,6 +9,7 @@
     <link href="/static/css/datepicker3.css" rel="stylesheet">
     <link href="/static/css/bootstrap-table.css" rel="stylesheet">
     <link href="/static/css/styles.css" rel="stylesheet">
+    
 
 
 </head>
@@ -45,12 +46,10 @@
         <li><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> 主页</a></li>
         <li class="parent ">
             <a href="#">
-                <span class="glyphicon glyphicon-list"></span> 管理操作 <span data-toggle="collapse" href="#sub-item-1"
-                                                                          class="icon pull-right"><em
-                    class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+                <span class="glyphicon glyphicon-list"></span> 管理操作 <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
             </a>
-            <ul id="sub-item-1">
-                <li class="active">
+            <ul class="children collapse" id="sub-item-1">
+                <li>
                     <a class="" href="show_drivers">
                         <span class="glyphicon glyphicon-share-alt"></span> 司机用户管理
                     </a>
@@ -65,6 +64,7 @@
                         <span class="glyphicon glyphicon-share-alt"></span> 广告管理
                     </a>
                 </li>
+
             </ul>
         </li>
         <li class="parent ">
@@ -73,7 +73,7 @@
                                                                           class="icon pull-right"><em
                     class="glyphicon glyphicon-s glyphicon-plus"></em></span>
             </a>
-            <ul class="children collapse" id="sub-item-2">
+            <ul id="sub-item-2">
                 <li>
                     <a class="" href="drivers_history">
                         <span class="glyphicon glyphicon-share-alt"></span> 司机领取广告记录
@@ -84,7 +84,7 @@
                         <span class="glyphicon glyphicon-share-alt"></span> 广告被领取记录
                     </a>
                 </li>
-
+                
             </ul>
         </li>
     </ul>
@@ -98,13 +98,13 @@
     <div class="row">
         <ol class="breadcrumb">
             <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
-            <li class="active">司机用户管理</li>
+            <li class="active">查看广告记录</li>
         </ol>
     </div><!--/.row-->
 
     <script language="javascript" type="text/javascript">
-        function show(ID, name, phone, flag) {
-            var strS = '<tr><td style="width:120px; text-align:center;">' + ID + '</td><td style="width:120px; text-align:center;">' + name + '</td><td style="width:120px; text-align:center;">' + phone + '</td><td style="width:120px; text-align:center;">' + flag + '</td><td style="width:120px; text-align:center;"><a href="show_driver/' + ID + '">查看</a> </td></tr>';
+        function show(adv_ID, amounts, text, cost, start_date, company) {
+            var strS = '<tr><td style="width:100px; text-align:center;">' + adv_ID + '</td><td style="width:120px; text-align:center;">' + amounts + '</td><td style="width:120px; text-align:center;">' + text + '</td><td style="width:120px; text-align:center;">' + cost + '</td><td style="width:120px; text-align:center;">' + start_date + '</td><td style="width:120px; text-align:center;">' + company + '</td><td style="width:120px; text-align:center;"><a href="adv_history/' + adv_ID + '">查看</a> </td></tr>';
             document.getElementById("change").innerHTML += strS;
         }
     </script>
@@ -112,26 +112,29 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <div class="panel-heading">司机用户信息</div>
+                <div class="panel-heading">广告被领取记录</div>
                 <div class="panel-body">
                     <table class="table">
                         <thead>
                         <tr>
-                            <th style="width:120px; text-align:center;">用户ID</th>
-                            <th style="width:120px; text-align:center;">司机姓名</th>
-                            <th style="width:120px; text-align:center;">手机号</th>
-                            <th style="width:120px; text-align:center;">账号状态</th>
-                            <th style="width:120px; text-align:center;">详细信息</th>
+                            <th style="width:100px; text-align:center;">编号</th>
+                            <th style="width:120px; text-align:center;">广告ID</th>
+                            <th style="width:300px; text-align:center;">广告内容</th>
+                            <th style="width:120px; text-align:center;">价格</th>
+                            <th style="width:120px; text-align:center;">发布时间</th>
+                            <th style="width:120px; text-align:center;">广告商</th>
+                            <th style="width:120px; text-align:center;">领取用户记录</th>
                         </tr>
                         </thead>
                         <tbody id="change">
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
-    </div>
-</div><!--/.row-->
+    </div><!--/.row-->
+</div>
 
 
 <script src="/static/js/jquery-1.11.1.min.js"></script>
@@ -158,12 +161,12 @@
     });
 
     $(document).ready(function () {
-        $.get("drivers_ajax", function (data, status) {
+        $.get("advs_ajax", function (data, status) {
             if (status == 'success') {
                 var json = eval(data);
                 for (var i = 0; i < json.length; i++) {
-                    var driver = json[i];
-                    show(driver['account_ID'], driver['user_name'], driver['phone'], driver['check_flag'])
+                    var adv = json[i];
+                    show(adv['adv_ID'], adv['adv_amounts'], adv['adv_text'], adv['cost'], adv['date'], adv['company'])
                 }
             }
         });
