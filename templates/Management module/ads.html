@@ -9,6 +9,7 @@
     <link href="/static/css/datepicker3.css" rel="stylesheet">
     <link href="/static/css/bootstrap-table.css" rel="stylesheet">
     <link href="/static/css/styles.css" rel="stylesheet">
+    
 
 
 </head>
@@ -67,6 +68,26 @@
                 </li>
             </ul>
         </li>
+        <li class="parent ">
+            <a href="#">
+                <span class="glyphicon glyphicon-list"></span> 查看记录 <span data-toggle="collapse" href="#sub-item-2"
+                                                                          class="icon pull-right"><em
+                    class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+            </a>
+            <ul class="children collapse" id="sub-item-2">
+                <li>
+                    <a class="" href="">
+                        <span class="glyphicon glyphicon-share-alt"></span> 司机领取广告记录
+                    </a>
+                </li>
+                <li class="active">
+                    <a class="" href="">
+                        <span class="glyphicon glyphicon-share-alt"></span> 广告被领取记录
+                    </a>
+                </li>
+                
+            </ul>
+        </li>
     </ul>
 
     <div class="attribution">Copyright © 2016 专业方向综合MovingAD项目组</div>
@@ -83,9 +104,13 @@
     </div><!--/.row-->
 
     <script language="javascript" type="text/javascript">
-        function show(adv_ID, amounts, text, cost, start_date, company) {
-            var strS = '<tr><td style="width:100px; text-align:center;">' + adv_ID + '</td><td style="width:120px; text-align:center;">' + amounts + '</td><td style="width:120px; text-align:center;">' + text + '</td><td style="width:120px; text-align:center;">' + cost + '</td><td style="width:120px; text-align:center;">' + start_date + '</td><td style="width:120px; text-align:center;">' + company + '</td><td style="width:120px; text-align:center;"><a href="adv/' + adv_ID + '">查看</a> </td></tr>';
-            document.getElementById("change").innerHTML += strS;
+        function show() {
+            var num = document.getElementById("test").getElementsByTagName("input")[0].value;
+            var y = parseInt(num);
+            for (var i = 1; i < y + 1; i++) {
+                var strS = '<tr><td style="width:100px; text-align:center;">' + i + '</td><td style="width:120px; text-align:center;">这里是广告ID</td><td style="width:120px; text-align:center;">这里是广告内容这里是广告内容这里是是广告内容这里是广告内容这里是广告内容这里是广告内广告内容这里是广告内容</td><td style="width:120px; text-align:center;">这里是广告时间</td><td style="width:120px; text-align:center;">这里是广告地点</td><td style="width:120px; text-align:center;">这里是广告商</td><td style="width:120px; text-align:center;"><a href="ad.html">查看</a> </td></tr>';
+                document.getElementById("change").innerHTML += strS;
+            }
         }
     </script>
 
@@ -97,11 +122,11 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th style="width:100px; text-align:center;">广告编号</th>
-                            <th style="width:120px; text-align:center;">发布条数</th>
+                            <th style="width:100px; text-align:center;">编号</th>
+                            <th style="width:120px; text-align:center;">广告ID</th>
                             <th style="width:300px; text-align:center;">广告内容</th>
-                            <th style="width:120px; text-align:center;">价格</th>
-                            <th style="width:120px; text-align:center;">开始日期</th>
+                            <th style="width:120px; text-align:center;">广告时间</th>
+                            <th style="width:120px; text-align:center;">广告地点</th>
                             <th style="width:120px; text-align:center;">广告商</th>
                             <th style="width:120px; text-align:center;">详细信息</th>
                         </tr>
@@ -139,18 +164,6 @@
     $(window).on('resize', function () {
         if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
     })
-
-    $(document).ready(function () {
-        $.get("advs_ajax", function (data, status) {
-            if (status == 'success') {
-                var json = eval(data)
-                for (var i = 0; i < json.length; i++) {
-                    var adv = json[i]
-                    show(adv['adv_ID'], adv['adv_amounts'], adv['adv_text'], adv['cost'], adv['date'], adv['company'])
-                }
-            }
-        });
-    });
 </script>
 </body>
 

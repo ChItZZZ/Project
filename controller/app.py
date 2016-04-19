@@ -4,6 +4,7 @@ from model.driver import driver_account
 from model.adv import adv_info, adv_record
 from app_config import db
 
+
 app_bp = Blueprint('app', __name__)
 
 

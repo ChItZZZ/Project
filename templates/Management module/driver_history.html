@@ -45,12 +45,10 @@
         <li><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> 主页</a></li>
         <li class="parent ">
             <a href="#">
-                <span class="glyphicon glyphicon-list"></span> 管理操作 <span data-toggle="collapse" href="#sub-item-1"
-                                                                          class="icon pull-right"><em
-                    class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+                <span class="glyphicon glyphicon-list"></span> 管理操作 <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="glyphicon glyphicon-s glyphicon-plus"></em></span>
             </a>
-            <ul id="sub-item-1">
-                <li class="active">
+            <ul class="children collapse" id="sub-item-1">
+                <li>
                     <a class="" href="show_drivers">
                         <span class="glyphicon glyphicon-share-alt"></span> 司机用户管理
                     </a>
@@ -65,6 +63,7 @@
                         <span class="glyphicon glyphicon-share-alt"></span> 广告管理
                     </a>
                 </li>
+
             </ul>
         </li>
         <li class="parent ">
@@ -73,13 +72,13 @@
                                                                           class="icon pull-right"><em
                     class="glyphicon glyphicon-s glyphicon-plus"></em></span>
             </a>
-            <ul class="children collapse" id="sub-item-2">
-                <li>
+            <ul id="sub-item-2">
+                <li class="active">
                     <a class="" href="">
                         <span class="glyphicon glyphicon-share-alt"></span> 司机领取广告记录
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a class="" href="">
                         <span class="glyphicon glyphicon-share-alt"></span> 广告被领取记录
                     </a>
@@ -98,18 +97,24 @@
     <div class="row">
         <ol class="breadcrumb">
             <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
-            <li class="active">司机用户管理</li>
+            <li class="active">查看广告记录</li>
         </ol>
     </div><!--/.row-->
 
     <script language="javascript" type="text/javascript">
         function show(ID, name, phone, flag) {
-            var strS = '<tr><td style="width:120px; text-align:center;">' + ID + '</td><td style="width:120px; text-align:center;">' + name + '</td><td style="width:120px; text-align:center;">' + phone + '</td><td style="width:120px; text-align:center;">' + flag + '</td><td style="width:120px; text-align:center;"><a href="show_driver/' + ID + '">查看</a> </td></tr>';
+            var strS = '<tr><td style="width:120px; text-align:center;">' + ID + '</td><td style="width:120px; text-align:center;">' + name + '</td><td style="width:120px; text-align:center;">' + phone + '</td><td style="width:120px; text-align:center;">' + flag + '</td></tr>';
             document.getElementById("change").innerHTML += strS;
         }
     </script>
-
-    <div class="row">
+    
+    <script language="javascript" type="text/javascript">
+        function show(ID, name) {
+            var strS = '<tr><td style="width:120px; text-align:center;">' + ID + '</td><td style="width:120px; text-align:center;">' + name + '</td></tr>';
+            document.getElementById("change2").innerHTML += strS;
+        }
+    </script>
+	<div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">司机用户信息</div>
@@ -121,7 +126,6 @@
                             <th style="width:120px; text-align:center;">司机姓名</th>
                             <th style="width:120px; text-align:center;">手机号</th>
                             <th style="width:120px; text-align:center;">账号状态</th>
-                            <th style="width:120px; text-align:center;">详细信息</th>
                         </tr>
                         </thead>
                         <tbody id="change">
@@ -131,6 +135,27 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">领取广告记录</div>
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th style="width:120px; text-align:center;">广告ID</th>
+                            <th style="width:120px; text-align:center;">领取时间</th>
+
+                        </tr>
+                        </thead>
+                        <tbody id="change2">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </div><!--/.row-->
 
 
