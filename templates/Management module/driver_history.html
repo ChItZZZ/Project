@@ -140,6 +140,7 @@
                         <tr>
                             <th style="width:120px; text-align:center;">广告ID</th>
                             <th style="width:120px; text-align:center;">领取时间</th>
+                            <th style="width:120px; text-align:center;">播放次数</th>
                         </tr>
                         </thead>
                         <tbody id="change2">
@@ -161,13 +162,30 @@
 <script src="/static/js/easypiechart-data.js"></script>
 <script src="/static/js/bootstrap-datepicker.js"></script>
 <script src="/static/js/bootstrap-table.js"></script>
+
 <script>
-    function show_advs(adv_ID, time) {
-        var str = '<tr><td style="width:120px; text-align:center;">' + adv_ID + '</td><td style="width:120px; text-align:center;">' + time + '</td></tr>'
+    function show_advs(adv_ID, time, times) {
+        var str = '<tr name="times"><td style="width:120px; text-align:center;">' + adv_ID + '</td><td style="width:120px; text-align:center;">' + time + '</td><td name="times2" style="width:120px; text-align:center;">' + times + '</td></tr>'
         document.getElementById("change2").innerHTML += str;
     }
 
 </script>
+
+<script>
+	function change_color(){
+		var a = document.getElementsByName("times"); 
+		var y = document.getElementsByName("times2"); 
+		var z = new Array();
+		for(i in y){ 
+			z[i] = parseInt(y[i].innerHTML);
+			if(z[i] > 899){
+				a[i].style.color="red";
+			}
+		} 
+	}
+	window.onload=change_color(); 
+</script>
+
 <script>
     !function ($) {
         $(document).on("click", "ul.nav li.parent > a > span.icon", function () {
