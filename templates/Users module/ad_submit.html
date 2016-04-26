@@ -14,7 +14,7 @@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 
-
+    //百度map
     <style>
         body, html {
             width: 100%;
@@ -129,11 +129,11 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-12">
-                            <label class="control-label templatemo-block" style="display: block">广告图片</label>
-                            <input type="file" name="adv_pic" id="fileToUpload" class="filestyle"
-                                   data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false">
+                            <label for="brief">广告简介</label>
+                            <textarea name="adv_text" class="form-control" id="brief" rows="1" required></textarea>
                         </div>
                     </div>
+
                     <div class="form-group">
                         <div class="col-md-6" style="margin-top: 30px">
                             <label for="num">广告数量</label>
@@ -144,9 +144,12 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label for="cost">每条价格</label>
-                            <input type="number" class="form-control" id="cost" name="cost" title="建议价格"
-                                   data-container="body" data-toggle="popover" data-placement="right"
+                            <input type="number" class="form-control" id="cost" name="cost" title="<h3>建议价格:$123</h3>"
+                                   data-container="body" data-toggle="tooltip" data-placement="right"
                                    data-content="$123">
+                            <!--<input type="number" class="form-control" id="cost" name="cost" title="建议价格:"-->
+                                   <!--data-container="body" data-toggle="popover" data-placement="right"-->
+                                   <!--data-content="$123">-->
                         </div>
                     </div>
                     <div class="form-group">
@@ -241,14 +244,7 @@
     map.addEventListener("click", function (e) {
         console.log(e.point.lng + "," + e.point.lat);
     });
-    //    map.addEventListener("mouseup", function (e) {
-    //        console.log(e.point.lng + "," + e.point.lat);
-    //    })
-    //    $("#map").mousedown(function (e) {
-    //        console.log(e.point.lng + "," + e.point.lat);
-    //    }).mouseup(function (e) {
-    //        console.log(e.point.lng + "," + e.point.lat);
-    //    })
+
     function ad_submit() {
         var loc = [];
         var lays = overlays[0]['ro'];
@@ -267,10 +263,11 @@
 </script>
 <script>
     $(document).ready(function () {
-        $("[data-toggle='popover']").popover();
-        $("#cost").blur(function () {
-            $(this).popover("hide");
-        })
+        $("[data-toggle='tooltip']").tooltip({html:true});
+//        $("[data-toggle='popover']").popover();
+//        $("#cost").blur(function () {
+//            $(this).popover("hide");
+//        })
     });
 </script>
 </body>
