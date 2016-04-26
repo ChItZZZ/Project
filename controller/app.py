@@ -15,8 +15,7 @@ def get_all_adv():
         dic = {}
         dic["adv_ID"] = adv.adv_ID
         dic["points"] = adv.location
-        dic['flag'] = 'image'
-        dic['image_src'] = adv.adv_pic
+        dic['text'] = adv.adv_text
         ajax.append(dic)
     return json.dumps(ajax)
 

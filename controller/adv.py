@@ -38,7 +38,6 @@ def check_login():
 
 @adv_bp.route('/check_adv_submit', methods=['POST'])
 def check_adv_submit():
-    print('123')
     adv_text = request.form['adv_text']
     adv_count = int(request.form['adv_count'])
     location = json.loads(request.form['location'])
