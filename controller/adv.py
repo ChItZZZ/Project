@@ -66,12 +66,12 @@ def login():
     return render_template('Users module/login.html')
 
 
-@adv_bp.route('/home')
+@adv_bp.route('/home/')
 def home():
     return render_template('Users module/ad_home.html', name=session['adv_charge_name'])
 
 
-@adv_bp.route('/get_rec_price/<float:lat>/<float:lng>')
+@adv_bp.route('/get_rec_price/<float:lat>/<float:lng>/')
 def get_rec_price(lng, lat):
     advs = adv_info.query.all()
     rec_price = 0
@@ -82,4 +82,7 @@ def get_rec_price(lng, lat):
         if dis < 1000:
             rec_price += adv.cost
             times += 1
-    return str(rec_price / times)
+    if times == 0:
+        return '0'
+    else:
+        return str(rec_price / times)
