@@ -79,7 +79,7 @@ def get_rec_price(lat, lng):
         center = json.loads(adv.center)
         dis = get_distance(lat, lng, center[1], center[0])
         if dis < 1:
-            rec_price += (1 - dis) * adv.cost
+            rec_price += (1 - dis) * float(adv.cost.real)
             times += (1 - dis)
     if times == 0:
         return '0'
