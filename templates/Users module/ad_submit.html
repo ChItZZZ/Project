@@ -269,27 +269,35 @@
 
     function get_rec() {
         var lat = 0, lng = 0;
-        var lays = overlays[0]['ro'];
-        for (var i = 0; i < lays.length; i++) {
-            lat += lays[i].lat;
-            lng += lays[i].lng;
+        if (overlays.length == 0) {
+            alert('请先选择范围!');
+            document.getElementById("num").focus();
+            document.getElementById("num").select();
+            $('#cost').blur();
+            return null;
         }
-        lat /= lays.length;
-        lng /= lays.length;
-        var url = '/adv/get_rec_price/' + lat + '/' + lng + '/';
-        $.get(url, function (data, status) {
-            if (status == 'success') {
-                $('#cost').attr('data-content', data)
-                $("[data-toggle='popover']").popover();
+        else {
+            var lays = overlays[0]['ro'];
+            for (var i = 0; i < lays.length; i++) {
+                lat += lays[i].lat;
+                lng += lays[i].lng;
             }
-        })
+            lat /= lays.length;
+            lng /= lays.length;
+            var url = '/adv/get_rec_price/' + lat + '/' + lng + '/';
+            $.get(url, function (data, status) {
+                if (status == 'success') {
+                    $('#cost').attr('data-content', data);
+                    $("[data-toggle='popover']").popover();
+                }
+            })
+        }
     }
 
 </script>
 
 <script>
     $(document).ready(function () {
-        //$("[data-toggle='popover']").popover();
         $("#cost").blur(function () {
             $(this).popover("hide");
         });
