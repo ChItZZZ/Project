@@ -161,7 +161,7 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label for="cost">每条价格</label>
-                            <input type="number" class="form-control" id="cost" name="cost" title="<h3>建议价格:$123</h3>"
+                            <input type="number" class="form-control" id="cost" name="cost"
                                    data-container="body" data-toggle="tooltip" data-placement="right"
                                    data-content="$123" onfocus="get_rec()">
                         </div>
@@ -265,16 +265,16 @@
         var lat = 0, lng = 0;
         var lays = overlays[0]['ro'];
         for (var i = 0; i < lays.length; i++) {
-            lat += lays[i].lng;
-            lng += lays[i].lat;
+            lat += lays[i].lat;
+            lng += lays[i].lng;
         }
         lat /= lays.length;
         lng /= lays.length;
         var url = '/adv/get_rec_price/' + lat + '/' + lng + '/';
         $.get(url, function (data, status) {
             if (status == 'success') {
-                var cost = data;
-                console.log(cost)
+                var text = '<h3>建议价格:' + data + '</h3>'
+                $('#cost').attr('data-original-title', text)
             }
         })
     }

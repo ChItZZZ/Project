@@ -1,7 +1,5 @@
-import os
 import time
 from datetime import datetime
-
 from flask import Blueprint, render_template, request, session, redirect, url_for, current_app
 import json
 from model.adv import *
@@ -72,16 +70,17 @@ def home():
 
 
 @adv_bp.route('/get_rec_price/<float:lat>/<float:lng>/')
-def get_rec_price(lng, lat):
+def get_rec_price(lat, lng):
+    lng, lat = bd09togcj02(lng, lat)
     advs = adv_info.query.all()
     rec_price = 0
     times = 0
     for adv in advs:
         center = json.loads(adv.center)
         dis = get_distance(lat, lng, center[1], center[0])
-        if dis < 1000:
-            rec_price += adv.cost
-            times += 1
+        if dis < 1:
+            rec_price += (1 - dis) * adv.cost
+            times += (1 - dis)
     if times == 0:
         return '0'
     else:
