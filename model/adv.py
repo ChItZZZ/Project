@@ -13,22 +13,30 @@ class adv_info(db.Model):
     end_time = db.Column('end_time', db.Time, nullable=False)
     location = db.Column('location', db.String(500), nullable=False)
     advter_account_ID = db.Column('advter_account_ID', db.Integer, nullable=False)
-    adv_pic = db.Column('adv_pic', db.String(50))
+    adv_sum = db.Column('adv_sum', db.String(50))
     adv_text = db.Column('adv_text', db.String(80))
     check_flag = db.Column('check_flag', db.Boolean)
+    center = db.Column('center', db.String(40))
 
     def __init__(self, cost, amounts, start_date, start_time, end_time, location, advter_account_ID, adv_text,
-                 adv_pic=None):
+                 adv_sum):
         self.cost = cost
         self.amounts = amounts
         self.start_date = start_date
         self.start_time = start_time
         self.end_time = end_time
-        self.location = location
+        self.location = str(location)
         self.advter_account_ID = advter_account_ID
         self.adv_text = adv_text
-        self.adv_pic = adv_pic
+        self.adv_sum = adv_sum
         self.check_flag = None
+        lat_all = 0
+        lng_all = 0
+        for point in location:
+            lng_all += point[0]
+            lat_all += point[1]
+        center = [lng_all / len(location), lat_all / len(location)]
+        self.center = str(center)
 
 
 class adv_account(db.Model):

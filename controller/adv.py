@@ -3,8 +3,7 @@ import time
 from datetime import datetime
 
 from flask import Blueprint, render_template, request, session, redirect, url_for, current_app
-from werkzeug.utils import secure_filename
-
+import json
 from model.adv import *
 from tools.LBS import *
 
@@ -41,7 +40,6 @@ def check_login():
 def check_adv_submit():
     print('123')
     adv_text = request.form['adv_text']
-    adv_pic = request.files['adv_pic']
     adv_count = int(request.form['adv_count'])
     location = json.loads(request.form['location'])
     gcj02_loc = []
@@ -51,10 +49,9 @@ def check_adv_submit():
     start_time = time.strptime(request.form['start_time'], '%H:%M')
     end_time = time.strptime(request.form['end_time'], '%H:%M')
     cost = float(request.form['cost'])
-    adv_filename = secure_filename(adv_pic.filename)
-    adv_pic.save((os.path.join(app.root_path, 'static/image/adv_pic', adv_filename)))
-    adv = adv_info(cost, adv_count, date, start_time, end_time, str(gcj02_loc), session['adv_account_id'], adv_text,
-                   adv_filename)
+    adv_sum = request.form['adv_sum']
+    adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_text,
+                   adv_sum)
     db.session.add(adv)
     db.session.commit()
     return '<script>alert("发布成功");location.href="home"</script>'
@@ -73,3 +70,17 @@ def login():
 @adv_bp.route('/home')
 def home():
     return render_template('Users module/ad_home.html', name=session['adv_charge_name'])
+
+
+@adv_bp.route('/get_rec_price/<float:lat>/<float:lng>')
+def get_rec_price(lng, lat):
+    advs = adv_info.query.all()
+    rec_price = 0
+    times = 0
+    for adv in advs:
+        center = json.loads(adv.center)
+        dis = get_distance(lat, lng, center[1], center[0])
+        if dis < 1000:
+            rec_price += adv.cost
+            times += 1
+    return str(rec_price / times)
