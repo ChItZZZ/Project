@@ -184,7 +184,7 @@
                                 <!--data-content="$123">-->
                                 <input type="number" class="form-control" id="cost" name="cost" title="建议价格:"
                                        data-container="body" data-toggle="popover" data-placement="right"
-                                       data-content="$123" onfocus="get_rec()">
+                                       data-content="无" onfocus="get_rec()">
                             </div>
                         </div>
                     </div>
@@ -270,9 +270,9 @@
     function get_rec() {
         var lat = 0, lng = 0;
         if (overlays.length == 0) {
-            alert('请先选择范围!');
-            document.getElementById("num").focus();
-            document.getElementById("num").select();
+            //alert('请先选择范围!');
+            //document.getElementById("num").focus();
+            //document.getElementById("num").select();
             $('#cost').blur();
             return null;
         }
