@@ -172,18 +172,17 @@
 </script>
 
 <script>
-	function change_color(){
-		var a = document.getElementsByName("times"); 
-		var y = document.getElementsByName("times2"); 
-		var z = new Array();
-		for(i in y){ 
-			z[i] = parseInt(y[i].innerHTML);
-			if(z[i] > 899){
-				a[i].style.color="red";
-			}
-		} 
-	}
-	window.onload=change_color(); 
+    function change_color(times) {
+        var a = document.getElementsByName("times");
+        var y = document.getElementsByName("times2");
+        var z = new Array();
+        for (i in y) {
+            z[i] = parseInt(y[i].innerHTML);
+            if (z[i] > times) {
+                a[i].style.color = "red";
+            }
+        }
+    }
 </script>
 
 <script>
@@ -208,8 +207,9 @@
                 var json = JSON.parse(data);
                 for (var i = 0; i < json.length; i++) {
                     var record = json[i];
-                    show_advs(record['adv_ID'], record['time'])
+                    show_advs(record['adv_ID'], record['time'], record['times'])
                 }
+                change_color(3);
             }
         });
     });

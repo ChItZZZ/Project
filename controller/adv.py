@@ -1,5 +1,3 @@
-import time
-from datetime import datetime
 from flask import Blueprint, render_template, request, session, redirect, url_for, current_app
 from model.adv import *
 from tools.LBS import *
@@ -85,4 +83,4 @@ def get_rec_price(lat, lng):
     if times == 0:
         return '0.05'
     else:
-        return str(rec_price / times)
+        return str(rec_price / max(times, 1))

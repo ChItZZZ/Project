@@ -7,6 +7,7 @@ from model.driver import driver_account
 from tools.LBS import *
 from controller.check_per import admin_check_login
 import json
+import re
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -190,11 +191,19 @@ def driver_history(driver_ID):
 def get_records_by_driver(driver_ID):
     records = adv_record.query.filter_by(driver_account_ID=driver_ID).all()
     ajax = []
+    date_dic = {}
     for record in records:
         dic = {}
         dic['adv_ID'] = record.adv_ID
         dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
+        date = record.play_time.strftime("%Y-%m-%d")
+        if date not in date_dic:
+            date_dic[date] = 1
+        else:
+            date_dic[date] += 1
         ajax.append(dic)
+    for a in ajax:
+        a['times'] = date_dic[re.findall('[0-9]+\-[0-9]+\-[0-9]+', a['time'])[0]]
     return json.dumps(ajax)
 
 
