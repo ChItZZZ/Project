@@ -149,3 +149,18 @@ def out_of_china(lng, lat):
     if lat < 0.8293 or lat > 55.8271:
         return True
     return False
+
+
+def rad(d):
+    return d * math.pi / 180.0
+
+
+def get_distance(lat1, lng1, lat2, lng2):#火星坐标获得两点距离
+    lat1 = rad(lat1)
+    lat2 = rad(lat2)
+    a = lat1 - lat2
+    b = rad(lng1) - rad(lng2)
+    s = 2 * math.asin(math.sqrt(pow(math.sin(a / 2), 2) + math.cos(lat1) * math.cos(lat2) * pow(math.sin(b / 2), 2)))
+    s = s * 6378.137
+    s = round(s * 10000) / 10000
+    return s

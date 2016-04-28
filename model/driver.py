@@ -1,7 +1,7 @@
-from . import security
 import hashlib
+
 from app_config import db
-import hashlib
+from tools import security
 
 
 class driver_account(db.Model):

@@ -64,9 +64,10 @@
         <div class="indivisual white-bg" style="padding: 30px 30px 100px 30px ; border-radius: 10px;
          position: relative;
          margin: 20px;
-         box-shadow: 0px 0px 1px 1px rgba(161, 159, 159, 0.1);" >
+         box-shadow: 0px 0px 1px 1px rgba(161, 159, 159, 0.1);">
 
-            <div class="white-bg home-item" style="padding-top: 15px" ><p style="font-size: 22px;padding: 0 10px"><i class="glyphicon glyphicon-user light-gray-bg"></i> 用户信息</p></div>
+            <div class="white-bg home-item" style="padding-top: 15px"><p style="font-size: 22px;padding: 0 10px"><i
+                    class="glyphicon glyphicon-user light-gray-bg"></i> 用户信息</p></div>
             <div class="indivisual-info " style="padding: 0px 50px 20px 50px;border-bottom: 1px dotted lightgray">
 
                 <div class="white-bg">
@@ -115,19 +116,20 @@
             </div>
 
 
-            <div class="home-item" ><p style="font-size: 22px;margin-top: 10px;padding: 0 10px"><i class="fa fa-list"></i> 广告播放记录</p></div>
+            <div class="home-item"><p style="font-size: 22px;margin-top: 10px;padding: 0 10px"><i
+                    class="fa fa-list"></i> 广告播放记录</p></div>
 
             <div class="indivisual-ad" style="margin-top: 30px;padding: 0px 20px;">
-                <table class="table table-striped" >
+                <table class="table table-striped">
                     <thead style="background-color: #5bc0de;color: white;border-radius: 5px">
                     <tr>
                         <th>No.</th>
-                        <th>广告id</th>
+                        <th>广告内容</th>
                         <th>时间</th>
                         <th>支出</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="record_table">
                     <tr>
                         <td>1.</td>
                         <td>123u8412213</td>
@@ -161,14 +163,14 @@
                     </tbody>
                 </table>
                 <div class="col-md-12" style="text-align: center;">
-                    <ul class="pagination" style="margin-left: -50px">
-                        <li><a href="#">&laquo;</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">&raquo;</a></li>
+                    <ul class="pagination" style="margin-left: -50px" id="page_ul">
+                        <li><a>&laquo;</a></li>
+                        <li><a onclick="show(1)">1</a></li>
+                        <li><a onclick="show(2)">2</a></li>
+                        <li><a onclick="show(3)">3</a></li>
+                        <li><a onclick="show(4)">4</a></li>
+                        <li><a onclick="show(5)">5</a></li>
+                        <li><a>&raquo;</a></li>
                     </ul>
                 </div>
             </div>
@@ -199,13 +201,32 @@
             $(this).siblings().removeClass("on");
             $(this).addClass("on");
 
-        })
-//        $(".indivisual-task .task-title .li1").click(function () {
-//            $(".indivisual-task .task-title li").siblings().removeClass("on");
-//            $(".indivisual-task .task-title .li1").addClass("on");
-//
-//        })
+        });
     });
+    var json = {};
+    $(document).ready(function () {
+        $.get("/driver/get_records/", function (data, status) {
+            if (status == 'success') {
+                json = JSON.parse(data);
+                show(1);
+                document.getElementById('page_ul').innerHTML = '';
+                for (var i = 0; i < json.length; i += 5) {
+                    var page=i/5+1;
+                    document.getElementById('page_ul').innerHTML += '<li><a onclick="show(' + page + ')">' + page + '</a></li>'
+                }
+            }
+        });
+    });
+
+    function show(page) {
+        document.getElementById('record_table').innerHTML = '';
+        var i = page * 5 - 5;
+        for (; i < json.length && i < page * 5; i++) {
+            var record = json[i];
+            var str = '<tr><td>' + record['NO'] + '</td><td>' + record['adv_text'] + '</td><td>' + record['time'] + '</td><td>' + record['money'] + '</td></tr>'
+            document.getElementById('record_table').innerHTML += str;
+        }
+    }
 </script>
 </body>
 </html>

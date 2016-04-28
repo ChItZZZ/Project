@@ -37,7 +37,7 @@
         <nav class="left-nav">
             <ul>
                 <li><a href="home"><i class="fa fa-home fa-fw"></i>个人主页</a></li>
-                <li><a href="dri-security.html" class="active"><i class="fa fa-database fa-fw"></i>安全中心</a></li>
+                <li><a href="security.html" class="active"><i class="fa fa-database fa-fw"></i>安全中心</a></li>
                 <li><a href="#"><i class="fa fa-map-marker fa-fw"></i>消息中心<span class="badge pull-right"
                                                                                 style="padding: 6px 12px;border-radius: 12px">6</span></a>
                 </li>
@@ -93,9 +93,13 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label for="phoneNum" class="col-md-4" style="text-align: right">手机号码:</label>
-                            <p style="display: inline-block" id="phoneNum" class="col-md-6">123*******23</p>
+                            <p style="display: inline-block" id="phoneNum" class="col-md-3">123*********23</p>
+                            <input type="button" class="btn btn-primary col-md-5" id="getID" style="width: 155px" value="获取验证码">
                         </div>
+
+
                         <div style="clear: both"></div>
+
 
                     </div>
                     <div class="form-group">
@@ -116,7 +120,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-12" style="text-align: center;margin-top: 20px" >
-                            <input type="submit" value="下一步" class="btn btn-primary">
+                            <input type="submit" value="下一步" class="btn btn-primary" style="width: 180px;height: 50px;">
                         </div>
                     </div>
 
@@ -135,5 +139,29 @@
 <!-- JS -->
 <script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
 <script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+<script>
+    var wait = 60;
+    function time(o) {
+        if (wait == 0) {
+            o.removeAttribute("disabled");
+            o.value = "免费获取验证码";
+            wait = 60;
+        } else {
+            o.setAttribute("disabled", true);
+            o.value = wait + "秒后可以重新发送";
+            wait--;
+            setTimeout(function () {
+                        time(o)
+                    },
+                    1000)
+        }
+    }
+    $(document).ready(function () {
+        $("#getID").click(function () {
+            time(this);
+        })
+    })
+</script>
+
 </body>
 </html>

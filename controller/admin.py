@@ -1,10 +1,13 @@
-from flask import request, render_template, session, current_app, redirect, url_for, Blueprint
+from flask import request, render_template, session, redirect, url_for, Blueprint
+
 from model import db
 from model.admin import admin_account
+from model.adv import adv_info, adv_account, adv_record
 from model.driver import driver_account
-from model.adv import adv_info, adv_account
-import hashlib
-from model.LBS import *
+from tools.LBS import *
+from controller.check_per import admin_check_login
+import json
+import re
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -12,6 +15,7 @@ admin_bp = Blueprint('admin', __name__)
 @admin_bp.route('/')
 @admin_bp.route('/home')
 @admin_bp.route('/index.html')
+@admin_check_login
 def index():
     return render_template('Management module/index.html', name=session['admin_account_name'])
 
@@ -38,11 +42,13 @@ def check_login():
 
 
 @admin_bp.route('/show_drivers')
+@admin_check_login
 def show_drivers():
     return render_template('Management module/drivers.html')
 
 
 @admin_bp.route('/drivers_ajax')
+@admin_check_login
 def drivers_ajax():
     drivers = driver_account.query.all()
     ajax = []
@@ -57,6 +63,7 @@ def drivers_ajax():
 
 
 @admin_bp.route('/show_driver/<int:ID>')
+@admin_check_login
 def show_driver(ID):
     if ID == None:
         return redirect(url_for('admin.show_drivers'))
@@ -68,6 +75,7 @@ def show_driver(ID):
 
 
 @admin_bp.route('/check_driver', methods=['GET'])
+@admin_check_login
 def check_driver():
     phone = request.args['phone']
     flag = bool(int(request.args['flag']))
@@ -78,11 +86,13 @@ def check_driver():
 
 
 @admin_bp.route('/show_advs')
+@admin_check_login
 def show_advs():
     return render_template('Management module/ads.html')
 
 
 @admin_bp.route('/advs_ajax')
+@admin_check_login
 def advs_ajax():
     advs = adv_info.query.all()
     ajax = []
@@ -100,6 +110,7 @@ def advs_ajax():
 
 
 @admin_bp.route('/adv/<int:adv_ID>')
+@admin_check_login
 def show_adv(adv_ID):
     if adv_ID == None:
         return redirect(url_for('admin.show_advs'))
@@ -116,11 +127,13 @@ def show_adv(adv_ID):
 
 
 @admin_bp.route('/show_advters')
+@admin_check_login
 def show_advters():
     return render_template('Management module/adusers.html')
 
 
 @admin_bp.route('/advters_ajax')
+@admin_check_login
 def advters_ajax():
     advters = adv_account.query.all()
     ajax = []
@@ -131,10 +144,11 @@ def advters_ajax():
         dic["company_name"] = advter.company_name
         dic["check_flag"] = str(advter.check_flag)
         ajax.append(dic)
-    return str(ajax)
+    return json.dumps(ajax)
 
 
 @admin_bp.route('/show_advter/<int:account_ID>')
+@admin_check_login
 def show_advter(account_ID):
     if account_ID == None:
         return redirect(url_for('admin.show_advters'))
@@ -146,6 +160,7 @@ def show_advter(account_ID):
 
 
 @admin_bp.route('/check_advter', methods=['GET'])
+@admin_check_login
 def check_advter():
     account_ID = request.args['account_ID']
     flag = bool(int(request.args['flag']))
@@ -153,3 +168,61 @@ def check_advter():
     advter.check_flag = flag
     db.session.commit()
     return "success"
+
+
+@admin_bp.route('/advs_history')
+def advs_history():
+    return render_template('Management module/ads_history.html')
+
+
+@admin_bp.route('/drivers_history')
+def drivers_history():
+    return render_template('Management module/drivers_history.html')
+
+
+@admin_bp.route('/driver_history/<int:driver_ID>')
+def driver_history(driver_ID):
+    driver = driver_account.query.filter_by(account_ID=driver_ID).first()
+    return render_template('Management module/driver_history.html', account_ID=driver.account_ID, name=driver.user_name,
+                           phone=driver.phone, flag=driver.check_flag)
+
+
+@admin_bp.route('/get_records_by_driver/<int:driver_ID>/')
+def get_records_by_driver(driver_ID):
+    records = adv_record.query.filter_by(driver_account_ID=driver_ID).all()
+    ajax = []
+    date_dic = {}
+    for record in records:
+        dic = {}
+        dic['adv_ID'] = record.adv_ID
+        dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
+        date = record.play_time.strftime("%Y-%m-%d")
+        if date not in date_dic:
+            date_dic[date] = 1
+        else:
+            date_dic[date] += 1
+        ajax.append(dic)
+    for a in ajax:
+        a['times'] = date_dic[re.findall('[0-9]+\-[0-9]+\-[0-9]+', a['time'])[0]]
+    return json.dumps(ajax)
+
+
+@admin_bp.route('/adv_history/<int:adv_ID>')
+def adv_history(adv_ID):
+    adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
+    last_time = '{0}至{1}'.format(adv.start_time.strftime('%H:%M:%S'), adv.end_time.strftime('%H:%M:%S'))
+    advter = adv_account.query.filter_by(account_ID=adv.advter_account_ID).first()
+    return render_template('Management module/ad_history.html', adv_ID=adv_ID, last_time=last_time,
+                           company=advter.company_name)
+
+
+@admin_bp.route('/get_records_by_adv/<int:adv_ID>/')
+def get_records_by_adv(adv_ID):
+    records = adv_record.query.filter_by(adv_ID=adv_ID).all()
+    ajax = []
+    for record in records:
+        dic = {}
+        dic['driver_ID'] = record.driver_account_ID
+        dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
+        ajax.append(dic)
+    return json.dumps(ajax)

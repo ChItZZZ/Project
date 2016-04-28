@@ -146,18 +146,18 @@
                     </div>
 
                     <div class="form-group" style="margin-top: 30px">
-                        <!--<div class="col-md-5">-->
-                            <!--<label for="datepicker">时间</label>-->
-                            <!--<input type="text" id="datepicker" class="form-control" placeholder="" name="date">-->
-                        <!--</div>-->
-                        <div class="col-md-4" style="padding-top: 5px;padding-right: 0px;">
-                            <label for="time1">时间</label>
+                        <div class="col-md-4">
+                            <label for="datepicker">时间</label>
+                            <input type="text" id="datepicker" class="form-control" placeholder="" name="date">
+                        </div>
+                        <div class="col-md-3" style="padding-top: 5px;padding-right: 0px;">
+                            <label for="time1"></label>
                             <input type="text" id="time1" class="form-control" placeholder="" name="start_time">
                         </div>
-                        <div class="col-md-2" style="margin-top: 35px;margin-left: 50px">
+                        <div class="col-md-1" style="margin-top: 30px;margin-left: 20px">
                             <p>至</p>
                         </div>
-                        <div class="col-md-4" style="padding-top: 5px;padding-left: 0px;margin-top: 5px">
+                        <div class="col-md-3" style="padding-top: 5px;padding-left: 0px;">
                             <label for="time2"></label>
                             <input type="text" id="time2" class="form-control" placeholder="" name="end_time">
                         </div>
@@ -213,6 +213,8 @@
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/jquery-ui.js"></script>
 <script src="/static/js/bootstrap-datetimepicker.js"></script>
+<script src="/static/js/jquery-ui-slide.js"></script>
+<script src="/static/js/jquery-ui-timepicker-addon.js"></script>
 <script>
     // 百度地图API功能
     var map = new BMap.Map('map');
@@ -300,10 +302,10 @@
         });
 
 
-        $("#time1").datetimepicker({
+        $("#time1").timepicker({
             autoclose:true
         });
-        $("#time2").datetimepicker({
+        $("#time2").timepicker({
             autoclose:true
 
         });
