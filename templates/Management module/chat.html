@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MovingAD管理平台</title>
+
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/datepicker3.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-table.css" rel="stylesheet">
+    <link href="/static/css/styles.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#"><span>MovingAD</span>管理平台</a>
+            <ul class="user-menu">
+                <li class="dropdown pull-right">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                            class="glyphicon glyphicon-user"></span> 管理员ID <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-cog"></span> 设置</a></li>
+                        <li><a href="login.html"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+
+    <form role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+        </div>
+    </form>
+
+    <ul class="nav menu">
+        <li><a href="index.html"><span class="glyphicon glyphicon-dashboard"></span> 主页</a></li>
+        <li class="parent ">
+            <a href="#">
+                <span class="glyphicon glyphicon-list"></span> 管理操作 <span data-toggle="collapse" href="#sub-item-1"
+                                                                          class="icon pull-right"><em
+                    class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+            </a>
+            <ul  class="children collapse" id="sub-item-1">
+                <li>
+                    <a class="" href="show_drivers">
+                        <span class="glyphicon glyphicon-share-alt"></span> 司机用户管理
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="show_advters">
+                        <span class="glyphicon glyphicon-share-alt"></span> 广告商用户管理
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="show_advs">
+                        <span class="glyphicon glyphicon-share-alt"></span> 广告管理
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="parent ">
+            <a href="#">
+                <span class="glyphicon glyphicon-list"></span> 查看记录 <span data-toggle="collapse" href="#sub-item-2"
+                                                                          class="icon pull-right"><em
+                    class="glyphicon glyphicon-s glyphicon-plus"></em></span>
+            </a>
+            <ul class="children collapse" id="sub-item-2">
+                <li>
+                    <a class="" href="drivers_history">
+                        <span class="glyphicon glyphicon-share-alt"></span> 司机领取广告记录
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="advs_history">
+                        <span class="glyphicon glyphicon-share-alt"></span> 广告被领取记录
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+        <li class="active"><a href="#"><span class="glyphicon glyphicon-list-alt"></span> 私信</a></li>
+    </ul>
+
+    <div class="attribution">Copyright © 2016 专业方向综合MovingAD项目组</div>
+
+</div><!--/.sidebar-->
+
+
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+            <li class="active">私信</li>
+        </ol>
+    </div><!--/.row-->
+    <br>
+
+				<div class="panel panel-default chat">
+					<div class="panel-heading" id="accordion"><span class="glyphicon glyphicon-comment"></span> 这里写司机ID</div>
+				
+					<div class="panel-body" style="height:420px;">
+						<ul>
+							<li class="left clearfix">
+								<span class="chat-img pull-left">
+									<img src="http://placehold.it/80/30a5ff/fff" alt="User Avatar" class="img-circle" />
+								</span>
+								<div class="chat-body clearfix">
+									<div class="header">
+										<strong class="primary-font">张三</strong> <small class="text-muted">32 mins ago</small>
+									</div>
+									<p>
+										在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗 
+									</p>
+								</div>
+							</li>
+							<li class="right clearfix">
+								<span class="chat-img pull-right">
+									<img src="http://placehold.it/80/dde0e6/5f6468" alt="User Avatar" class="img-circle" />
+								</span>
+								<div class="chat-body clearfix">
+									<div class="header">
+										<strong class="pull-left primary-font">我</strong> <small class="text-muted">6 mins ago</small>
+									</div>
+									<p>
+										不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在
+									</p>
+								</div>
+							</li>
+							<li class="left clearfix">
+								<span class="chat-img pull-left">
+									<img src="http://placehold.it/80/30a5ff/fff" alt="User Avatar" class="img-circle" />
+								</span>
+								<div class="chat-body clearfix">
+									<div class="header">
+										<strong class="primary-font">张三</strong> <small class="text-muted">32 mins ago</small>
+									</div>
+									<p>
+										在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗在吗 
+									</p>
+								</div>
+							</li>
+							<li class="right clearfix">
+								<span class="chat-img pull-right">
+									<img src="http://placehold.it/80/dde0e6/5f6468" alt="User Avatar" class="img-circle" />
+								</span>
+								<div class="chat-body clearfix">
+									<div class="header">
+										<strong class="pull-left primary-font">我</strong> <small class="text-muted">6 mins ago</small>
+									</div>
+									<p>
+										不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在不在
+									</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+					
+					<div class="panel-footer">
+						<div class="input-group">
+							<input id="btn-input" type="text" class="form-control input-md" placeholder="输入内容..." />
+							<span class="input-group-btn">
+								<button class="btn btn-success btn-md" id="btn-chat">发送</button>
+							</span>
+						</div>
+					</div>
+				</div>
+
+
+</div>
+
+
+<script src="/static/js/jquery-1.11.1.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/chart.min.js"></script>
+<script src="/static/js/chart-data.js"></script>
+<script src="/static/js/easypiechart.js"></script>
+<script src="/static/js/easypiechart-data.js"></script>
+<script src="/static/js/bootstrap-datepicker.js"></script>
+<script src="/static/js/bootstrap-table.js"></script>
+<script>
+    !function ($) {
+        $(document).on("click", "ul.nav li.parent > a > span.icon", function () {
+            $(this).find('em:first').toggleClass("glyphicon-minus");
+        });
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+    })
+    $(window).on('resize', function () {
+        if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+    })
+
+    $(document).ready(function () {
+        $.get("advs_ajax", function (data, status) {
+            if (status == 'success') {
+                var json = eval(data)
+                for (var i = 0; i < json.length; i++) {
+                    var adv = json[i]
+                    show(adv['adv_ID'], adv['adv_amounts'], adv['adv_text'], adv['cost'], adv['date'], adv['company'])
+                }
+            }
+        });
+    });
+</script>
+</body>
+
+</html>
