@@ -40,7 +40,7 @@ h1 {
 
 .btn-primary {
     border-radius: 2px;
-    background-color: #39ADB4;
+    background-color: #59b4d4;
     border: none;
     color: white;
 }
@@ -135,9 +135,8 @@ h1 {
 }
 
 .container {
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 2px solid #5bc0de;
-    border-radius: 8px;
+    border: 1px solid #5bc0de;
+    background: rgba(240, 248, 255, 0.8);
     margin: 0 auto;
     padding: 30px;
 }
@@ -339,15 +338,22 @@ h1 {
     border: 1px solid #5bc0de;
 }
 
-.step-list .on .text {
-    color: black;
-}
-
-.modify-box{
+.modify-box {
     padding: 30px 18px;
 }
 
-.form-group{
+.form-group {
     font-size: 18px;
     margin-top: 25px;
+}
+
+.findpwd-form {
+    max-width: 600px;
+    margin: 0 auto;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    background: rgba(255,255,255,0.8);
+    padding: 30px;
+    height: 275px;
+    border-radius: 10px;
 }

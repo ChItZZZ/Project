@@ -11,26 +11,23 @@
     <link href="/static/css/font-awesome.min.css" rel="stylesheet">
 
 
-
 </head>
 <body class="bg-gray">
-<div id="Layer1" style="position:absolute; left:0px; top:0px; width:100%; height:100%;z-index:-1">  
-	<img src="/static/images/default2.png" width="100%" height="100%"/>  
+<div id="Layer1" style="position:absolute; left:0px; top:0px; width:100%; height:100%;z-index:-1">
+    <img src="/static/images/default2.png" width="100%" height="100%"/>
 </div>
-<div >
+<div>
     <div class="col-md-12">
-    <div style="width:100%; height:200px"></div>
+        <div style="width:100%; height:200px"></div>
         <form class="form-horizontal container loign-form-1 margin-bottom-30" role="form"
               action="check_login" method="POST">
-             <h1 class="margin-bottom-15">登 录</h1>
+            <h1 class="margin-bottom-15">登 录</h1>
             <div class="form-group">
                 <div class="col-xs-12">
                     <div class="control-wrapper">
                         <label for="username" class="control-label fa-label"><i
                                 class="fa fa-user fa-medium"></i></label>
-                        <input type="text" class="form-control" id="username" value="Username"
-                               onfocus="if(this.value=='Username'){this.value = ''} "
-                               onblur="if(this.value==''){this.value = 'phone'}" name="phone">
+                        <input type="text" class="form-control" id="username" placeholder="Username">
                     </div>
                 </div>
             </div>
@@ -39,8 +36,9 @@
                     <div class="control-wrapper">
                         <label for="password" class="control-label fa-label"><i
                                 class="fa fa-lock fa-medium"></i></label>
-                        <input type="password" class="form-control" id="password" value="Password"
-                               onfocus="this.value = '' " onblur="if(this.value==''){this.value = 'Password'}" name="password">
+                        <input type="password" class="form-control" id="password" placeholder="Password"
+                               onfocus="this.value = '' " onblur="if(this.value==''){this.value = 'Password'}"
+                               name="password">
                     </div>
                 </div>
             </div>

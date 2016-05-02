@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>MovingAD</title>
     <meta name="description" content="">
+    <meta name="author" content="templatemo">
 
     <link href="/static/css/font-awesome.min.css" rel="stylesheet">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/style-home.css" rel="stylesheet">
     <link href="/static/css/style.css" rel="stylesheet">
-
-
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--获取验证码-->
 
 </head>
 <body>
@@ -36,11 +36,9 @@
         </div>
         <nav class="left-nav">
             <ul>
-                <li><a href="home"><i class="fa fa-home fa-fw"></i>个人主页</a></li>
-                <li><a href="security.html" class="active"><i class="fa fa-database fa-fw"></i>安全中心</a></li>
-                <li><a href="#"><i class="fa fa-map-marker fa-fw"></i>消息中心<span class="badge pull-right"
-                                                                                style="padding: 6px 12px;border-radius: 12px">6</span></a>
-                </li>
+                <li><a href="#" class="active"><i class="fa fa-home fa-fw"></i>个人主页</a></li>
+                <li><a href="#"><i class="fa fa-database fa-fw"></i>安全中心</a></li>
+                <li><a href="#"><i class="fa fa-map-marker fa-fw"></i>位置信息</a></li>
                 <li><a href="#"><i class="fa fa-cab fa-fw"></i>时间安排</a></li>
                 <li><a href="#"><i class="fa fa-cog fa-fw"></i>设置</a></li>
                 <li><a href="login.html"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
@@ -63,7 +61,7 @@
         </div>
         <div class="indivisual-security-main">
             <div class="indivisual-security-info col-md-12" style="padding: 30px 40px">
-                <p><strong style="font-size: 27px">找回交易密码</strong></p>
+                <p><strong style="font-size: 27px">修改登录密码</strong></p>
             </div>
             <div class="col-md-12" style="background-color: #fff;padding: 0;">
                 <ul class="step-list">
@@ -74,7 +72,7 @@
                     </li>
                     <li class="step-2 col-md-4">
                         <span class="num">02</span>
-                        <span class="text">设置交易密码</span>
+                        <span class="text">设置登录密码</span>
                         <span></span>
                     </li>
                     <li class="step-3 col-md-4">
@@ -94,12 +92,12 @@
                         <div class="col-md-12">
                             <label for="phoneNum" class="col-md-4" style="text-align: right">手机号码:</label>
                             <p style="display: inline-block" id="phoneNum" class="col-md-3">123*********23</p>
-                            <input type="button" class="btn btn-primary col-md-5" id="getID" style="width: 155px" value="获取验证码">
+                            <input type="button" class="btn btn-primary col-md-5" id="getID" style="width: 155px"
+                                   value="获取验证码">
                         </div>
 
 
                         <div style="clear: both"></div>
-
 
                     </div>
                     <div class="form-group">
@@ -119,7 +117,7 @@
 
                     </div>
                     <div class="form-group">
-                        <div class="col-md-12" style="text-align: center;margin-top: 20px" >
+                        <div class="col-md-12" style="text-align: center;margin-top: 20px">
                             <input type="submit" value="下一步" class="btn btn-primary" style="width: 180px;height: 50px;">
                         </div>
                     </div>
@@ -162,6 +160,5 @@
         })
     })
 </script>
-
 </body>
 </html>

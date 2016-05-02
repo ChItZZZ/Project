@@ -10,7 +10,6 @@
     <link href="/static/css/font-awesome.min.css" rel="stylesheet">
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/style-home.css" rel="stylesheet">
-
     <link href="/static/css/jquery-ui.min.css" rel="stylesheet">
     <link href="/static/css/bootstrap-datetimepicker.css" rel="stylesheet">
 
@@ -121,7 +120,7 @@
             </div>
         </div>
         <div class="">
-            <form role="form" class="advertisement-summit container" action="/adv/check_adv_submit" method="post"
+            <form role="form" class="advertisement-summit container" action="check_adv_submit" method="post"
                   enctype="multipart/form-data" id="form1">
                 <div class="form-inner">
                     <div class="form-group">
@@ -133,9 +132,10 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label for="brief">广告简介</label>
-                            <textarea name="adv_sum" class="form-control" id="brief" rows="1" required></textarea>
+                            <textarea name="adv_text" class="form-control" id="brief" rows="1" required></textarea>
                         </div>
                     </div>
+
 
                     <div class="form-group">
                         <div class="col-md-6" style="margin-top: 30px">
@@ -146,14 +146,18 @@
                     </div>
 
                     <div class="form-group" style="margin-top: 30px">
-                        <div class="col-md-4" style="padding-top: 5px;padding-right: 0px;">
-                            <label for="time1">时间</label>
+                        <div class="col-md-4">
+                            <label for="datepicker">时间</label>
+                            <input type="text" id="datepicker" class="form-control" placeholder="" name="date">
+                        </div>
+                        <div class="col-md-3" style="padding-top: 5px;padding-right: 0px;">
+                            <label for="time1"></label>
                             <input type="text" id="time1" class="form-control" placeholder="" name="start_time">
                         </div>
-                        <div class="col-md-2" style="margin-top: 35px;margin-left: 50px">
+                        <div class="col-md-1" style="margin-top: 30px;margin-left: 20px">
                             <p>至</p>
                         </div>
-                        <div class="col-md-4" style="padding-top: 5px;padding-left: 0px;margin-top: 5px">
+                        <div class="col-md-3" style="padding-top: 5px;padding-left: 0px;">
                             <label for="time2"></label>
                             <input type="text" id="time2" class="form-control" placeholder="" name="end_time">
                         </div>
@@ -162,32 +166,32 @@
                     <div class="form-group">
                         <div class="col-md-12" style="margin-top: 10px">
                             <label for="allmap">广告播放位置</label>
-                            <div id="allmap" style="overflow:hidden;zoom:1;position:relative">
+                            <div id="allmap" style="overflow:hidden;zoom:1;position:relative;">
                                 <div id="map"
                                      style="border: 1px solid darkgray;border-radius:5px;height:95%;width: 88%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;">
                                 </div>
                             </div>
                             <input type="text" name="location" style="display: none;" id="location">
                             <div id="result">
-                                <input type="button" class="btn btn-ad-summit" style="margin-left: 0px;" value="重新标记"
+                                <input type="button" class="btn btn-ad-summit" style="margin-left: 15px;" value="重新标记"
                                        onclick="clearAll();"/>
                             </div>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-md-6">
-                            <div class="col-md-8" style="padding-left:0px">
-                                <label for="cost" style="margin-top: 30px">每条价格</label>
-                                <!--<input type="number" class="form-control" id="cost" name="cost" title="建议价格:$123"-->
-                                <!--data-container="body" data-toggle="tooltip" data-placement="right"-->
-                                <!--data-content="$123">-->
-                                <input type="number" class="form-control" id="cost" name="cost" title="建议价格:"
-                                       data-container="body" data-toggle="popover" data-placement="right"
-                                       data-content="无" onfocus="get_rec()">
-                            </div>
+                    <div class="form-group" >
+                        <div class="col-md-8">
+                            <label for="cost" style="margin-top: 30px">每条价格</label>
+                            <!--<input type="number" class="form-control" id="cost" name="cost" title="建议价格:$123"-->
+                                   <!--data-container="body" data-toggle="tooltip" data-placement="right"-->
+                                   <!--data-content="$123">-->
+                            <input type="number" class="form-control" id="cost" name="cost" title="建议价格:"
+                                   data-container="body" data-toggle="popover" data-placement="right"
+                                   data-content="$123">
                         </div>
                     </div>
+                    <!--<div style="clear: both;"></div>-->
+
 
 
                     <div class="form-group">
@@ -209,6 +213,8 @@
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/jquery-ui.js"></script>
 <script src="/static/js/bootstrap-datetimepicker.js"></script>
+<script src="/static/js/jquery-ui-slide.js"></script>
+<script src="/static/js/jquery-ui-timepicker-addon.js"></script>
 <script>
     // 百度地图API功能
     var map = new BMap.Map('map');
@@ -261,59 +267,50 @@
             one_loc[1] = lays[i].lat;
             loc.push(one_loc);
         }
-        loc = JSON.stringify(loc);
+        loc = JSON.stringify(loc)
         document.getElementById('location').value = loc;
         //alert(document.getElementById('location').value);
         document.getElementById('form1').submit()
     }
 
-    function get_rec() {
-        var lat = 0, lng = 0;
-        if (overlays.length == 0) {
-            //alert('请先选择范围!');
-            //document.getElementById("num").focus();
-            //document.getElementById("num").select();
-            $('#cost').blur();
-            return null;
-        }
-        else {
-            var lays = overlays[0]['ro'];
-            for (var i = 0; i < lays.length; i++) {
-                lat += lays[i].lat;
-                lng += lays[i].lng;
-            }
-            lat /= lays.length;
-            lng /= lays.length;
-            var url = '/adv/get_rec_price/' + lat + '/' + lng + '/';
-            $.get(url, function (data, status) {
-                if (status == 'success') {
-                    $('#cost').attr('data-content', data);
-                    $("[data-toggle='popover']").popover();
-                }
-            })
-        }
+
+//    百度地图双击事件
+
+    function showInfo(e){
+        alert(e.point.lng + ", " + e.point.lat);
     }
+    map.addEventListener("dblclick", showInfo);
 
 </script>
 
 <script>
     $(document).ready(function () {
+//        $("[data-toggle='tooltip']").tooltip();
+//        $("[data-toggle='tooltip']").on('focus',function () {
+//            $(this).tooltip('show');
+//        }.on('blur', function () {
+//            $(this).tooltip('hide');
+//        })
+
+        $("[data-toggle='popover']").popover();
         $("#cost").blur(function () {
             $(this).popover("hide");
-        });
-        $("#datepicker").datepicker({
+        })
+        $( "#datepicker" ).datepicker({
             changeMonth: true,
             changeYear: true
         });
 
 
-        $("#time1").datetimepicker({
-            autoclose: true
+        $("#time1").timepicker({
+            autoclose:true
         });
-        $("#time2").datetimepicker({
-            autoclose: true
+        $("#time2").timepicker({
+            autoclose:true
 
         });
+
+
     });
 </script>
 </body>
