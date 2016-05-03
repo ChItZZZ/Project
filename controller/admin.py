@@ -226,3 +226,14 @@ def get_records_by_adv(adv_ID):
         dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
         ajax.append(dic)
     return json.dumps(ajax)
+
+
+@admin_bp.route('/chat')
+def chat():
+    return render_template('Management module/chat.html')
+
+
+@admin_bp.route('/chats')
+@admin_bp.route('/chats.html')
+def chats():
+    return render_template('Management module/chats.html')
