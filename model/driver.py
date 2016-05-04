@@ -56,3 +56,8 @@ class driver_account(db.Model):
         dic['user_name'] = self.user_name
         dic['card_pic'] = self.card_pic
         return dic
+
+    def change_pwd(self, pwd):
+        self.account_pwd = hashlib.md5((pwd + self.salt).encode('ascii')).hexdigest()
+        db.session.commit()
+        return True
