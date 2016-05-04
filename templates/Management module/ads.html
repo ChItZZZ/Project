@@ -87,7 +87,7 @@
 
             </ul>
         </li>
-        <li><a href="chats.html"><span class="glyphicon glyphicon-list-alt"></span> 私信</a></li>
+        <li><a href="chats"><span class="glyphicon glyphicon-list-alt"></span> 私信</a></li>
     </ul>
 
     <div class="attribution">Copyright © 2016 专业方向综合MovingAD项目组</div>
@@ -164,9 +164,9 @@
     $(document).ready(function () {
         $.get("advs_ajax", function (data, status) {
             if (status == 'success') {
-                var json = eval(data)
+                var json = JSON.parse(data);
                 for (var i = 0; i < json.length; i++) {
-                    var adv = json[i]
+                    var adv = json[i];
                     show(adv['adv_ID'], adv['adv_amounts'], adv['adv_text'], adv['cost'], adv['date'], adv['company'])
                 }
             }

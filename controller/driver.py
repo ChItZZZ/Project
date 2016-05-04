@@ -81,7 +81,7 @@ def register():
     return render_template('Users module/create-account.html')
 
 
-@driver_bp.route('/dri-security.html')
+
 @driver_bp.route('/security')
 @driver_check_login
 def security():
