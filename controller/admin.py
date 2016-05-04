@@ -1,9 +1,10 @@
 from flask import request, render_template, session, redirect, url_for, Blueprint
-
+from sqlalchemy import or_, and_
 from model import db
 from model.admin import admin_account
 from model.adv import adv_info, adv_account, adv_record
 from model.driver import driver_account
+from model.message import message
 from tools.LBS import *
 from controller.check_per import admin_check_login
 import json
@@ -170,16 +171,19 @@ def check_advter():
     return "success"
 
 
+@admin_check_login
 @admin_bp.route('/advs_history')
 def advs_history():
     return render_template('Management module/ads_history.html')
 
 
+@admin_check_login
 @admin_bp.route('/drivers_history')
 def drivers_history():
     return render_template('Management module/drivers_history.html')
 
 
+@admin_check_login
 @admin_bp.route('/driver_history/<int:driver_ID>')
 def driver_history(driver_ID):
     driver = driver_account.query.filter_by(account_ID=driver_ID).first()
@@ -187,6 +191,7 @@ def driver_history(driver_ID):
                            phone=driver.phone, flag=driver.check_flag)
 
 
+@admin_check_login
 @admin_bp.route('/get_records_by_driver/<int:driver_ID>/')
 def get_records_by_driver(driver_ID):
     records = adv_record.query.filter_by(driver_account_ID=driver_ID).all()
@@ -207,6 +212,7 @@ def get_records_by_driver(driver_ID):
     return json.dumps(ajax)
 
 
+@admin_check_login
 @admin_bp.route('/adv_history/<int:adv_ID>')
 def adv_history(adv_ID):
     adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
@@ -216,6 +222,7 @@ def adv_history(adv_ID):
                            company=advter.company_name)
 
 
+@admin_check_login
 @admin_bp.route('/get_records_by_adv/<int:adv_ID>/')
 def get_records_by_adv(adv_ID):
     records = adv_record.query.filter_by(adv_ID=adv_ID).all()
@@ -228,12 +235,38 @@ def get_records_by_adv(adv_ID):
     return json.dumps(ajax)
 
 
-@admin_bp.route('/chat')
-def chat():
-    return render_template('Management module/chat.html')
+@admin_check_login
+@admin_bp.route('/chat/<int:receiver_ID>')
+def chat(receiver_ID):
+    name = driver_account.query.filter_by(account_ID=receiver_ID).first().user_name
+    return render_template('Management module/chat.html', receiver_ID=receiver_ID, name=name)
 
 
+@admin_check_login
 @admin_bp.route('/chats')
 @admin_bp.route('/chats.html')
 def chats():
     return render_template('Management module/chats.html')
+
+
+@admin_bp.route('/get_message/<int:driver_ID>')
+def get_message(driver_ID):
+    # ms = message.query.filter_by(receiver_ID=driver_ID, flag=True)
+    # ms += message.query.filter_by(sender_ID=driver_ID, flag=False)
+    ms = message.query.filter(or_(and_(message.receiver_ID == driver_ID, message.flag == True),
+                                  and_(message.sender_ID == driver_ID, message.flag == False)))
+    ajax = []
+    for m in ms:
+        ajax.append(m.to_json())
+    return json.dumps(ajax)
+
+
+@admin_bp.route('/send_message/', methods=['POST'])
+def send_message():
+    text = request.form['text']
+    receiver_ID = request.form['receiver_ID']
+    sender_ID = session['admin_account_id']
+    m = message(text, sender_ID, receiver_ID, True)
+    db.session.add(m)
+    db.session.commit()
+    return 'success'
