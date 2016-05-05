@@ -132,7 +132,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label for="brief">广告简介</label>
-                            <textarea name="adv_text" class="form-control" id="brief" rows="1" required></textarea>
+                            <textarea name="adv_sum" class="form-control" id="brief" rows="1" required ></textarea>
                         </div>
                     </div>
 
@@ -171,7 +171,7 @@
                                      style="border: 1px solid darkgray;border-radius:5px;height:95%;width: 88%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;">
                                 </div>
                             </div>
-                            <input type="text" name="location" style="display: none;" id="location">
+                            <input type="text" name="location" style="display: none;" id="location"/>
                             <div id="result">
                                 <input type="button" class="btn btn-ad-summit" style="margin-left: 15px;" value="重新标记"
                                        onclick="clearAll();"/>
@@ -179,19 +179,18 @@
                         </div>
                     </div>
 
-                    <div class="form-group" >
+                    <div class="form-group">
                         <div class="col-md-8">
                             <label for="cost" style="margin-top: 30px">每条价格</label>
                             <!--<input type="number" class="form-control" id="cost" name="cost" title="建议价格:$123"-->
-                                   <!--data-container="body" data-toggle="tooltip" data-placement="right"-->
-                                   <!--data-content="$123">-->
+                            <!--data-container="body" data-toggle="tooltip" data-placement="right"-->
+                            <!--data-content="$123">-->
                             <input type="number" class="form-control" id="cost" name="cost" title="建议价格:"
                                    data-container="body" data-toggle="popover" data-placement="right"
-                                   data-content="$123">
+                                   data-content="计算中..." onfocus="get_rec()">
                         </div>
                     </div>
                     <!--<div style="clear: both;"></div>-->
-
 
 
                     <div class="form-group">
@@ -267,23 +266,46 @@
             one_loc[1] = lays[i].lat;
             loc.push(one_loc);
         }
-        loc = JSON.stringify(loc)
+        loc = JSON.stringify(loc);
         document.getElementById('location').value = loc;
         //alert(document.getElementById('location').value);
         document.getElementById('form1').submit()
     }
 
 
-//    百度地图双击事件
+    //    百度地图双击事件
 
-    function showInfo(e){
-        alert(e.point.lng + ", " + e.point.lat);
-    }
-    map.addEventListener("dblclick", showInfo);
 
 </script>
 
 <script>
+
+    function get_rec() {
+        var lat = 0, lng = 0;
+        if (overlays.length == 0) {
+            alert('请先选择范围!');
+            document.getElementById("num").focus();
+            document.getElementById("num").select();
+            //$('#cost').blur();
+            return null;
+        }
+        else {
+            var lays = overlays[0]['ro'];
+            for (var i = 0; i < lays.length; i++) {
+                lat += lays[i].lat;
+                lng += lays[i].lng;
+            }
+            lat /= lays.length;
+            lng /= lays.length;
+            var url = '/adv/get_rec_price/' + lat + '/' + lng + '/';
+            $.get(url, function (data, status) {
+                if (status == 'success') {
+                    $('#cost').attr('data-content', data);
+                    $("[data-toggle='popover']").popover();
+                }
+            })
+        }
+    }
     $(document).ready(function () {
 //        $("[data-toggle='tooltip']").tooltip();
 //        $("[data-toggle='tooltip']").on('focus',function () {
@@ -296,17 +318,17 @@
         $("#cost").blur(function () {
             $(this).popover("hide");
         })
-        $( "#datepicker" ).datepicker({
+        $("#datepicker").datepicker({
             changeMonth: true,
             changeYear: true
         });
 
 
         $("#time1").timepicker({
-            autoclose:true
+            autoclose: true
         });
         $("#time2").timepicker({
-            autoclose:true
+            autoclose: true
 
         });
 

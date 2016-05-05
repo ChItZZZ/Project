@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, session, redirect, url_fo
 from model.adv import *
 from tools.LBS import *
 import re
+from datetime import datetime
 
 app = current_app
 adv_bp = Blueprint('adv', __name__)
@@ -40,10 +41,9 @@ def check_adv_submit():
     gcj02_loc = []
     for point in location:
         gcj02_loc.append(bd09togcj02(point[0], point[1]))
-    # date = datetime.strptime(request.form['date'], '%Y-%m-%d')
-    start_time = time.strptime(re.findall('[0-9]{2}:[0-9]{2}', request.form['start_time'])[0], '%H:%M')
-    end_time = time.strptime(re.findall('[0-9]{2}:[0-9]{2}', request.form['end_time'])[0], '%H:%M')
-    date = re.findall('[0-9]+\-[0-9]+\-[0-9]+', request.form['start_time'])[0]
+    date = datetime.strptime(request.form['date'], '%m/%d/%Y')
+    start_time = time.strptime(request.form['start_time'], '%H:%M')
+    end_time = time.strptime(request.form['end_time'], '%H:%M')
     cost = float(request.form['cost'])
     adv_sum = request.form['adv_sum']
     adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_text,

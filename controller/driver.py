@@ -3,7 +3,7 @@ import os
 from werkzeug.utils import secure_filename
 from model import db
 from model.driver import driver_account
-from tools.security import get_cap_code
+from tools.security import get_cap_code, get_salt
 from ali_config import tool
 from controller.check_per import *
 from model.adv import adv_record, adv_info
@@ -81,11 +81,11 @@ def register():
     return render_template('Users module/create-account.html')
 
 
-@driver_bp.route('/dri-security.html')
+
 @driver_bp.route('/security')
 @driver_check_login
 def security():
-    return render_template('Users module/dri-security.html', name=session['driver_user_name'])
+    return render_template('Users module/security.html', name=session['driver_user_name'])
 
 
 @driver_bp.route('/get_check_code/<int:phone>')
@@ -115,3 +115,49 @@ def get_records():
         if (i == 25):
             break
     return json.dumps(ajax)
+
+
+@driver_bp.route('/change_pwd/')
+def change_pwd():
+    return render_template('Users module/sec-modify-pwd-bypwd.html', name=session['driver_user_name'],
+                           url='/driver/check_change_pwd/')
+
+
+@driver_bp.route('/check_change_pwd/', methods=['GET', 'POST'])
+def check_change_pwd():
+    old_pwd = request.form['old']
+    new_pwd = request.form['new']
+    driver = driver_account.query.get(session['driver_account_id'])
+    if (driver.check(old_pwd)):
+        driver.change_pwd(new_pwd)
+        return '<script>alert("修改密码成功,请重新登录");location.href="/driver/login"</script>'
+    else:
+        return '<script>alert("密码有误,请重试");location.reload();</script>'
+
+
+@driver_bp.route('/forgot_pwd/')
+def forgot_pwd():
+    return render_template('Users module/forgot-password.html', url='/driver/check_forgot_code/',
+                           code_url='/driver/get_forgot_code/')
+
+
+@driver_bp.route('/get_forgot_code/<int:phone>')
+def get_forgot_code(phone):
+    forget_code = get_cap_code()
+    session['forget_code'] = forget_code
+    session['phone'] = phone
+    tool.send_forgot_pwd_message(phone, forget_code)
+    return "success"
+
+
+@driver_bp.route('/check_forgot_code/', methods=['post'])
+def check_forgot_pwd():
+    code = request.form['code']
+    phone = request.form['phone']
+    if code == session['forget_code'] and phone == session['phone']:
+        driver = driver_account.query.filter_by(phone=phone).first()
+        pwd = get_salt(8)
+        driver.change_pwd(pwd)
+        return '<script>alert("您的新密码为{0},请登陆后尽快修改");location.href="/driver/login"</script>'.format(pwd)
+    else:
+        return '<script>alert("手机号或验证码有误,请重试")</script>'
