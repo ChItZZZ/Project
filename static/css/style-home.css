@@ -713,3 +713,13 @@ nav li {
     cursor: pointer;
 
 }
+.personal-list .readMess{
+    width: 10px;
+    border-radius: 50%;
+    height: 10px;
+    position: absolute;
+    background-color: red;
+    display: inline-block;
+    top:40%;
+
+}
