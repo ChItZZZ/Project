@@ -21,7 +21,8 @@ body {
 }
 
 body, .left-nav {
-    background: #1f2124;
+    /*background: #1f2124;*/
+    background: #262626;
 }
 
 h1, h2, h3 {
@@ -414,7 +415,8 @@ nav li {
 }
 
 .panel-default > .panel-heading {
-    background-color: #39ADB4;
+    /*background-color: #39ADB4;*/
+    background-color: #5bc0de;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     color: white;
@@ -651,4 +653,63 @@ nav li {
     background: whitesmoke;
     color: black;
     border-radius: 2px
+}
+
+/*personal-letter*/
+.panel-heading {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    color: #5f6468;
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 0.025em;
+    height: 66px;
+    line-height: 45px;
+}
+
+.personal-list{
+    padding: 30px;
+    border-bottom: 1px solid #e6e6e6;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    margin:0 -30px;
+}
+.personal-head img{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.layer-menu-list{
+    float: right;
+    margin-right: 60px;
+}
+
+.float-left{
+    float: left;
+}
+.float-right{
+    float: right;
+}
+
+.personal-cont{
+    margin-left: 50px;
+}
+.more{
+    float: right;
+    margin-right: 30px;
+}
+
+.dropdown-menu{
+    left: -40px;
+    min-width: 110px;
+}
+
+.personal-list:hover{
+    background-color: lightgray;
+    cursor: pointer;
+
 }
