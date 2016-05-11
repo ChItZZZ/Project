@@ -25,4 +25,5 @@ class sys_notice(db.Model):
         dic['title'] = self.notice_title
         dic['start_time'] = self.start_time.strftime("%Y-%m-%d")
         dic['end_time'] = self.end_time.strftime("%Y-%m-%d")
+        dic['text']=self.notice_text
         return dic

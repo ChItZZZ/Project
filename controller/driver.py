@@ -176,6 +176,7 @@ def get_message():
         ajax.append(m.to_json())
     return json.dumps(ajax)
 
+
 @driver_bp.route('/send_message/', methods=['POST'])
 def send_message():
     text = request.form['text']
@@ -200,3 +201,8 @@ def get_notice():
 @driver_bp.route('/chat')
 def chat():
     return render_template('Users module/dri_chat.html')
+
+
+@driver_bp.route('/s_notice')
+def s_notice():
+    return render_template('Users module/personal-letter.html')
