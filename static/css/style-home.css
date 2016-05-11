@@ -667,7 +667,7 @@ nav li {
     line-height: 45px;
 }
 
-.personal-list{
+.personal-list {
     padding: 30px;
     border-bottom: 1px solid #e6e6e6;
     -webkit-transition: all 0.3s;
@@ -675,51 +675,102 @@ nav li {
     -ms-transition: all 0.3s;
     -o-transition: all 0.3s;
     transition: all 0.3s;
-    margin:0 -30px;
+    margin: 0 -30px;
 }
-.personal-head img{
+
+.personal-head img {
     width: 70px;
     height: 70px;
     border-radius: 50%;
 }
 
-.layer-menu-list{
+.layer-menu-list {
     float: right;
     margin-right: 60px;
 }
 
-.float-left{
+.float-left {
     float: left;
 }
-.float-right{
+
+.float-right {
     float: right;
 }
 
-.personal-cont{
+.personal-cont {
     margin-left: 50px;
 }
-.more{
+
+.more {
     float: right;
     margin-right: 30px;
 }
 
-.dropdown-menu{
+.dropdown-menu {
     left: -40px;
     min-width: 110px;
 }
 
-.personal-list:hover{
+.personal-list:hover {
     background-color: lightgray;
     cursor: pointer;
 
 }
-.personal-list .readMess{
+
+.personal-list .readMess {
     width: 10px;
     border-radius: 50%;
     height: 10px;
     position: absolute;
     background-color: red;
     display: inline-block;
-    top:40%;
+    top: 40%;
+}
 
+/*Chat Widget*/
+
+.chat ul {
+    list-style: none;
+    margin: -15px;
+    padding: 15px;
+}
+
+.chat ul li {
+    margin-bottom: 10px;
+    padding: 15px 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.chat ul li.left .chat-body {
+    margin-left: 80px;
+}
+
+.chat ul li.right .chat-body {
+    margin-right: 100px;
+}
+
+.chat ul li .chat-body p {
+    margin-top: 24px;
+}
+
+.chat ul .glyphicon {
+    margin-right: 5px;
+}
+
+.chat .panel-body {
+    overflow-y: scroll;
+    height: 300px;
+}
+
+.chat-body small {
+    margin-left: 5px;
+}
+
+#message_ul .left span {
+    display: inline;
+    float: left;
+}
+#message_ul .left img{
+    width: 60px;
+    height: 60px;
 }
