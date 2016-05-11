@@ -81,7 +81,6 @@ def register():
     return render_template('Users module/create-account.html')
 
 
-
 @driver_bp.route('/security')
 @driver_check_login
 def security():
@@ -161,3 +160,14 @@ def check_forgot_pwd():
         return '<script>alert("您的新密码为{0},请登陆后尽快修改");location.href="/driver/login"</script>'.format(pwd)
     else:
         return '<script>alert("手机号或验证码有误,请重试")</script>'
+
+
+@driver_bp.route('/chat')
+def chat():
+    return render_template('Users module/chat.html')
+
+
+@driver_bp.route('/personal_letter')
+def letter():
+    return render_template('Users module/personal-letter.html')
+
