@@ -40,8 +40,9 @@ def check_login():
     return json.dumps(result)
 
 
-@app_bp.route('/post_adv/<int:adv_ID>/<int:driver_account_ID>')
-def post_adv(adv_ID, driver_account_ID):
+@app_bp.route('/post_adv/<int:adv_ID>/')
+def post_adv(adv_ID):
+    driver_account_ID = session['driver_account_id']
     driver = driver_account.query.filter_by(account_ID=driver_account_ID).first()
     adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
     adv.amounts -= 1

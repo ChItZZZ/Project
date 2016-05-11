@@ -20,10 +20,8 @@ class message(db.Model):
 
     def to_json(self):
         dic = {}
-        # dic['message_ID'] = self.message_ID
         dic['message_text'] = self.message_text
-        # dic['sender_ID'] = self.sender_ID
-        # dic['receiver_ID'] = self.receiver_ID
         dic['flag'] = self.flag
         dic['time'] = self.send_time.strftime("%Y-%m-%d %H:%M:%S")
+        dic['sender_ID'] = self.sender_ID
         return dic

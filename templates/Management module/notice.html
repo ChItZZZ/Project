@@ -70,7 +70,7 @@
         <li class="parent ">
             <a href="#">
                 <span class="glyphicon glyphicon-list-alt"></span> 查看记录 <span data-toggle="collapse" href="#sub-item-2"
-                                                                          class="icon pull-right"><em
+                                                                              class="icon pull-right"><em
                     class="glyphicon glyphicon-s glyphicon-plus"></em></span>
             </a>
             <ul class="children collapse" id="sub-item-2">
@@ -87,15 +87,12 @@
 
             </ul>
         </li>
-		<li class="active"><a href="#"><span class="glyphicon glyphicon-info-sign"></span> 系统通知</a></li>
+        <li class="active"><a href="#"><span class="glyphicon glyphicon-info-sign"></span> 系统通知</a></li>
     </ul>
 
     <div class="attribution">Copyright © 2016 专业方向综合MovingAD项目组</div>
 
 </div><!--/.sidebar-->
-
-
-
 
 
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
@@ -106,78 +103,86 @@
         </ol>
     </div><!--/.row-->
     <br>
-    
+
     <div class="col-md-12">
-		<div class="panel panel-default">
-					<div class="panel-heading"><span class="glyphicon glyphicon-envelope"></span> 发送系统通知</div>
-					<div class="panel-body">
-						<form class="form-horizontal" action="" method="post">
-							<fieldset>
-								<!-- Name input-->
-								<div class="form-group">
-									<label class="col-md-3 control-label" for="radio">通知对象</label>
-									<div class="col-md-9">
-											<input type="radio" name="optionsRadios" id="optionsRadios1" value="allusers" checked>全体用户&nbsp;&nbsp;&nbsp; 
-											<input type="radio" name="optionsRadios" id="optionsRadios2" value="adusers">广告商用户&nbsp;&nbsp;&nbsp; 
-											<input type="radio" name="optionsRadios" id="optionsRadios3" value="drivers">司机用户
-									</div>
-								</div>
-								
-								<div class="form-group">
-									<label class="col-md-3 control-label" for="name">通知标题</label>
-									<div class="col-md-9">
-									<input id="name" name="name" type="text" placeholder="请输入系统通知标题..." class="form-control">
-									</div>
-								</div>
-							
-								
-								<!-- Message body -->
-								<div class="form-group">
-									<label class="col-md-3 control-label" for="message">通知内容</label>
-									<div class="col-md-9">
-										<textarea class="form-control" id="message" name="message" placeholder="请输入系统通知内容..." rows="5"></textarea>
-									</div>
-								</div>
-								
-								<!-- Form actions -->
-								<div class="form-group">
-									<div class="col-md-12 widget-right">
-										<button type="submit" class="btn btn-default btn-md pull-right">发送通知</button>
-									</div>
-								</div>
-							</fieldset>
-						</form>
-					</div>
-		</div>
-	</div>
-	
+        <div class="panel panel-default">
+            <div class="panel-heading"><span class="glyphicon glyphicon-envelope"></span> 发送系统通知</div>
+            <div class="panel-body">
+                <form class="form-horizontal" action="/admin/send_notice" method="post">
+                    <fieldset>
+                        <!-- Name input-->
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="radio">通知对象</label>
+                            <div class="col-md-9">
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="allusers" checked>全体用户&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="adusers">广告商用户&nbsp;&nbsp;&nbsp;
+                                <input type="radio" name="optionsRadios" id="optionsRadios3" value="drivers">司机用户
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="name">通知标题</label>
+                            <div class="col-md-9">
+                                <input id="name" name="title" type="text" placeholder="请输入系统通知标题..."
+                                       class="form-control">
+                            </div>
+                        </div>
+
+
+                        <!-- Message body -->
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="message">通知内容</label>
+                            <div class="col-md-9">
+                                <textarea class="form-control" id="message" name="text" placeholder="请输入系统通知内容..."
+                                          rows="5"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="name">有效日期至</label>
+                            <div class="col-md-9">
+                                <input type="text" id="datepicker" class="form-control" placeholder="" name="date">
+                            </div>
+                        </div>
+
+                        <!-- Form actions -->
+                        <div class="form-group">
+                            <div class="col-md-12 widget-right">
+                                <button type="submit" class="btn btn-default btn-md pull-right">发送通知</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
-	</div>
-	
+    </div>
+
     <script language="javascript" type="text/javascript">
-        function show(notice_ID, notice_time, notice_title, notice_text) {
-            var strS = '<tr><td style="width:100px; text-align:center;">' + notice_ID + '</td><td style="width:120px; text-align:center;">' + notice_time + '</td><td style="width:120px; text-align:center;">' + notice_title + '</td><td style="width:300px; text-align:center;">' + notice_text + '</td></tr>';
+        function show(notice_ID, notice_time, notice_title, end_time) {
+            var strS = '<tr><td style="width:100px; text-align:center;">' + notice_ID + '</td><td style="width:120px; text-align:center;">' + notice_time + '</td><td style="width:120px; text-align:center;">' + notice_title + '</td><td style="width:300px; text-align:center;">' + end_time + '</td></tr>';
             document.getElementById("change").innerHTML += strS;
         }
     </script>
     <div class="panel panel-default chat">
-				<div class="panel-heading">历史通知</div>
-                <div class="panel-body">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th style="width:100px; text-align:center;">编号</th>
-                            <th style="width:120px; text-align:center;">发布时间</th>
-                            <th style="width:120px; text-align:center;">通知标题</th>
-                            <th style="width:300px; text-align:center;">通知内容</th>
-                        </tr>
-                        </thead>
-                        <tbody id="change">
-                        </tbody>
-                    </table>
-               </div>
-	</div>
-	
+        <div class="panel-heading">历史通知</div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th style="width:100px; text-align:center;">编号</th>
+                    <th style="width:120px; text-align:center;">发布时间</th>
+                    <th style="width:120px; text-align:center;">通知标题</th>
+                    <th style="width:300px; text-align:center;">截止日期</th>
+                </tr>
+                </thead>
+                <tbody id="change">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 
 
@@ -189,6 +194,19 @@
 <script src="/static/js/easypiechart-data.js"></script>
 <script src="/static/js/bootstrap-datepicker.js"></script>
 <script src="/static/js/bootstrap-table.js"></script>
+<script>
+    $(document).ready(function () {
+        $.get("/admin/get_notice", function (data, status) {
+            if (status == 'success') {
+                var json = JSON.parse(data);
+                for (var i = 0; i < json.length; i++) {
+                    var notice = json[i];
+                    show(notice['ID'], notice['start_time'], notice['title'], notice['end_time'])
+                }
+            }
+        });
+    });
+</script>
 
 </body>
 

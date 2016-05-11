@@ -70,7 +70,7 @@
         <li class="parent ">
             <a href="#">
                 <span class="glyphicon glyphicon-list-alt"></span> 查看记录 <span data-toggle="collapse" href="#sub-item-2"
-                                                                          class="icon pull-right"><em
+                                                                              class="icon pull-right"><em
                     class="glyphicon glyphicon-s glyphicon-plus"></em></span>
             </a>
             <ul class="children collapse" id="sub-item-2">
@@ -134,43 +134,43 @@
             </div>
         </div>
     </div><!--/.row-->
+</div>
 
-
-    <script src="/static/js/jquery-1.11.1.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-    <script src="/static/js/chart.min.js"></script>
-    <script src="/static/js/chart-data.js"></script>
-    <script src="/static/js/easypiechart.js"></script>
-    <script src="/static/js/easypiechart-data.js"></script>
-    <script src="/static/js/bootstrap-datepicker.js"></script>
-    <script src="/static/js/bootstrap-table.js"></script>
-    <script>
-        !function ($) {
-            $(document).on("click", "ul.nav li.parent > a > span.icon", function () {
-                $(this).find('em:first').toggleClass("glyphicon-minus");
-            });
-            $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
-        }(window.jQuery);
-
-        $(window).on('resize', function () {
-            if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
-        })
-        $(window).on('resize', function () {
-            if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
-        })
-
-        $(document).ready(function () {
-            $.get("advters_ajax", function (data, status) {
-                if (status == 'success') {
-                    var json = eval(data)
-                    for (var i = 0; i < json.length; i++) {
-                        var driver = json[i]
-                        show(driver['account_ID'], driver['charge_name'], driver['company_name'], driver['check_flag'])
-                    }
-                }
-            });
+<script src="/static/js/jquery-1.11.1.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/chart.min.js"></script>
+<script src="/static/js/chart-data.js"></script>
+<script src="/static/js/easypiechart.js"></script>
+<script src="/static/js/easypiechart-data.js"></script>
+<script src="/static/js/bootstrap-datepicker.js"></script>
+<script src="/static/js/bootstrap-table.js"></script>
+<script>
+    !function ($) {
+        $(document).on("click", "ul.nav li.parent > a > span.icon", function () {
+            $(this).find('em:first').toggleClass("glyphicon-minus");
         });
-    </script>
+        $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+    }(window.jQuery);
+
+    $(window).on('resize', function () {
+        if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+    })
+    $(window).on('resize', function () {
+        if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+    })
+
+    $(document).ready(function () {
+        $.get("advters_ajax", function (data, status) {
+            if (status == 'success') {
+                var json = eval(data);
+                for (var i = 0; i < json.length; i++) {
+                    var driver = json[i];
+                    show(driver['account_ID'], driver['charge_name'], driver['company_name'], driver['check_flag'])
+                }
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

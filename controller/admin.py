@@ -5,6 +5,7 @@ from model.admin import admin_account
 from model.adv import adv_info, adv_account, adv_record
 from model.driver import driver_account
 from model.message import message
+from model.sys_notice import sys_notice
 from tools.LBS import *
 from controller.check_per import admin_check_login
 import json
@@ -270,3 +271,31 @@ def send_message():
     db.session.add(m)
     db.session.commit()
     return 'success'
+
+
+@admin_bp.route('/notice')
+def notice():
+    return render_template('Management module/notice.html')
+
+
+@admin_bp.route('/send_notice', methods=['POST'])
+def send_notice():
+    title = request.form['title']
+    text = request.form['text']
+    type = request.form['optionsRadios']
+    date = request.form['date']
+    type_dic = {'allusers': 1, 'adusers': 2, 'drivers': 3}
+    n = sys_notice(title, text, type_dic[type], date)
+    db.session.add(n)
+    db.session.commit()
+    return '<script>alert("发布成功!");location.href="/admin/notice"</script>'
+
+
+@admin_bp.route('/get_notice')
+def get_notice():
+    ns = sys_notice.query.all()
+    ajax = []
+    for n in ns:
+        dic = n.to_json()
+        ajax.append(dic)
+    return json.dumps(ajax)
