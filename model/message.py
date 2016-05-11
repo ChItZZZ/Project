@@ -23,4 +23,5 @@ class message(db.Model):
         dic['message_text'] = self.message_text
         dic['flag'] = self.flag
         dic['time'] = self.send_time.strftime("%Y-%m-%d %H:%M:%S")
+        dic['sender_ID'] = self.sender_ID
         return dic
