@@ -36,14 +36,11 @@
         </div>
         <nav class="left-nav">
             <ul>
-                <li><a href="/driver/home"><i class="fa fa-home fa-fw"></i>个人主页</a></li>
-                <li><a href="/driver/security" class="active"><i class="fa fa-database fa-fw"></i>安全中心</a></li>
-                <li><a href="#"><i class="fa fa-map-marker fa-fw"></i>消息中心<span class="badge pull-right"
-                                                                                style="padding: 6px 12px;border-radius: 12px">6</span></a>
-                </li>
-                <li><a href="#"><i class="fa fa-cab fa-fw"></i>时间安排</a></li>
-                <li><a href="#"><i class="fa fa-cog fa-fw"></i>设置</a></li>
-                <li><a href="login.html"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
+                <li><a href="/adv/home" class="active"><i class="fa fa-home fa-fw"></i>用户主页</a></li>
+                <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
+                <li><a href="#"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
+                <li><a href="/adv/adv_submit"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
+                <li><a href="/adv/login"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
             </ul>
         </nav>
     </div>
@@ -55,30 +52,29 @@
                     <ul class="text-uppercase">
                         <li><a href="" class="active">用户首页</a></li>
                         <li><a href="">动态信息</a></li>
-                        <li><a href="">任务栏</a></li>
-                        <li><a href="login.html">退出登录</a></li>
+                        <li><a href="../Drivers%20module/login.html">退出登录</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
         <div class="indivisual-security-main">
             <div class="indivisual-security-info col-md-12" style="padding: 30px 40px">
-                <p><strong style="font-size: 27px">修改登录密码</strong></p>
+                <p><strong style="font-size: 27px">找回交易密码</strong></p>
             </div>
             <div class="col-md-12" style="background-color: #fff;padding: 0;">
                 <ul class="step-list">
-                    <li class="step-1 col-md-6 on">
+                    <li class="step-1 col-md-4 on">
                         <span class="num">01</span>
-                        <span class="text">根据登录密码修改</span>
+                        <span class="text">身份验证</span>
                         <span></span>
                     </li>
-                    <!--<li class="step-2 col-md-4">-->
-                    <!--<span class="num">02</span>-->
-                    <!--<span class="text">设置交易密码</span>-->
-                    <!--<span></span>-->
-                    <!--</li>-->
-                    <li class="step-3 col-md-6">
+                    <li class="step-2 col-md-4">
                         <span class="num">02</span>
+                        <span class="text">设置交易密码</span>
+                        <span></span>
+                    </li>
+                    <li class="step-3 col-md-4">
+                        <span class="num">03</span>
                         <span class="text">成功</span>
                         <span></span>
                     </li>
@@ -89,34 +85,38 @@
 
             <!--身份验证-->
             <div class="col-md-12 modify-box" id="step1" data-index="1">
-                <form action="{{ url }}" class="col-md-12" method="post" id="form1">
+                <form action="" class="col-md-12">
                     <div class="form-group">
                         <div class="col-md-12">
-                            <label for="pwd" class="col-md-4" style="text-align: right">请输入原始密码:</label>
-                            <input type="password" id="pwd" class="col-md-5 " placeholder="" name="old">
+                            <label for="phoneNum" class="col-md-4" style="text-align: right">手机号码:</label>
+                            <p style="display: inline-block" id="phoneNum" class="col-md-3">123*********23</p>
+                            <input type="button" class="btn btn-primary col-md-5" id="getID" style="width: 155px" value="获取验证码">
+                        </div>
+
+
+                        <div style="clear: both"></div>
+
+
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="con-pwd" class="col-md-4" style="text-align: right">验证码:</label>
+                            <input type="password" id="con-pwd" class="col-md-5 " placeholder="请输入验证码">
                         </div>
                         <div style="clear: both"></div>
 
                     </div>
-
                     <div class="form-group">
                         <div class="col-md-12">
-                            <label for="new-pwd" class="col-md-4" style="text-align: right">新密码:</label>
-                            <input type="password" id="new-pwd" class="col-md-5 " placeholder="" name="new">
-                        </div>
-                        <div style="clear: both"></div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label for="con-pwd" class="col-md-4" style="text-align: right">再次输入:</label>
-                            <input type="password" id="con-pwd" class="col-md-5 " placeholder="" onblur="check_re()">
+                            <label for="IDCard" class="col-md-4 " style="text-align: right">身份证号码:</label>
+                            <input type="text" id="IDCard" placeholder="请输入您的身份证号码" class="col-md-5 ">
                         </div>
                         <div style="clear: both"></div>
 
                     </div>
                     <div class="form-group">
-                        <div class="col-md-12" style="text-align: center;margin-top: 20px">
-                            <input type="button" value="下一步" class="btn btn-primary" style="width: 180px;height: 50px;" onclick="sub()">
+                        <div class="col-md-12" style="text-align: center;margin-top: 20px" >
+                            <input type="submit" value="下一步" class="btn btn-primary" style="width: 180px;height: 50px;">
                         </div>
                     </div>
 
@@ -156,19 +156,7 @@
         $("#getID").click(function () {
             time(this);
         })
-    });
-    function check_re() {
-        if (document.getElementById('con-pwd').value != document.getElementById('new-pwd').value) {
-            alert('两次输入密码不一致')
-        }
-    }
-    function sub(){
-        if (document.getElementById('con-pwd').value != document.getElementById('new-pwd').value) {
-            alert('两次输入密码不一致')
-        }else{
-            document.getElementById('form1').submit();
-        }
-    }
+    })
 </script>
 
 </body>
