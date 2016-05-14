@@ -61,7 +61,7 @@ def drivers_ajax():
         dic["phone"] = driver.phone
         dic["check_flag"] = str(driver.check_flag)
         ajax.append(dic)
-    return str(ajax)
+    return json.dumps(ajax)
 
 
 @admin_bp.route('/show_driver/<int:ID>')
@@ -108,7 +108,7 @@ def advs_ajax():
         advter = adv_account.query.filter_by(account_ID=adv.advter_account_ID).first()
         dic['company'] = advter.company_name
         ajax.append(dic)
-    return str(ajax)
+    return json.dumps(ajax)
 
 
 @admin_bp.route('/adv/<int:adv_ID>')

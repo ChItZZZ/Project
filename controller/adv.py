@@ -3,6 +3,8 @@ from model.adv import *
 from tools.LBS import *
 from controller.check_per import advter_check_login
 from datetime import datetime
+from werkzeug.utils import secure_filename
+import os
 
 app = current_app
 adv_bp = Blueprint('adv', __name__)
@@ -42,7 +44,7 @@ def check_login():
 @adv_bp.route('/check_adv_submit', methods=['POST'])
 @advter_check_login
 def check_adv_submit():
-    adv_text = request.form['adv_text']
+    flag = request.form['select'] == 'true'
     adv_count = int(request.form['adv_count'])
     location = json.loads(request.form['location'])
     gcj02_loc = []
@@ -53,8 +55,17 @@ def check_adv_submit():
     end_time = time.strptime(request.form['end_time'], '%H:%M')
     cost = float(request.form['cost'])
     adv_sum = request.form['adv_sum']
-    adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_text,
-                   adv_sum)
+    if flag:
+        img = request.files['adv_img']
+        img_filename = secure_filename(img.filename)
+        img.save(os.path.join(app.root_path, 'static/image/adv_img', img_filename))
+        adv = adv_info(cost, adv_count, date, start_time, end_time, location, session['adv_account_id'], adv_sum, flag,
+                       img_filename)
+    else:
+        adv_text = request.form['adv_text']
+        adv = adv_info(cost, adv_count, date, start_time, end_time, location, session['adv_account_id'], adv_sum, flag,
+                       adv_text)
+
     db.session.add(adv)
     db.session.commit()
     return '<script>alert("发布成功");location.href="home"</script>'

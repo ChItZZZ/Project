@@ -1,6 +1,8 @@
 from app_config import db
 import hashlib
 import time
+from tools.LBS import get_distance
+import json
 
 
 class adv_info(db.Model):
@@ -16,10 +18,12 @@ class adv_info(db.Model):
     adv_sum = db.Column('adv_sum', db.String(50))
     adv_text = db.Column('adv_text', db.String(80))
     check_flag = db.Column('check_flag', db.Boolean)
+    img_src = db.Column('img_src', db.String(50))
+    img_flag = db.Column('img_flag', db.Boolean)
     center = db.Column('center', db.String(40))
 
-    def __init__(self, cost, amounts, start_date, start_time, end_time, location, advter_account_ID, adv_text,
-                 adv_sum):
+    def __init__(self, cost, amounts, start_date, start_time, end_time, location, advter_account_ID, adv_sum, img_flag,
+                 adv_text=None, img_src=None):
         self.cost = cost
         self.amounts = amounts
         self.start_date = start_date
@@ -30,6 +34,8 @@ class adv_info(db.Model):
         self.adv_text = adv_text
         self.adv_sum = adv_sum
         self.check_flag = None
+        self.img_flag = img_flag
+        self.img_src = img_src
         lat_all = 0
         lng_all = 0
         for point in location:
@@ -37,6 +43,13 @@ class adv_info(db.Model):
             lat_all += point[1]
         center = [lng_all / len(location), lat_all / len(location)]
         self.center = str(center)
+
+    def check_in(self, lat, lng, meter):
+        points = json.loads(self.location)
+        for point in points:
+            if get_distance(lat, lng, point[1], point[0]) < meter / 1000.0:
+                return True
+        return False
 
 
 class adv_account(db.Model):

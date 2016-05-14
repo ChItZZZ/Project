@@ -3,24 +3,30 @@ import json
 from model.driver import driver_account
 from model.adv import adv_info, adv_record
 from app_config import db
+from tools.LBS import *
 
 app_bp = Blueprint('app', __name__)
 
 
-@app_bp.route('/get_all_advs')
-def get_all_adv():
+@app_bp.route('/get_advs/<int:meter>/<float:lng>/<float:lat>')
+def get_all_adv(meter, lat, lng):
     advs = adv_info.query.filter(adv_info.amounts > 0).all()
     ajax = []
     for adv in advs:
-        dic = {}
-        dic["adv_ID"] = adv.adv_ID
-        dic["points"] = adv.location
-        dic['text'] = adv.adv_text
-        ajax.append(dic)
+        if adv.check_in(lat, lng, meter):
+            dic = {}
+            dic["adv_ID"] = adv.adv_ID
+            dic["points"] = adv.location
+            dic['flag'] = adv.img_flag
+            if adv.img_flag:
+                dic['img_src'] = adv.img_src
+            else:
+                dic['text'] = adv.adv_text
+            ajax.append(dic)
     return json.dumps(ajax)
 
 
-@app_bp.route('/check_login', methods=['POST','GET'])
+@app_bp.route('/check_login', methods=['POST', 'GET'])
 def check_login():
     phone = request.values.get('phone')
     password = request.values.get('password')
