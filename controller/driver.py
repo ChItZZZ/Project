@@ -99,7 +99,6 @@ def security():
 
 
 @driver_bp.route('/get_check_code/<int:phone>')
-@driver_check_login
 def get_check_code(phone):
     check_code = get_cap_code()
     session['check_code'] = check_code
