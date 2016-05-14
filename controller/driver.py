@@ -43,6 +43,12 @@ def check_login():
             return '<script>alert("用户名或密码错误");location.href="/driver/login"</script>'
 
 
+@driver_bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('driver.login'))
+
+
 @driver_bp.route('/check_register', methods=['POST'])
 def check_register():
     check_code = session['check_code']
@@ -71,24 +77,24 @@ def check_register():
 @driver_check_login
 def home():
     driver = session['driver_account']
-    return render_template('Users module/dri-home.html', name=session['driver_user_name'],
+    return render_template('Drivers module/dri-home.html', name=session['driver_user_name'],
                            account=driver['account_money'], card_pic=driver['card_pic'], user_ID=driver['user_ID'])
 
 
 @driver_bp.route('/login')
 def login():
-    return render_template('Users module/login.html')
+    return render_template('Drivers module/login.html')
 
 
 @driver_bp.route('/register')
 def register():
-    return render_template('Users module/create-account.html')
+    return render_template('Drivers module/create-account.html')
 
 
 @driver_bp.route('/security')
 @driver_check_login
 def security():
-    return render_template('Users module/security.html', name=session['driver_user_name'])
+    return render_template('Drivers module/security.html', name=session['driver_user_name'])
 
 
 @driver_bp.route('/get_check_code/<int:phone>')
@@ -122,7 +128,7 @@ def get_records():
 
 @driver_bp.route('/change_pwd/')
 def change_pwd():
-    return render_template('Users module/sec-modify-pwd-bypwd.html', name=session['driver_user_name'],
+    return render_template('Drivers module/sec-modify-pwd-bypwd.html', name=session['driver_user_name'],
                            url='/driver/check_change_pwd/')
 
 
@@ -140,7 +146,7 @@ def check_change_pwd():
 
 @driver_bp.route('/forgot_pwd/')
 def forgot_pwd():
-    return render_template('Users module/forgot-password.html', url='/driver/check_forgot_code/',
+    return render_template('Drivers module/forgot-password.html', url='/driver/check_forgot_code/',
                            code_url='/driver/get_forgot_code/')
 
 
@@ -200,9 +206,9 @@ def get_notice():
 
 @driver_bp.route('/chat')
 def chat():
-    return render_template('Users module/dri_chat.html')
+    return render_template('Drivers module/dri-chat.html')
 
 
 @driver_bp.route('/s_notice')
 def s_notice():
-    return render_template('Users module/personal-letter.html')
+    return render_template('Drivers module/personal-letter.html')

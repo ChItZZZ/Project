@@ -55,17 +55,17 @@ def check_adv_submit():
 
 @adv_bp.route('/adv_submit')
 def adv_submit():
-    return render_template('Users module/ad_submit.html', name=session['adv_charge_name'])
+    return render_template('Advertiser module/ad-submit.html', name=session['adv_charge_name'])
 
 
 @adv_bp.route('/login')
 def login():
-    return render_template('Users module/login.html')
+    return render_template('Advertiser module/login.html')
 
 
 @adv_bp.route('/home/')
 def home():
-    return render_template('Users module/ad_home.html', name=session['adv_charge_name'])
+    return render_template('Advertiser module/adv-home.html', name=session['adv_charge_name'])
 
 
 @adv_bp.route('/get_rec_price/<float:lat>/<float:lng>/')
