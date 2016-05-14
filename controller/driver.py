@@ -44,6 +44,7 @@ def check_login():
 
 
 @driver_bp.route('/logout')
+@driver_check_login
 def logout():
     session.clear()
     return redirect(url_for('driver.login'))
@@ -107,6 +108,7 @@ def get_check_code(phone):
 
 
 @driver_bp.route('/get_records/')
+@driver_check_login
 def get_records():
     account_ID = session['driver_account_id']
     records = adv_record.query.filter_by(driver_account_ID=account_ID).all()
@@ -127,12 +129,14 @@ def get_records():
 
 
 @driver_bp.route('/change_pwd/')
+@driver_check_login
 def change_pwd():
     return render_template('Drivers module/sec-modify-pwd-bypwd.html', name=session['driver_user_name'],
                            url='/driver/check_change_pwd/')
 
 
 @driver_bp.route('/check_change_pwd/', methods=['GET', 'POST'])
+@driver_check_login
 def check_change_pwd():
     old_pwd = request.form['old']
     new_pwd = request.form['new']
@@ -173,6 +177,7 @@ def check_forgot_pwd():
 
 
 @driver_bp.route('/get_message')
+@driver_check_login
 def get_message():
     driver_ID = session['driver_account_id']
     ms = message.query.filter(or_(and_(message.receiver_ID == driver_ID, message.flag == True),
@@ -184,6 +189,7 @@ def get_message():
 
 
 @driver_bp.route('/send_message/', methods=['POST'])
+@driver_check_login
 def send_message():
     text = request.form['text']
     receiver_ID = request.form['receiver_ID']
@@ -195,6 +201,7 @@ def send_message():
 
 
 @driver_bp.route('/get_notice')
+@driver_check_login
 def get_notice():
     now = time.localtime(time.time())
     ajax = []
@@ -205,10 +212,12 @@ def get_notice():
 
 
 @driver_bp.route('/chat')
+@driver_check_login
 def chat():
     return render_template('Drivers module/dri-chat.html')
 
 
 @driver_bp.route('/s_notice')
+@driver_check_login
 def s_notice():
     return render_template('Drivers module/personal-letter.html')

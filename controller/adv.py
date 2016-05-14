@@ -39,8 +39,8 @@ def check_login():
             return '<script>alert("用户名或密码错误");location.href="login"</script>'
 
 
-@advter_check_login
 @adv_bp.route('/check_adv_submit', methods=['POST'])
+@advter_check_login
 def check_adv_submit():
     adv_text = request.form['adv_text']
     adv_count = int(request.form['adv_count'])
@@ -60,8 +60,8 @@ def check_adv_submit():
     return '<script>alert("发布成功");location.href="home"</script>'
 
 
-@advter_check_login
 @adv_bp.route('/adv_submit')
+@advter_check_login
 def adv_submit():
     return render_template('Advertiser module/ad-submit.html', name=session['adv_charge_name'])
 
@@ -71,14 +71,14 @@ def login():
     return render_template('Advertiser module/login.html')
 
 
-@advter_check_login
 @adv_bp.route('/home/')
+@advter_check_login
 def home():
     return render_template('Advertiser module/adv-home.html', name=session['adv_charge_name'])
 
 
-@advter_check_login
 @adv_bp.route('/get_rec_price/<float:lat>/<float:lng>/')
+@advter_check_login
 def get_rec_price(lat, lng):
     lng, lat = bd09togcj02(lng, lat)
     advs = adv_info.query.all()

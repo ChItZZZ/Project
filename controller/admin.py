@@ -172,28 +172,28 @@ def check_advter():
     return "success"
 
 
-@admin_check_login
 @admin_bp.route('/advs_history')
+@admin_check_login
 def advs_history():
     return render_template('Management module/ads_history.html')
 
 
-@admin_check_login
 @admin_bp.route('/drivers_history')
+@admin_check_login
 def drivers_history():
     return render_template('Management module/drivers_history.html')
 
 
-@admin_check_login
 @admin_bp.route('/driver_history/<int:driver_ID>')
+@admin_check_login
 def driver_history(driver_ID):
     driver = driver_account.query.filter_by(account_ID=driver_ID).first()
     return render_template('Management module/driver_history.html', account_ID=driver.account_ID, name=driver.user_name,
                            phone=driver.phone, flag=driver.check_flag)
 
 
-@admin_check_login
 @admin_bp.route('/get_records_by_driver/<int:driver_ID>/')
+@admin_check_login
 def get_records_by_driver(driver_ID):
     records = adv_record.query.filter_by(driver_account_ID=driver_ID).all()
     ajax = []
@@ -213,8 +213,8 @@ def get_records_by_driver(driver_ID):
     return json.dumps(ajax)
 
 
-@admin_check_login
 @admin_bp.route('/adv_history/<int:adv_ID>')
+@admin_check_login
 def adv_history(adv_ID):
     adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
     last_time = '{0}至{1}'.format(adv.start_time.strftime('%H:%M:%S'), adv.end_time.strftime('%H:%M:%S'))
@@ -223,8 +223,8 @@ def adv_history(adv_ID):
                            company=advter.company_name)
 
 
-@admin_check_login
 @admin_bp.route('/get_records_by_adv/<int:adv_ID>/')
+@admin_check_login
 def get_records_by_adv(adv_ID):
     records = adv_record.query.filter_by(adv_ID=adv_ID).all()
     ajax = []
@@ -236,22 +236,22 @@ def get_records_by_adv(adv_ID):
     return json.dumps(ajax)
 
 
-@admin_check_login
 @admin_bp.route('/chat/<int:receiver_ID>')
+@admin_check_login
 def chat(receiver_ID):
     name = driver_account.query.filter_by(account_ID=receiver_ID).first().user_name
     return render_template('Management module/chat.html', receiver_ID=receiver_ID, name=name)
 
 
-@admin_check_login
 @admin_bp.route('/chats')
 @admin_bp.route('/chats.html')
+@admin_check_login
 def chats():
     return render_template('Management module/chats.html')
 
 
-@admin_check_login
 @admin_bp.route('/get_message/<int:driver_ID>')
+@admin_check_login
 def get_message(driver_ID):
     # ms = message.query.filter_by(receiver_ID=driver_ID, flag=True)
     # ms += message.query.filter_by(sender_ID=driver_ID, flag=False)
@@ -263,8 +263,8 @@ def get_message(driver_ID):
     return json.dumps(ajax)
 
 
-@admin_check_login
 @admin_bp.route('/send_message/', methods=['POST'])
+@admin_check_login
 def send_message():
     text = request.form['text']
     receiver_ID = request.form['receiver_ID']
@@ -275,14 +275,14 @@ def send_message():
     return 'success'
 
 
-@admin_check_login
 @admin_bp.route('/notice')
+@admin_check_login
 def notice():
     return render_template('Management module/notice.html')
 
 
-@admin_check_login
 @admin_bp.route('/send_notice', methods=['POST'])
+@admin_check_login
 def send_notice():
     title = request.form['title']
     text = request.form['text']
@@ -295,8 +295,8 @@ def send_notice():
     return '<script>alert("发布成功!");location.href="/admin/notice"</script>'
 
 
-@admin_check_login
 @admin_bp.route('/get_notice')
+@admin_check_login
 def get_notice():
     ns = sys_notice.query.all()
     ajax = []
