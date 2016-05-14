@@ -20,14 +20,10 @@ def get_all_adv():
     return json.dumps(ajax)
 
 
-@app_bp.route('/check_login', methods=['POST'])
+@app_bp.route('/check_login', methods=['POST','GET'])
 def check_login():
-    phone = request.form.get('phone')
-    if phone == None:
-        phone = request.args.get('phone')
-        password = request.args.get('password')
-    else:
-        password = request.form['password']
+    phone = request.values.get('phone')
+    password = request.values.get('password')
     driver = driver_account.query.filter_by(phone=phone).first()
     result = {}
     if driver == None:
