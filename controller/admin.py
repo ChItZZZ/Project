@@ -250,6 +250,7 @@ def chats():
     return render_template('Management module/chats.html')
 
 
+@admin_check_login
 @admin_bp.route('/get_message/<int:driver_ID>')
 def get_message(driver_ID):
     # ms = message.query.filter_by(receiver_ID=driver_ID, flag=True)
@@ -262,6 +263,7 @@ def get_message(driver_ID):
     return json.dumps(ajax)
 
 
+@admin_check_login
 @admin_bp.route('/send_message/', methods=['POST'])
 def send_message():
     text = request.form['text']
@@ -273,11 +275,13 @@ def send_message():
     return 'success'
 
 
+@admin_check_login
 @admin_bp.route('/notice')
 def notice():
     return render_template('Management module/notice.html')
 
 
+@admin_check_login
 @admin_bp.route('/send_notice', methods=['POST'])
 def send_notice():
     title = request.form['title']
@@ -291,6 +295,7 @@ def send_notice():
     return '<script>alert("发布成功!");location.href="/admin/notice"</script>'
 
 
+@admin_check_login
 @admin_bp.route('/get_notice')
 def get_notice():
     ns = sys_notice.query.all()

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, current_app
 from model.adv import *
 from tools.LBS import *
-import re
+from controller.check_per import advter_check_login
 from datetime import datetime
 
 app = current_app
@@ -14,6 +14,12 @@ def index():
         return redirect(url_for('adv.login'))
     else:
         return redirect(url_for('adv.home'))
+
+
+@adv_bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('adv.login'))
 
 
 @adv_bp.route('/check_login', methods=['POST'])
@@ -33,6 +39,7 @@ def check_login():
             return '<script>alert("用户名或密码错误");location.href="login"</script>'
 
 
+@advter_check_login
 @adv_bp.route('/check_adv_submit', methods=['POST'])
 def check_adv_submit():
     adv_text = request.form['adv_text']
@@ -53,6 +60,7 @@ def check_adv_submit():
     return '<script>alert("发布成功");location.href="home"</script>'
 
 
+@advter_check_login
 @adv_bp.route('/adv_submit')
 def adv_submit():
     return render_template('Advertiser module/ad-submit.html', name=session['adv_charge_name'])
@@ -63,11 +71,13 @@ def login():
     return render_template('Advertiser module/login.html')
 
 
+@advter_check_login
 @adv_bp.route('/home/')
 def home():
     return render_template('Advertiser module/adv-home.html', name=session['adv_charge_name'])
 
 
+@advter_check_login
 @adv_bp.route('/get_rec_price/<float:lat>/<float:lng>/')
 def get_rec_price(lat, lng):
     lng, lat = bd09togcj02(lng, lat)
