@@ -20,10 +20,14 @@ def get_all_adv():
     return json.dumps(ajax)
 
 
-@app_bp.route('/check_login', methods=['POST', 'GET'])
+@app_bp.route('/check_login', methods=['POST'])
 def check_login():
-    phone = request.form['phone']
-    password = request.form['password']
+    phone = request.form.get('phone')
+    if phone == None:
+        phone = request.args.get('phone')
+        password = request.args.get('password')
+    else:
+        password = request.form['password']
     driver = driver_account.query.filter_by(phone=phone).first()
     result = {}
     if driver == None:
@@ -54,9 +58,9 @@ def post_adv(adv_ID):
 
 
 @app_bp.route('/get_driver_info/')
-def get_driver_ID(driver_ID):
+def get_driver_ID():
     driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
-    return driver.to_json()
+    return json.dumps(driver.to_json())
 
 
 @app_bp.route('/get_records/')
