@@ -102,11 +102,11 @@ def security():
 def get_check_code(phone):
     driver = driver_account.query.filter_by(phone=phone).first()
     if driver != None:
-        return '220'
+        return '310'
     check_code = get_cap_code()
     session['check_code'] = check_code
     tool.send_register_message(phone, check_code)
-    return "success"
+    return "300"
 
 
 @driver_bp.route('/get_records/')
@@ -152,8 +152,7 @@ def check_change_pwd():
 
 @driver_bp.route('/forgot_pwd/')
 def forgot_pwd():
-    return render_template('Drivers module/forgot-password.html', url='/driver/check_forgot_code/',
-                           code_url='/driver/get_forgot_code/')
+    return render_template('Drivers module/forgot-password.html')
 
 
 @driver_bp.route('/get_forgot_code/<int:phone>')

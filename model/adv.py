@@ -3,6 +3,7 @@ import hashlib
 import time
 from tools.LBS import get_distance
 import json
+from tools import security
 
 
 class adv_info(db.Model):
@@ -61,8 +62,24 @@ class adv_account(db.Model):
     adv_amount = db.Column('adv_amount', db.Integer, nullable=False)
     charge_name = db.Column('charge_name', db.String(18), nullable=False)
     phone = db.Column('phone', db.String(11), nullable=False)
+    company_img = db.Column('company_img', db.String(50))
+    ID_card = db.Column('ID_card', db.String(50))
+    user_ID = db.Column('user_ID', db.String(50))
     check_flag = db.Column('check_flag', db.Boolean)
     remark = db.Column('remark', db.String(50))
+    pay_password = db.Column('pay_password', db.String(50))
+    account_money = db.Column('account_money', db.DECIMAL(10, 3), nullable=False, default=0)
+
+    def __init__(self, account_pwd, company_name, charge_name, phone, company_img, ID_card, user_ID):
+        self.salt = security.get_salt(16)
+        self.account_pwd = hashlib.md5((account_pwd + self.salt).encode('ascii')).hexdigest()
+        self.company_name = company_name
+        self.charge_name = charge_name
+        self.phone = phone
+        self.company_img = company_img
+        self.ID_card = ID_card
+        self.user_ID = user_ID
+        self.adv_amount = 0
 
     def check(self, password):
         password = hashlib.md5((password + self.salt).encode('ascii')).hexdigest()
@@ -70,6 +87,11 @@ class adv_account(db.Model):
             return True
         else:
             return False
+
+    def change_pwd(self, pwd):
+        self.account_pwd = hashlib.md5((pwd + self.salt).encode('ascii')).hexdigest()
+        db.session.commit()
+        return True
 
 
 class adv_record(db.Model):
@@ -83,3 +105,26 @@ class adv_record(db.Model):
         self.adv_ID = adv_ID
         self.driver_account_ID = driver_account_ID
         self.play_time = time.localtime()
+
+
+class adv_history(db.Model):
+    __tablename__ = 'adv_history'
+    history_ID = db.Column('history_ID', db.Integer, primary_key=True, nullable=False, autoincrement=True)
+    adv_ID = db.Column('adv_ID', db.Integer, nullable=False)
+    advter_ID = db.Column('advter_ID', db.Integer, nullable=False)
+    cost = db.Column('cost', db.DECIMAL(10, 3), nullable=False)
+    post_time = db.Column('post_time', db.Date, nullable=False)
+
+    def __init__(self, adv_ID, advter_ID, cost):
+        self.adv_ID = adv_ID
+        self.advter_ID = advter_ID
+        self.post_time = time.localtime()
+        self.cost = cost
+
+    def to_json(self):
+        dic = {}
+        dic['adv_ID'] = self.adv_ID
+        dic['post_time'] = str(self.post_time)
+        dic['cost'] = float(self.cost.real)
+        dic['history'] = self.history_ID
+        return dic

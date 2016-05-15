@@ -29,7 +29,12 @@ class ali_message_tools:
         self.set_para("注册验证", sms_param, phone, "SMS_7495113")
         return self.send_message()
 
-    def send_forgot_pwd_message(self,phone,code):
+    def send_forgot_pwd_message(self, phone, code):
         sms_param = {"product": "MovineAD", "code": code}
-        self.set_para("注册验证", sms_param, phone, "SMS_7495111")
+        self.set_para("变更验证", sms_param, phone, "SMS_7495111")
+        return self.send_message()
+
+    def send_forgot_pay_message(self, phone, code):
+        sms = {'product': "MovingAD支付密码", "code": code}
+        self.set_para('变更验证', sms, phone, 'SMS_7495110')
         return self.send_message()

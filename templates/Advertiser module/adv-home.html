@@ -76,7 +76,7 @@
                 <p><i class="fa fa-user " data-toggle="tooltip" data-placement="right"
                       data-title="身份已验证" style="font-size: 30px"></i></p>
                 <p><i class="glyphicon glyphicon-phone-alt fa-2x" data-toggle="tooltip" data-placement="right"
-                      data-title="已绑定手机***********"></i></p>
+                      data-title="已绑定手机{{ phone }}"></i></p>
                 <p><i class="fa fa-key fa-2x" data-toggle="tooltip" data-placement="right"
                       data-title="您的交易密码已设置"></i></p>
             </div>
@@ -87,7 +87,7 @@
             <div style="clear: both"></div>
 
 
-            <div class="home-item"><p style="font-size: 22px;margin-top: 15px"><i class="fa fa-list"></i> 广告播放记录</p>
+            <div class="home-item"><p style="font-size: 22px;margin-top: 15px"><i class="fa fa-list"></i> 广告投放记录</p>
             </div>
 
             <div class="indivisual-ad" style="margin: 30px auto;">
@@ -100,37 +100,8 @@
                         <th>支出</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>1.</td>
-                        <td>123u8412213</td>
-                        <td>2016.3.5</td>
-                        <td>200</td>
-                    </tr>
-                    <tr>
-                        <td>2.</td>
-                        <td>1243u21904</td>
-                        <td>2016.3.3</td>
-                        <td>300</td>
-                    </tr>
-                    <tr>
-                        <td>3.</td>
-                        <td>1243u21904</td>
-                        <td>2016.3.3</td>
-                        <td>300</td>
-                    </tr>
-                    <tr>
-                        <td>4.</td>
-                        <td>1243u21904</td>
-                        <td>2016.3.3</td>
-                        <td>300</td>
-                    </tr>
-                    <tr>
-                        <td>5.</td>
-                        <td>1243u21904</td>
-                        <td>2016.3.3</td>
-                        <td>300</td>
-                    </tr>
+                    <tbody id="history">
+
                     </tbody>
                 </table>
                 <div class="col-md-12" style="text-align: center;">
@@ -158,6 +129,26 @@
     $(function () {
         $("[data-toggle='tooltip']").tooltip();
 
+    });
+
+    function show_table(id, adv, time, cost) {
+        var text = '<tr>\
+                        <td>' + id + '</td>\
+                        <td>' + adv + '</td>\
+                        <td>' + time + '</td>\
+                        <td>' + cost + '</td>\
+                    </tr>';
+        document.getElementById('history').innerHTML += text;
+    }
+    $(document).ready(function () {
+        $.get('/adv/get_history', function (data, status) {
+            if (status = 'success') {
+                var json = JSON.parse(data);
+                for (var i = 0; i < json.length; i += 1) {
+                    show_table(json[i]['history'], json[i]['adv_ID'], json[i]['post_time'], json[i]['cost']);
+                }
+            }
+        })
     })
 </script>
 </body>

@@ -48,9 +48,15 @@
 </div>
 <div>
     <div class="col-md-12">
-        <form class="form-horizontal create-account container" id="border" role="form" action="check_register"
+        <form class="form-horizontal create-account container" id="border" role="form" action="/adv/check_register"
               method="post" style="margin-bottom: 20px" enctype="multipart/form-data">
             <div class="form-inner">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <label for="phone" class="control-label">公司名称</label>
+                        <input type="text" class="form-control" id="company_name" name="company_name">
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-md-6">
                         <label for="phone" class="control-label">电话号码</label>
@@ -69,7 +75,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-6">
-                        <label for="username" class="control-label">姓名</label>
+                        <label for="username" class="control-label">企业负责人姓名</label>
                         <input type="text" class="form-control" id="username" placeholder="Name" name="user_name">
                     </div>
                     <div class="col-md-6">
@@ -102,15 +108,8 @@
 
                 <div class="row form-group">
                     <div class="col-md-12">
-                        <label class="control-label">驾驶证照片</label>
-                        <input type="file" name="permit_card_image" id="license" class="filestyle"
-                               data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false">
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-12">
-                        <label class="control-label">行驶证照片</label>
-                        <input type="file" name="car_image" id="drilicense" class="filestyle"
+                        <label class="control-label">公司证件照片</label>
+                        <input type="file" name="company_img" id="license" class="filestyle"
                                data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false">
                     </div>
                 </div>
@@ -144,11 +143,11 @@
 <script>
     $('#getID').click(function () {
         var phone_num = $('#phone').val();
-        $.get("get_check_code/" + phone_num, function (data, status) {
+        $.get("/adv/get_check_code/" + phone_num, function (data, status) {
             if (status == 'success') {
                 if (data == '310') {
                     alert('账号已存在');
-                }else if(data=='300'){
+                } else if (data == '300') {
                     alert('验证码已发送');
                 }
             }
