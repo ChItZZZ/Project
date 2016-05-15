@@ -16,7 +16,7 @@ admin_bp = Blueprint('admin', __name__)
 
 @admin_bp.route('/')
 @admin_bp.route('/home')
-@admin_bp.route('/index.html')
+@admin_bp.route('/index')
 @admin_check_login
 def index():
     return render_template('Management module/index.html', name=session['admin_account_name'])

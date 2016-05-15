@@ -1,7 +1,6 @@
 from app_config import app
 import controller
 from flask import render_template
-import ali_config
 
 app.register_blueprint(controller.admin_bp, url_prefix='/admin')
 app.register_blueprint(controller.adv_bp, url_prefix='/adv')

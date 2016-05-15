@@ -25,7 +25,7 @@ def index():
 @adv_bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('adv.login'))
+    return redirect(url_for('index'))
 
 
 @adv_bp.route('/check_login', methods=['POST'])

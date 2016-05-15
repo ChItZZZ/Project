@@ -1,6 +1,7 @@
 from app_config import db
 import time
 
+
 class message(db.Model):
     __tablename__ = 'message'
     message_ID = db.Column('message_ID', db.Integer, primary_key=True, nullable=False, autoincrement=True)
@@ -9,6 +10,7 @@ class message(db.Model):
     receiver_ID = db.Column('receiver_ID', db.Integer, nullable=False)
     send_time = db.Column('send_time', db.DateTime, nullable=False)
     flag = db.Column('flag', db.Integer, nullable=False)  # True是由管理员到用户 false是用户到管理员
+    read_flag = db.Column('read_flag', db.Boolean, default=False, nullable=False)
 
     def __init__(self, text, sender_ID, receiver_ID, flag):
         self.message_text = text
@@ -16,7 +18,6 @@ class message(db.Model):
         self.receiver_ID = receiver_ID
         self.flag = flag
         self.send_time = time.localtime(time.time())
-
 
     def to_json(self):
         dic = {}
