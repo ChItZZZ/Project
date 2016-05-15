@@ -38,6 +38,7 @@
                 <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
                 <li><a href="#"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/adv/adv_submit"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
+                <li><a href="/adv/notice"><i class="fa fa-list fa-fw"></i>系统通知</a></li>
                 <li><a href="/adv/logout"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
             </ul>
         </nav>
@@ -105,14 +106,7 @@
                     </tbody>
                 </table>
                 <div class="col-md-12" style="text-align: center;">
-                    <ul class="pagination" style="margin-left: -50px">
-                        <li><a href="#">&laquo;</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">&raquo;</a></li>
+                    <ul id="page_tab" class="pagination" style="margin-left: -50px">
                     </ul>
                 </div>
             </div>
@@ -130,6 +124,7 @@
         $("[data-toggle='tooltip']").tooltip();
 
     });
+    var json = '';
 
     function show_table(id, adv, time, cost) {
         var text = '<tr>\
@@ -143,13 +138,27 @@
     $(document).ready(function () {
         $.get('/adv/get_history', function (data, status) {
             if (status = 'success') {
-                var json = JSON.parse(data);
-                for (var i = 0; i < json.length; i += 1) {
+                json = JSON.parse(data);
+                var page = 1
+                for (var i = json.length; i > 0; i -= 5) {
+                    document.getElementById('page_tab').innerHTML += '<li><a href="" onclick="show_page(' + page + ')">' + page + '</a></li>';
+                    page++;
+                }
+                for (var i = 0; i < json.length && i < 5; i += 1) {
                     show_table(json[i]['history'], json[i]['adv_ID'], json[i]['post_time'], json[i]['cost']);
                 }
             }
         })
-    })
+    });
+
+    function show_page(page) {
+        document.getElementById('history').innerHTML = '';
+        var end = page * 5;
+        for (var i = 0; i < json.length && i < end; i += 1) {
+            show_table(json[i]['history'], json[i]['adv_ID'], json[i]['post_time'], json[i]['cost']);
+        }
+    }
+
 </script>
 </body>
 </html>

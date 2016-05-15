@@ -7,6 +7,8 @@ from controller.check_per import advter_check_login
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
+from model.sys_notice import sys_notice
+from sqlalchemy import *
 
 app = current_app
 adv_bp = Blueprint('adv', __name__)
@@ -191,9 +193,12 @@ def security():
 @advter_check_login
 def get_history():
     historys = adv_history.query.filter_by(advter_ID=session['adv_account_id']).all()
+    historys.reverse()
     ajax = []
     for h in historys:
         ajax.append(h.to_json())
+        if len(ajax) == 25:
+            break
     return json.dumps(ajax)
 
 
@@ -226,6 +231,24 @@ def change_pay_pwd():
 @advter_check_login
 def check_change_pay_pwd():
     pass
+
+
+@adv_bp.route('/notice')
+@advter_check_login
+def notice():
+    return render_template('Advertiser module/notice.html')
+
+
+@adv_bp.route('/get_notice')
+@advter_check_login
+def get_notice():
+    now = time.localtime(time.time())
+    ajax = []
+    ns = sys_notice.query.filter(
+        and_(sys_notice.end_time < now, or_(sys_notice.notice_type == 1, sys_notice.notice_type == 2))).all()
+    for n in ns:
+        ajax.append(n.to_json())
+    return json.dumps(ajax)
 
 
 @adv_bp.route('/change_phone')

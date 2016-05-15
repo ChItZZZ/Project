@@ -34,10 +34,11 @@
         </div>
         <nav class="left-nav">
             <ul>
-                <li><a href="/adv/home" class="active"><i class="fa fa-home fa-fw"></i>用户主页</a></li>
+                <li><a href="/adv/home"><i class="fa fa-home fa-fw"></i>用户主页</a></li>
                 <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
                 <li><a href="#"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/adv/adv_submit"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
+                <li><a href="/adv/notice" class="active"><i class="fa fa-list fa-fw"></i>系统通知</a></li>
                 <li><a href="/adv/logout"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
             </ul>
         </nav>
@@ -61,7 +62,7 @@
          margin: 20px;
          box-shadow: 0px 0px 1px 1px rgba(161, 159, 159, 0.1);" id="main">
             <div class="panel-heading">
-                <span class="glyphicon glyphicon-envelope" style="font-size: 26px"></span>
+                <span class="glyphicon glyphicon-envelope" style="font-size: 26px"></span> 系统通知
             </div>
 
         </div>
@@ -97,7 +98,7 @@
                 </div>\
             </div>';
     $(document).ready(function () {
-        $.get('/driver/get_notice', function (data, status) {
+        $.get('/adv/get_notice', function (data, status) {
             if (status == 'success') {
                 var json = JSON.parse(data);
                 for (var i = 0; i < json.length; i++) {
