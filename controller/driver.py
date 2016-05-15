@@ -159,7 +159,7 @@ def forgot_pwd():
 def get_forgot_code(phone):
     forget_code = get_cap_code()
     session['forget_code'] = forget_code
-    session['phone'] = phone
+    session['phone_change'] = str(phone)
     tool.send_forgot_pwd_message(phone, forget_code)
     return "success"
 
@@ -167,8 +167,8 @@ def get_forgot_code(phone):
 @driver_bp.route('/check_forgot_code/', methods=['post'])
 def check_forgot_pwd():
     code = request.form['code']
-    phone = request.form['phone']
-    if code == session['forget_code'] and phone == session['phone']:
+    phone = session['phone_change']
+    if code == session['forget_code']:
         driver = driver_account.query.filter_by(phone=phone).first()
         pwd = get_salt(8)
         driver.change_pwd(pwd)
