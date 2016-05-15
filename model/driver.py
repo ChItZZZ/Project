@@ -21,6 +21,7 @@ class driver_account(db.Model):
     permit_pic = db.Column('permit_pic', db.String(255))
     car_pic = db.Column('car_pic', db.String(255))
     token = db.Column('token', db.String(40))
+    pay_password = db.Column('pay_password', db.String(50))
 
     def __init__(self, phone, password, user_name, user_id, card_pic, permit_pic, car_pic, email=None):
         self.salt = security.get_salt(16)

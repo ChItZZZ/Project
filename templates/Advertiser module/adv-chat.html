@@ -7,9 +7,9 @@
     <title>MovingAD</title>
     <meta name="description" content="">
 
-    <link href="/Project/static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/Project/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/Project/static/css/style-home.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style-home.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -26,7 +26,7 @@
             </div>
         </header>
         <div class="profile-photo-container">
-            <img src="/Project/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
+            <img src="/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
             <div class="profile-photo-overlay"></div>
         </div>
         <div class="mobile-menu-icon">
@@ -38,7 +38,7 @@
                 <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
                 <li><a href="#"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/adv/adv_submit"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
-                <li><a href="/adv/login"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
+                <li><a href="/adv/logout"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
             </ul>
         </nav>
     </div>
@@ -50,7 +50,7 @@
                     <ul class="text-uppercase">
                         <li><a href="" class="active">公司主页</a></li>
                         <li><a href="">动态信息</a></li>
-                        <li><a href="../Drivers%20module/login.html">退出登录</a></li>
+                        <li><a href="/adv/logout">退出登录</a></li>
                     </ul>
                 </nav>
             </div>
@@ -128,9 +128,9 @@
 </div>
 
 <!-- JS -->
-<script src="/Project/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
-<script src="/Project/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
-<script src="/Project/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
+<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+<script src="/static/js/bootstrap.min.js"></script>
 <script>
     function admin_show(name, text, send_time) {
         var HTML_text = '<li class="left clearfix"><span class="chat-img pull-left"><img src="http://placehold.it/80/30a5ff/fff" alt="User Avatar" class="img-circle"/></span><div class="chat-body clearfix"><div class="header"><strong class="primary-font">' + name + '</strong><small class="text-muted">' + send_time + '</small></div><p>' + text + '</p></div></li>'

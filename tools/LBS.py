@@ -155,7 +155,7 @@ def rad(d):
     return d * math.pi / 180.0
 
 
-def get_distance(lat1, lng1, lat2, lng2):#火星坐标获得两点距离
+def get_distance(lat1, lng1, lat2, lng2):#火星坐标获得两点距离 单位为公里
     lat1 = rad(lat1)
     lat2 = rad(lat2)
     a = lat1 - lat2

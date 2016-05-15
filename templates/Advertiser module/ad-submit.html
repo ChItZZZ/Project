@@ -7,11 +7,11 @@
     <title>MovingAD</title>
     <meta name="description" content="">
 
-    <link href="/Project/static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/Project/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/Project/static/css/style-home.css" rel="stylesheet">
-    <link href="/Project/static/css/jquery-ui.min.css" rel="stylesheet">
-    <link href="/Project/static/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style-home.css" rel="stylesheet">
+    <link href="/static/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-datetimepicker.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -87,7 +87,7 @@
             </div>
         </header>
         <div class="profile-photo-container">
-            <img src="/Project/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
+            <img src="/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
             <div class="profile-photo-overlay"></div>
         </div>
         <div class="mobile-menu-icon">
@@ -95,11 +95,11 @@
         </div>
         <nav class="left-nav">
             <ul>
-                <li><a href="/adv/home" ><i class="fa fa-home fa-fw"></i>用户主页</a></li>
+                <li><a href="/adv/home"><i class="fa fa-home fa-fw"></i>用户主页</a></li>
                 <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
                 <li><a href="#"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/adv/adv_submit" class="active"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
-                <li><a href="/adv/login"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
+                <li><a href="/adv/logout"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
             </ul>
         </nav>
     </div>
@@ -112,7 +112,7 @@
                     <ul class="text-uppercase">
                         <li><a href="" class="active">用户首页</a></li>
                         <li><a href="">动态信息</a></li>
-                        <li><a href="../Drivers%20module/login.html">退出登录</a></li>
+                        <li><a href="/adv/logout">退出登录</a></li>
                     </ul>
                 </nav>
             </div>
@@ -121,30 +121,33 @@
          position: relative;
          margin: 20px;
          box-shadow: 0px 0px 1px 1px rgba(161, 159, 159, 0.1);">
-            <form role="form" class="advertisement-summit " action="check_adv_submit" method="post"
+            <form role="form" class="advertisement-summit " action="/adv/check_adv_submit" method="post"
                   enctype="multipart/form-data" id="form1">
                 <div class="form-inner">
 
                     <div class="form-group">
                         <div class="col-md-8">
                             <label for="brief">广告简介</label>
-                            <textarea name="adv_sum" class="form-control" id="brief" rows="1" required style="margin-bottom: 10px"></textarea>
+                            <textarea name="adv_sum" class="form-control" id="brief" rows="1" required
+                                      style="margin-bottom: 10px"></textarea>
                         </div>
                         <div style="clear: both;"></div>
                     </div>
                     <div class="form-group" style="margin: 15px 18px;">
-                        <input type="radio" id="con" name="select" checked="checked">文字内容
-                        <input type="radio" id="img" name="select">广告图片
+                        <input type="radio" id="con" name="select" checked="checked" value="false">文字内容
+                        <input type="radio" id="img" name="select" value="true">广告图片
                     </div>
                     <div class="form-group">
                         <div class="col-md-12 sel-con">
-                            <textarea name="adv_text" class="form-control" id="content" rows="3" required style="margin-bottom: 2px"></textarea>
+                            <textarea name="adv_text" class="form-control" id="content" rows="3" required
+                                      style="margin-bottom: 2px"></textarea>
                         </div>
                         <div class="col-md-12 sel-img" style="display: none;margin: 5px 0">
                             <p>
                                 <label>请选择一个图像文件：</label>
-                                <input type="file" name="ID_card_image" id="IDCard" class="filestyle"
-                                       data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false"  style="z-index: 0">
+                                <input type="file" name="adv_img" id="IDCard" class="filestyle"
+                                       data-buttonName="btn-primary" data-buttonBefore="true" data-icon="false"
+                                       style="z-index: 0">
                             </p>
                         </div>
                     </div>
@@ -213,14 +216,14 @@
 </div>
 
 <!-- JS -->
-<script src="/Project/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
-<script src="/Project/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
-<script src="/Project/static/js/bootstrap-filestyle.min.js"></script>
-<script src="/Project/static/js/bootstrap.min.js"></script>
-<script src="/Project/static/js/jquery-ui.js"></script>
-<script src="/Project/static/js/bootstrap-datetimepicker.js"></script>
-<script src="/Project/static/js/jquery-ui-slide.js"></script>
-<script src="/Project/static/js/jquery-ui-timepicker-addon.js"></script>
+<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
+<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+<script src="/static/js/bootstrap-filestyle.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery-ui.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.js"></script>
+<script src="/static/js/jquery-ui-slide.min.js"></script>
+<script src="/static/js/jquery-ui-timepicker-addon.js"></script>
 <script>
     // 百度地图API功能
     var map = new BMap.Map('map');

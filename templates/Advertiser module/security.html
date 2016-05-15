@@ -34,11 +34,12 @@
         </div>
         <nav class="left-nav">
             <ul>
-                <li><a href="/adv/home" class="active"><i class="fa fa-home fa-fw"></i>用户主页</a></li>
-                <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
+                <li><a href="/adv/home"><i class="fa fa-home fa-fw"></i>用户主页</a></li>
+                <li><a href="/adv/security" class="active"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a>
+                </li>
                 <li><a href="#"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/adv/adv_submit"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
-                <li><a href="/adv/login"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
+                <li><a href="/adv/logout"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
             </ul>
         </nav>
     </div>
@@ -50,32 +51,32 @@
                     <ul class="text-uppercase">
                         <li><a href="" class="active">用户首页</a></li>
                         <li><a href="">动态信息</a></li>
-                        <li><a href="../Drivers%20module/login.html">退出登录</a></li>
+                        <li><a href="/adv/logout">退出登录</a></li>
                     </ul>
                 </nav>
             </div>
         </div>
         <div class="indivisual-security-main">
             <div class="indivisual-security-info col-md-12">
-                <p><strong>hahaha</strong>123456789(987654@qq.com)</p>
+                <p><strong>{{ name }}</strong>{{ phone }}</p>
                 <p>建议您启用全部安全设置,以保障账户安全</p>
             </div>
             <div class="indivisual-security-body col-md-12">
                 <ul class="security-list">
-                    <li>
-                        <i class="glyphicon glyphicon-envelope"></i>
-                        <h4>
-                            <strong>绑定邮箱<span></span></strong>
-                            <span>您验证的邮箱:123345411@qq.com</span>
-                            <!--<a href="#" class="pull-right">验证 ></a>-->
-                        </h4>
-                    </li>
+                    {#                    <li>#}
+                    {#                        <i class="glyphicon glyphicon-envelope"></i>#}
+                    {#                        <h4>#}
+                    {#                            <strong>绑定邮箱<span></span></strong>#}
+                    {#                            <span>您验证的邮箱:123345411@qq.com</span>#}
+                    {#                            <!--<a href="#" class="pull-right">验证 ></a>-->#}
+                    {#                        </h4>#}
+                    {#                    </li>#}
                     <li>
                         <i class="fa fa-mobile" style="font-size: 40px"></i>
                         <h4>
                             <strong>手机号码<span></span></strong>
-                            <span>您绑定的手机号:12334541111</span>
-                            <a href="sec-phone.html" class="pull-right">修改 ></a>
+                            <span>您绑定的手机号:{{ phone }}</span>
+                            <a href="/adv/change_phone" class="pull-right">修改 ></a>
                         </h4>
                     </li>
                     <li>
@@ -83,7 +84,7 @@
                         <h4>
                             <strong>登录密码<span></span></strong>
                             <span>定期修改密码,确保账号安全</span>
-                            <a href="/driver/change_pwd" class="pull-right" style="margin-left: 20px">修改 ></a>
+                            <a href="/adv/change_pay_pwd" class="pull-right" style="margin-left: 20px">修改 ></a>
                         </h4>
                     </li>
                     <li>
@@ -91,8 +92,8 @@
                         <h4>
                             <strong>交易密码<span></span></strong>
                             <span>资金变动时需验证,确保本人操作</span>
-                            <a href="#" class="pull-right" style="right: 80px">修改 ></a>
-                            <a href="sec-find-pay-pwd.html" class="pull-right" style="margin-left: 20px">找回 ></a>
+                            <a href="/adv/change_pay_pwd" class="pull-right" style="right: 80px">修改 ></a>
+                            <a href="/adv/find_pay_pwd" class="pull-right" style="margin-left: 20px">找回 ></a>
                         </h4>
                     </li>
                     <li>

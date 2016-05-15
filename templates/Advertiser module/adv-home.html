@@ -7,9 +7,9 @@
     <title>MovingAD</title>
     <meta name="description" content="">
 
-    <link href="/Project/static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/Project/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/Project/static/css/style-home.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style-home.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -26,7 +26,7 @@
             </div>
         </header>
         <div class="profile-photo-container">
-            <img src="/Project/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
+            <img src="/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
             <div class="profile-photo-overlay"></div>
         </div>
         <div class="mobile-menu-icon">
@@ -38,7 +38,7 @@
                 <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
                 <li><a href="#"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/adv/adv_submit"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
-                <li><a href="/adv/login"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
+                <li><a href="/adv/logout"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
             </ul>
         </nav>
     </div>
@@ -50,7 +50,7 @@
                     <ul class="text-uppercase">
                         <li><a href="" class="active">公司主页</a></li>
                         <li><a href="">动态信息</a></li>
-                        <li><a href="../Drivers%20module/login.html">退出登录</a></li>
+                        <li><a href="/adv/logout">退出登录</a></li>
                     </ul>
                 </nav>
             </div>
@@ -76,7 +76,7 @@
                 <p><i class="fa fa-user " data-toggle="tooltip" data-placement="right"
                       data-title="身份已验证" style="font-size: 30px"></i></p>
                 <p><i class="glyphicon glyphicon-phone-alt fa-2x" data-toggle="tooltip" data-placement="right"
-                      data-title="已绑定手机***********"></i></p>
+                      data-title="已绑定手机{{ phone }}"></i></p>
                 <p><i class="fa fa-key fa-2x" data-toggle="tooltip" data-placement="right"
                       data-title="您的交易密码已设置"></i></p>
             </div>
@@ -87,7 +87,7 @@
             <div style="clear: both"></div>
 
 
-            <div class="home-item"><p style="font-size: 22px;margin-top: 15px"><i class="fa fa-list"></i> 广告播放记录</p>
+            <div class="home-item"><p style="font-size: 22px;margin-top: 15px"><i class="fa fa-list"></i> 广告投放记录</p>
             </div>
 
             <div class="indivisual-ad" style="margin: 30px auto;">
@@ -100,37 +100,8 @@
                         <th>支出</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>1.</td>
-                        <td>123u8412213</td>
-                        <td>2016.3.5</td>
-                        <td>200</td>
-                    </tr>
-                    <tr>
-                        <td>2.</td>
-                        <td>1243u21904</td>
-                        <td>2016.3.3</td>
-                        <td>300</td>
-                    </tr>
-                    <tr>
-                        <td>3.</td>
-                        <td>1243u21904</td>
-                        <td>2016.3.3</td>
-                        <td>300</td>
-                    </tr>
-                    <tr>
-                        <td>4.</td>
-                        <td>1243u21904</td>
-                        <td>2016.3.3</td>
-                        <td>300</td>
-                    </tr>
-                    <tr>
-                        <td>5.</td>
-                        <td>1243u21904</td>
-                        <td>2016.3.3</td>
-                        <td>300</td>
-                    </tr>
+                    <tbody id="history">
+
                     </tbody>
                 </table>
                 <div class="col-md-12" style="text-align: center;">
@@ -151,13 +122,33 @@
 </div>
 
 <!-- JS -->
-<script src="/Project/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
-<script src="/Project/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
-<script src="/Project/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
+<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+<script src="/static/js/bootstrap.min.js"></script>
 <script>
     $(function () {
         $("[data-toggle='tooltip']").tooltip();
 
+    });
+
+    function show_table(id, adv, time, cost) {
+        var text = '<tr>\
+                        <td>' + id + '</td>\
+                        <td>' + adv + '</td>\
+                        <td>' + time + '</td>\
+                        <td>' + cost + '</td>\
+                    </tr>';
+        document.getElementById('history').innerHTML += text;
+    }
+    $(document).ready(function () {
+        $.get('/adv/get_history', function (data, status) {
+            if (status = 'success') {
+                var json = JSON.parse(data);
+                for (var i = 0; i < json.length; i += 1) {
+                    show_table(json[i]['history'], json[i]['adv_ID'], json[i]['post_time'], json[i]['cost']);
+                }
+            }
+        })
     })
 </script>
 </body>

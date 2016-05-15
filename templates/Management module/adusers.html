@@ -162,7 +162,7 @@
     $(document).ready(function () {
         $.get("advters_ajax", function (data, status) {
             if (status == 'success') {
-                var json = eval(data);
+                var json = JSON.parse(data);
                 for (var i = 0; i < json.length; i++) {
                     var driver = json[i];
                     show(driver['account_ID'], driver['charge_name'], driver['company_name'], driver['check_flag'])

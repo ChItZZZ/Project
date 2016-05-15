@@ -164,7 +164,7 @@
     $(document).ready(function () {
         $.get("advs_ajax", function (data, status) {
             if (status == 'success') {
-                var json = eval(data);
+                var json = JSON.parse(data);
                 for (var i = 0; i < json.length; i++) {
                     var adv = json[i];
                     show(adv['adv_ID'], adv['adv_amounts'], adv['adv_text'], adv['cost'], adv['date'], adv['company'])
