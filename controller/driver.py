@@ -221,4 +221,4 @@ def chat():
 @driver_bp.route('/s_notice')
 @driver_check_login
 def s_notice():
-    return render_template('Drivers module/personal-letter.html')
+    return render_template('Drivers module/notice.html')
