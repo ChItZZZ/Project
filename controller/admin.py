@@ -19,7 +19,7 @@ admin_bp = Blueprint('admin', __name__)
 @admin_bp.route('/index')
 @admin_check_login
 def index():
-    return render_template('Management module/index.html', name=session['admin_account_name'])
+    return render_template('Management module/index.html', adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/login')
@@ -46,7 +46,7 @@ def check_login():
 @admin_bp.route('/show_drivers')
 @admin_check_login
 def show_drivers():
-    return render_template('Management module/drivers.html')
+    return render_template('Management module/drivers.html', adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/drivers_ajax')
@@ -73,7 +73,7 @@ def show_driver(ID):
         driver = driver_account.query.filter_by(account_ID=ID).first()
         return render_template('Management module/driver.html', phone=driver.phone, flag=str(driver.check_flag),
                                name=driver.user_name, user_id=driver.user_ID, permit_image=driver.permit_pic,
-                               ID_card_image=driver.card_pic)
+                               ID_card_image=driver.card_pic, adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/check_driver', methods=['GET'])
@@ -90,7 +90,7 @@ def check_driver():
 @admin_bp.route('/show_advs')
 @admin_check_login
 def show_advs():
-    return render_template('Management module/ads.html')
+    return render_template('Management module/ads.html', adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/advs_ajax')
@@ -125,13 +125,13 @@ def show_adv(adv_ID):
         for point in location_json:
             location.append(gcj02tobd09(point[0], point[1]))
         return render_template('Management module/ad.html', adv_ID=adv.adv_ID, text=adv.adv_text, datetime=date,
-                               location=location, company=advter.company_name)
+                               location=location, company=advter.company_name, adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/show_advters')
 @admin_check_login
 def show_advters():
-    return render_template('Management module/adusers.html')
+    return render_template('Management module/adusers.html', adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/advters_ajax')
@@ -158,7 +158,7 @@ def show_advter(account_ID):
         advter = adv_account.query.filter_by(account_ID=account_ID).first()
         return render_template('Management module/aduser.html', account_ID=account_ID, flag=advter.check_flag,
                                company=advter.company_name, amount=advter.adv_amount, name=advter.charge_name,
-                               phone=advter.phone, remark=advter.remark)
+                               phone=advter.phone, remark=advter.remark, adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/check_advter', methods=['GET'])
@@ -175,13 +175,13 @@ def check_advter():
 @admin_bp.route('/advs_history')
 @admin_check_login
 def advs_history():
-    return render_template('Management module/ads_history.html')
+    return render_template('Management module/ads_history.html', adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/drivers_history')
 @admin_check_login
 def drivers_history():
-    return render_template('Management module/drivers_history.html')
+    return render_template('Management module/drivers_history.html', adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/driver_history/<int:driver_ID>')
@@ -189,7 +189,7 @@ def drivers_history():
 def driver_history(driver_ID):
     driver = driver_account.query.filter_by(account_ID=driver_ID).first()
     return render_template('Management module/driver_history.html', account_ID=driver.account_ID, name=driver.user_name,
-                           phone=driver.phone, flag=driver.check_flag)
+                           phone=driver.phone, flag=driver.check_flag,adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/get_records_by_driver/<int:driver_ID>/')
@@ -220,7 +220,7 @@ def adv_history(adv_ID):
     last_time = '{0}至{1}'.format(adv.start_time.strftime('%H:%M:%S'), adv.end_time.strftime('%H:%M:%S'))
     advter = adv_account.query.filter_by(account_ID=adv.advter_account_ID).first()
     return render_template('Management module/ad_history.html', adv_ID=adv_ID, last_time=last_time,
-                           company=advter.company_name)
+                           company=advter.company_name,adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/get_records_by_adv/<int:adv_ID>/')
@@ -240,14 +240,14 @@ def get_records_by_adv(adv_ID):
 @admin_check_login
 def chat(receiver_ID):
     name = driver_account.query.filter_by(account_ID=receiver_ID).first().user_name
-    return render_template('Management module/chat.html', receiver_ID=receiver_ID, name=name)
+    return render_template('Management module/chat.html', receiver_ID=receiver_ID, name=name,adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/chats')
 @admin_bp.route('/chats.html')
 @admin_check_login
 def chats():
-    return render_template('Management module/chats.html')
+    return render_template('Management module/chats.html',adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/get_message/<int:driver_ID>')
@@ -278,7 +278,7 @@ def send_message():
 @admin_bp.route('/notice')
 @admin_check_login
 def notice():
-    return render_template('Management module/notice.html')
+    return render_template('Management module/notice.html',adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/send_notice', methods=['POST'])

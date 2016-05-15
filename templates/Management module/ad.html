@@ -21,7 +21,7 @@
             <ul class="user-menu">
                 <li class="dropdown pull-right">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
-                            class="glyphicon glyphicon-user"></span> 管理员ID <span class="caret"></span></a>
+                            class="glyphicon glyphicon-user">{{ adm_name }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
                         <li><a href="#" onclick="clearNewMessageRemind();hideredspot();return false;"><span class="glyphicon glyphicon-cog"></span> 私信</a></li>
@@ -139,8 +139,6 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="adplace">广告地点</label>
                                 <div class="col-md-4">
-                                    <input id="adplace" readonly name="adplace" type="text" placeholder="同济大学各个校区+地图API"
-                                           class="form-control">
                                     <br>
                                     <div style="z-index:9;width:450px;height:340px;border:1px solid gray"
                                          id="container"></div>
