@@ -100,6 +100,9 @@ def security():
 
 @driver_bp.route('/get_check_code/<int:phone>')
 def get_check_code(phone):
+    driver = driver_account.query.filter_by(phone=phone).first()
+    if driver != None:
+        return '220'
     check_code = get_cap_code()
     session['check_code'] = check_code
     tool.send_register_message(phone, check_code)
