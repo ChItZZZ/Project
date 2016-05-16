@@ -57,7 +57,7 @@ def check_register():
     if check_code != request.form['check_code']:
         return '<script>alert("验证码错误!");location.href="/adv/register"</script>'
     user_id = request.form['userID']
-    phone = request.form['phone']
+    phone = session['register_phone'] 
     company_name = request.form['company_name']
     user_name = request.form['user_name']
     password = request.form['password']
@@ -78,6 +78,7 @@ def get_check_code(phone):
     advter = adv_account.query.filter_by(phone=phone).first()
     if advter != None:
         return '310'
+    session['register_phone'] = str(phone)
     check_code = get_cap_code()
     session['check_code'] = check_code
     tool.send_register_message(phone, check_code)
@@ -245,7 +246,7 @@ def get_notice():
     now = time.localtime(time.time())
     ajax = []
     ns = sys_notice.query.filter(
-        and_(sys_notice.end_time < now, or_(sys_notice.notice_type == 1, sys_notice.notice_type == 2))).all()
+        and_(sys_notice.end_time > now, or_(sys_notice.notice_type == 1, sys_notice.notice_type == 2))).all()
     for n in ns:
         ajax.append(n.to_json())
     return json.dumps(ajax)
