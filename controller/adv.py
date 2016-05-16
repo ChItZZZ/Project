@@ -133,11 +133,11 @@ def check_adv_submit():
         img = request.files['adv_img']
         img_filename = secure_filename(img.filename)
         img.save(os.path.join(app.root_path, 'static/image/adv_img', img_filename))
-        adv = adv_info(cost, adv_count, date, start_time, end_time, location, session['adv_account_id'], adv_sum, flag,
+        adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_sum, flag,
                        img_filename)
     else:
         adv_text = request.form['adv_text']
-        adv = adv_info(cost, adv_count, date, start_time, end_time, location, session['adv_account_id'], adv_sum, flag,
+        adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_sum, flag,
                        adv_text)
 
     db.session.add(adv)
@@ -176,8 +176,8 @@ def get_rec_price(lat, lng):
         center = json.loads(adv.center)
         dis = get_distance(lat, lng, center[1], center[0])
         if dis < 1:
-            rec_price += (1 - dis) * float(adv.cost.real)
-            times += (1 - dis)
+            rec_price += dis * float(adv.cost.real)
+            times += dis
     if times == 0:
         return '0.05'
     else:
