@@ -37,7 +37,7 @@ def check_login():
             session['driver_account_id'] = driver.account_ID
             session['driver_user_name'] = driver.user_name
             session['driver_account'] = driver.to_json()
-            session['phone']=phone
+            session['phone'] = phone
             # 这里应该写个token
             return '<script>location.href="/driver/home"</script>'
         else:
@@ -122,7 +122,7 @@ def check_forgot_pwd():
 def home():
     driver = session['driver_account']
     return render_template('Drivers module/dri-home.html', name=session['driver_user_name'],
-                           count=session['message_count'],phone=session['phone'],
+                           count=session['message_count'], phone=session['phone'],
                            account=driver['account_money'], card_pic=driver['card_pic'], user_ID=driver['user_ID'])
 
 
@@ -131,7 +131,7 @@ def home():
 @driver_check_login
 def security():
     return render_template('Drivers module/security.html', name=session['driver_user_name'],
-                           count=session['message_count'],phone=session['phone'])
+                           count=session['message_count'], phone=session['phone'])
 
 
 @driver_bp.route('/logout')
@@ -171,16 +171,15 @@ def change_pwd():
                            count=session['message_count'])
 
 
-@driver_bp.route('/check_change_pwd/', methods=['GET', 'POST'])
+@driver_bp.route('/check_change_pwd/', methods=['POST'])
 @driver_check_login
-@driver_check_message
 def check_change_pwd():
     old_pwd = request.form['old']
     new_pwd = request.form['new']
     driver = driver_account.query.get(session['driver_account_id'])
     if (driver.check(old_pwd)):
         driver.change_pwd(new_pwd)
-        return '<script>alert("修改密码成功,请重新登录");location.href="/driver/login"</script>'
+        return '<script>alert("修改密码成功,请重新登录");location.href="/driver/logout"</script>'
     else:
         return '<script>alert("密码有误,请重试");location.reload();</script>'
 
@@ -195,7 +194,8 @@ def get_message():
     ajax = []
     for m in ms:
         ajax.append(m.to_json())
-        m.read_flag = True
+        if m.flag == True:
+            m.read_flag = True
     db.session.commit()
     return json.dumps(ajax)
 
@@ -220,7 +220,7 @@ def get_notice():
     now = time.localtime(time.time())
     ajax = []
     ns = sys_notice.query.filter(
-        and_(sys_notice.end_time < now, or_(sys_notice.notice_type == 3, sys_notice.notice_type == 2))).all()
+        and_(sys_notice.end_time > now, or_(sys_notice.notice_type == 3, sys_notice.notice_type == 1))).all()
     for n in ns:
         ajax.append(n.to_json())
     return json.dumps(ajax)

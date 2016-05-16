@@ -52,3 +52,14 @@ def advter_check_login(f):
             return f(*args, **kwargs)
 
     return decorated_function
+
+
+def app_check_login(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'driver_account_id' not in session:
+            return '100'  # 尚未登录
+        else:
+            return f(*args, **kwargs)
+
+    return decorated_function
