@@ -65,20 +65,20 @@
             </div>
         </nav>
         <div class="home-item"><p style="font-size: 22px;margin-top: 10px;padding: 0 10px"><i
-                class="fa fa-list"></i> 广告播放记录</p></div>
+                class="fa fa-list"></i> 广告列表</p></div>
 
         <div class="indivisual-security-body col-md-12">
             <ul class="security-list">
                 <li class="details">
                     <h4 style="float: left;margin-left: 30px">
-                        <strong>name<span></span></strong>
+                        <strong>简介<span></span></strong>
                         <span style="display: block;margin-top: 10px">广告内容简介广告内容简介广告内容简介</span>
                         <a href="/adv/change_phone" class="pull-right operate dropdown-toggle"
                            data-toggle="dropdown">操作 <span class="caret"></span> </a>
                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1"
                             style="right: 20px;position: absolute;top: 60%;">
                             <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#">删除</a>
+                                <a role="menuitem" tabindex="-1"  class="del">删除</a>
                             </li>
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">查看详情</a>
@@ -94,14 +94,14 @@
                 </li>
                 <li class="details">
                     <h4 style="float: left;margin-left: 30px">
-                        <strong>name<span></span></strong>
+                        <strong>简介<span></span></strong>
                         <span style="display: block;margin-top: 10px">广告内容简介广告内容简介广告内容简介</span>
                         <a href="/adv/change_phone" class="pull-right operate dropdown-toggle"
                            data-toggle="dropdown">操作 <span class="caret"></span> </a>
                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1"
                             style="right: 20px;position: absolute;top: 60%;">
                             <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#">删除</a>
+                                <a role="menuitem" tabindex="-1" href="#" class="del">删除</a>
                             </li>
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">查看详情</a>
@@ -117,7 +117,7 @@
                 </li>
                 <li class="details">
                     <h4 class="details-info">
-                        <strong>name<span></span></strong>
+                        <strong>简介<span></span></strong>
                         <span style="display: block;margin-top: 10px">广告内容简介广告内容简介广告内容简介</span>
                         <!--<div class="dropdown">-->
                         <a href="/adv/change_phone" class="pull-right operate dropdown-toggle"
@@ -125,7 +125,7 @@
                         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1"
                             style="right: 20px;position: absolute;top: 60%;">
                             <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#">删除</a>
+                                <a role="menuitem" tabindex="-1" href="#" class="del">删除</a>
                             </li>
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">查看详情</a>
@@ -171,6 +171,12 @@
         $(".back-top").click(function () {
             $("body,html").animate({scrollTop: 0}, 300);
         })
+
+        $(".del").click(function () {
+            $(this).parents(".details").remove();
+
+        })
+
     })
 </script>
 </body>
