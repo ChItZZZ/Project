@@ -72,7 +72,7 @@ def post_adv(adv_ID):
 
 @app_bp.route('/get_driver_info/')
 @app_check_login
-def get_driver_ID():
+def get_driver_info():
     driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
     return json.dumps(driver.to_json())
 
