@@ -38,10 +38,10 @@
 
                 <li><a href="/driver/home"><i class="fa fa-home fa-fw"></i>个人主页</a></li>
                 <li><a href="/driver/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
-                <li><a href="#" class="active"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
+                <li><a href="/driver/ad_details" class="active"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/driver/chat"><i class="glyphicon glyphicon-envelope gly-item"></i>消息中心<span
                         class="badge pull-right"
-                        style="padding: 6px 12px;border-radius: 12px">6</span></a>
+                        style="padding: 6px 12px;border-radius: 12px">{{ count }}</span></a>
                 </li>
                 <li><a href="/driver/s_notice"><i class="glyphicon glyphicon-info-sign gly-item"></i>通知查看</a></li>
                 <li><a href="#"><i class="fa fa-cab fa-fw"></i>任务栏</a></li>
@@ -82,14 +82,12 @@
                     </tr>
                     </thead>
                     <tbody id="record_table">
-
+                    <tr>
+                    </tr>
                     </tbody>
                 </table>
                 <div class="col-md-12" style="text-align: center;">
                     <ul class="pagination" style="margin-left: -50px" id="page_ul">
-                        <li><a>&laquo;</a></li>
-                        <li><a onclick="show(1)">1</a></li>
-                        <li><a>&raquo;</a></li>
                     </ul>
                 </div>
             </div>
@@ -98,6 +96,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        var record_count ={{ count }};
+        for (var i = 0; i < record_count; i += 10) {
+            document.getElementById('page_ul').innerHTML += '<li><a onclick="show(' + i / 10 + 1 + ')">' + i / 10 + 1 + '</a></li>'
+        }
+    });
+
+    function show(i){
+        $.get()
+    }
+</script>
 
 <!-- JS -->
 <script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->

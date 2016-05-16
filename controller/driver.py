@@ -34,6 +34,12 @@ def check_login():
         return '<script>alert("用户名或密码错误");location.href="/driver/login"</script>'
     else:
         if driver.check(password):
+            if driver.check_flag == None:
+                session['flag'] = '未通过验证'
+            elif driver.check_flag == False:
+                return '<script>alert("账号被封禁");location.href="/driver/login"</script>'
+            elif driver.check_flag == True:
+                session['flag'] = '已通过验证'
             session['driver_account_id'] = driver.account_ID
             session['driver_user_name'] = driver.user_name
             session['driver_account'] = driver.to_json()
@@ -46,11 +52,11 @@ def check_login():
 
 @driver_bp.route('/check_register', methods=['POST'])
 def check_register():
-    check_code = session['check_code']
+    check_code = session.get('check_code')
     if check_code != request.form['check_code']:
         return '<script>alert("验证码错误!");location.href="/driver/register"</script>'
     user_id = request.form['userID']
-    phone = request.form['phone']
+    phone = session['register_phone']
     user_name = request.form['user_name']
     password = request.form['password']
     ID_card_image = request.files['ID_card_image']
@@ -81,6 +87,7 @@ def register():
 @driver_bp.route('/get_check_code/<int:phone>')
 def get_check_code(phone):
     driver = driver_account.query.filter_by(phone=phone).first()
+    session['register_phone'] = str(phone)
     if driver != None:
         return '310'
     check_code = get_cap_code()
@@ -122,7 +129,7 @@ def check_forgot_pwd():
 def home():
     driver = session['driver_account']
     return render_template('Drivers module/dri-home.html', name=session['driver_user_name'],
-                           count=session['message_count'], phone=session['phone'],
+                           count=session['message_count'], phone=session['phone'], flag=session['flag'],
                            account=driver['account_money'], card_pic=driver['card_pic'], user_ID=driver['user_ID'])
 
 
@@ -154,7 +161,7 @@ def get_records():
         dic = {}
         adv = adv_info.query.filter_by(adv_ID=record.adv_ID).first()
         dic['NO'] = i
-        dic['adv_text'] = adv.adv_text
+        dic['adv_text'] = adv.adv_sum
         dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
         dic['money'] = float(adv.cost.real)
         ajax.append(dic)
@@ -243,5 +250,42 @@ def s_notice():
 
 
 @driver_bp.route('/ad_details')
+@driver_check_login
+@driver_check_message
 def ad_details():
-    return render_template('Drivers module/ad-details.html')
+    return render_template('Drivers module/ad-details.html', name=session['driver_user_name'],
+                           count=session['message_count'])
+
+
+@driver_bp.route('/get_records_by_page/<int:page>')
+@driver_check_login
+@driver_check_message
+def get_records_by_page(page):
+    account_ID = session['driver_account_id']
+    records = adv_record.query.filter_by(driver_account_ID=account_ID).all()
+    ajax = []
+    i = 0
+    records = records[10 * page:10 * page + 10]
+    for record in records:
+        dic = {}
+        adv = adv_info.query.filter_by(adv_ID=record.adv_ID).first()
+        dic['NO'] = i
+        dic['adv_text'] = adv.adv_sum
+        dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
+        dic['money'] = float(adv.cost.real)
+        ajax.append(dic)
+    return json.dumps(ajax)
+
+
+@driver_bp.route('/get_money/<float:money>')
+@driver_check_login
+def get_money(money):
+    driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
+    if float(driver.account_money.real) >= money:
+        driver.account_money = float(driver.account_money.real) - money
+        db.session.commit()
+        session['driver_account'] = driver.to_json()
+        return '<script>alert("取款成功");location.href="/driver/home"</script>'
+    else:
+        session['driver_account'] = driver.to_json()
+        return '<script>alert("账号余额不足");location.href="/driver/home"</script>'
