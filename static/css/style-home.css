@@ -615,7 +615,7 @@ nav li {
     border-top: 1px solid #e6e6e6;
 }
 
-.security-list li {
+.security-list .details {
     float: left;
     display: inline-block;
     width: 100%;
@@ -624,7 +624,7 @@ nav li {
     border-bottom: 1px solid #e6e6e6;
 }
 
-.security-list li a {
+.security-list li .operate {
     position: absolute;
     top: 50%;
     display: block;
@@ -651,6 +651,12 @@ nav li {
     font-weight: 400;
     margin-right: 22px;
     display: block;
+}
+
+.security-list li h4 strong span {
+    font-size: 14px;
+    margin-left: 18px;
+    
 }
 
 .home-item {
@@ -864,4 +870,38 @@ nav li {
 .details-info {
     float: left;
     margin-left: 30px;
+}
+
+.details .dropdown-menu {
+    width: 140px;
+    right: 100px;
+}
+
+.details .dropdown-menu li {
+
+}
+
+.back-top {
+    position: fixed;
+    text-align: center;
+    line-height: 60px;
+    bottom: 40px;
+    z-index: 1005;
+    font-size: 28px;
+    cursor: pointer;
+    right: 40px;
+    background-color: lightgray;
+    width: 60px;
+    height: 60px;
+}
+
+.back-top:hover {
+    background-color: darkgray;
+}
+
+.ad-details-time {
+    font-size: 15px;
+    text-align: center;
+    margin-top: 30px;
+    line-height: 20px;
 }
