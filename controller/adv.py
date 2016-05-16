@@ -34,16 +34,23 @@ def check_login():
     password = request.form['password']
     advter = adv_account.query.filter_by(phone=phone).first()
     if advter == None:
-        return '<script>alert("用户名或密码错误");location.href="login"</script>'
+        return '<script>alert("用户名或密码错误");location.href="/adv/login"</script>'
     else:
         if advter.check(password):
+            if advter.check_flag == None:
+                session['flag'] = '未通过验证'
+            elif advter.check_flag == False:
+                return '<script>alert("账号被封禁");location.href="/adv/login"</script>'
+            else:
+                session['flag'] = '已通过验证'
             session['adv_account_id'] = advter.account_ID
             session['adv_charge_name'] = advter.charge_name
             session['phone'] = advter.phone
+            session['money'] = float(advter.account_money.real)
             # 这里应该写个token
             return '<script>location.href="/adv/home"</script>'
         else:
-            return '<script>alert("用户名或密码错误");location.href="login"</script>'
+            return '<script>alert("用户名或密码错误");location.href="/adv/login"</script>'
 
 
 @adv_bp.route('/register/')
@@ -53,7 +60,7 @@ def register():
 
 @adv_bp.route('/check_register/', methods=['POST', 'GET'])
 def check_register():
-    check_code = session['check_code']
+    check_code = session.get('check_code')
     if check_code != request.form['check_code']:
         return '<script>alert("验证码错误!");location.href="/adv/register"</script>'
     user_id = request.form['userID']
@@ -129,6 +136,14 @@ def check_adv_submit():
     end_time = time.strptime(request.form['end_time'], '%H:%M')
     cost = float(request.form['cost'])
     adv_sum = request.form['adv_sum']
+    advter = adv_account.query.filter_by(account_ID=session['adv_account_id']).first()
+    if advter.check_flag == None or advter.check_flag == False:
+        return '<script>alert("尚未通过验证");location.href="/adv/home"</script>'
+    if advter.account_money < cost * adv_count:
+        return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
+    else:
+        advter.account_money -= cost * adv_count
+        session['money'] = float(advter.account_money.real)
     if flag:
         img = request.files['adv_img']
         img_filename = secure_filename(img.filename)
@@ -145,7 +160,7 @@ def check_adv_submit():
     his = adv_history(adv.adv_ID, session['adv_account_id'], cost * adv_count)
     db.session.add(his)
     db.session.commit()
-    return '<script>alert("发布成功");location.href="home"</script>'
+    return '<script>alert("发布成功");location.href="/adv/home"</script>'
 
 
 @adv_bp.route('/adv_submit')
@@ -162,7 +177,8 @@ def login():
 @adv_bp.route('/home/')
 @advter_check_login
 def home():
-    return render_template('Advertiser module/adv-home.html', name=session['adv_charge_name'], phone=session['phone'])
+    return render_template('Advertiser module/adv-home.html', name=session['adv_charge_name'], phone=session['phone'],
+                           money=session['money'], flag=session['flag'])
 
 
 @adv_bp.route('/get_rec_price/<float:lat>/<float:lng>/')
@@ -237,7 +253,7 @@ def check_change_pay_pwd():
 @adv_bp.route('/notice')
 @advter_check_login
 def notice():
-    return render_template('Advertiser module/notice.html',name=session['adv_charge_name'])
+    return render_template('Advertiser module/notice.html', name=session['adv_charge_name'])
 
 
 @adv_bp.route('/get_notice')
@@ -269,3 +285,13 @@ def find_pay_pwd():
 @advter_check_login
 def task_details():
     return render_template('Advertiser module/')
+
+
+@adv_bp.route('/pay/<float:money>/')
+@advter_check_login
+def pay(money):
+    advter = adv_account.query.filter_by(account_ID=session['adv_account_id']).first()
+    advter.account_money = money + float(advter.account_money.real)
+    db.session.commit()
+    session['money'] = float(advter.account_money.real)
+    return '<script>alert("充值成功!");location.href="/adv/home"</script>'
