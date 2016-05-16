@@ -37,17 +37,11 @@ def check_login():
             session['driver_account_id'] = driver.account_ID
             session['driver_user_name'] = driver.user_name
             session['driver_account'] = driver.to_json()
+            session['phone']=phone
             # 这里应该写个token
             return '<script>location.href="/driver/home"</script>'
         else:
             return '<script>alert("用户名或密码错误");location.href="/driver/login"</script>'
-
-
-@driver_bp.route('/logout')
-@driver_check_login
-def logout():
-    session.clear()
-    return redirect(url_for('driver.login'))
 
 
 @driver_bp.route('/check_register', methods=['POST'])
@@ -74,14 +68,6 @@ def check_register():
     return '<script>alert("注册成功!");location.href="/driver/login"</script>'
 
 
-@driver_bp.route('/home')
-@driver_check_login
-def home():
-    driver = session['driver_account']
-    return render_template('Drivers module/dri-home.html', name=session['driver_user_name'],
-                           account=driver['account_money'], card_pic=driver['card_pic'], user_ID=driver['user_ID'])
-
-
 @driver_bp.route('/login')
 def login():
     return render_template('Drivers module/login.html')
@@ -90,12 +76,6 @@ def login():
 @driver_bp.route('/register')
 def register():
     return render_template('Drivers module/create-account.html')
-
-
-@driver_bp.route('/security')
-@driver_check_login
-def security():
-    return render_template('Drivers module/security.html', name=session['driver_user_name'])
 
 
 @driver_bp.route('/get_check_code/<int:phone>')
@@ -109,8 +89,61 @@ def get_check_code(phone):
     return "300"
 
 
+@driver_bp.route('/forgot_pwd/')
+def forgot_pwd():
+    return render_template('Drivers module/forgot-password.html')
+
+
+@driver_bp.route('/get_forgot_code/<int:phone>')
+def get_forgot_code(phone):
+    forget_code = get_cap_code()
+    session['forget_code'] = forget_code
+    session['phone_change'] = str(phone)
+    tool.send_forgot_pwd_message(phone, forget_code)
+    return "success"
+
+
+@driver_bp.route('/check_forgot_code/', methods=['post'])
+def check_forgot_pwd():
+    code = request.form['code']
+    phone = session['phone_change']
+    if code == session['forget_code']:
+        driver = driver_account.query.filter_by(phone=phone).first()
+        pwd = get_salt(8)
+        driver.change_pwd(pwd)
+        return '<script>alert("您的新密码为{0},请登陆后尽快修改");location.href="/driver/login"</script>'.format(pwd)
+    else:
+        return '<script>alert("手机号或验证码有误,请重试")</script>'
+
+
+@driver_bp.route('/home')
+@driver_check_login
+@driver_check_message
+def home():
+    driver = session['driver_account']
+    return render_template('Drivers module/dri-home.html', name=session['driver_user_name'],
+                           count=session['message_count'],phone=session['phone'],
+                           account=driver['account_money'], card_pic=driver['card_pic'], user_ID=driver['user_ID'])
+
+
+@driver_bp.route('/security')
+@driver_check_message
+@driver_check_login
+def security():
+    return render_template('Drivers module/security.html', name=session['driver_user_name'],
+                           count=session['message_count'],phone=session['phone'])
+
+
+@driver_bp.route('/logout')
+@driver_check_login
+def logout():
+    session.clear()
+    return redirect(url_for('index'))
+
+
 @driver_bp.route('/get_records/')
 @driver_check_login
+@driver_check_message
 def get_records():
     account_ID = session['driver_account_id']
     records = adv_record.query.filter_by(driver_account_ID=account_ID).all()
@@ -132,13 +165,15 @@ def get_records():
 
 @driver_bp.route('/change_pwd/')
 @driver_check_login
+@driver_check_message
 def change_pwd():
     return render_template('Drivers module/sec-modify-pwd-bypwd.html', name=session['driver_user_name'],
-                           url='/driver/check_change_pwd/')
+                           count=session['message_count'])
 
 
 @driver_bp.route('/check_change_pwd/', methods=['GET', 'POST'])
 @driver_check_login
+@driver_check_message
 def check_change_pwd():
     old_pwd = request.form['old']
     new_pwd = request.form['new']
@@ -150,35 +185,9 @@ def check_change_pwd():
         return '<script>alert("密码有误,请重试");location.reload();</script>'
 
 
-@driver_bp.route('/forgot_pwd/')
-def forgot_pwd():
-    return render_template('Drivers module/forgot-password.html')
-
-
-@driver_bp.route('/get_forgot_code/<int:phone>')
-def get_forgot_code(phone):
-    forget_code = get_cap_code()
-    session['forget_code'] = forget_code
-    session['phone'] = phone
-    tool.send_forgot_pwd_message(phone, forget_code)
-    return "success"
-
-
-@driver_bp.route('/check_forgot_code/', methods=['post'])
-def check_forgot_pwd():
-    code = request.form['code']
-    phone = request.form['phone']
-    if code == session['forget_code'] and phone == session['phone']:
-        driver = driver_account.query.filter_by(phone=phone).first()
-        pwd = get_salt(8)
-        driver.change_pwd(pwd)
-        return '<script>alert("您的新密码为{0},请登陆后尽快修改");location.href="/driver/login"</script>'.format(pwd)
-    else:
-        return '<script>alert("手机号或验证码有误,请重试")</script>'
-
-
 @driver_bp.route('/get_message')
 @driver_check_login
+@driver_check_message
 def get_message():
     driver_ID = session['driver_account_id']
     ms = message.query.filter(or_(and_(message.receiver_ID == driver_ID, message.flag == True),
@@ -186,11 +195,14 @@ def get_message():
     ajax = []
     for m in ms:
         ajax.append(m.to_json())
+        m.read_flag = True
+    db.session.commit()
     return json.dumps(ajax)
 
 
 @driver_bp.route('/send_message/', methods=['POST'])
 @driver_check_login
+@driver_check_message
 def send_message():
     text = request.form['text']
     receiver_ID = request.form['receiver_ID']
@@ -203,10 +215,12 @@ def send_message():
 
 @driver_bp.route('/get_notice')
 @driver_check_login
+@driver_check_message
 def get_notice():
     now = time.localtime(time.time())
     ajax = []
-    ns = sys_notice.query.filter(sys_notice.end_time < now).all()
+    ns = sys_notice.query.filter(
+        and_(sys_notice.end_time < now, or_(sys_notice.notice_type == 3, sys_notice.notice_type == 2))).all()
     for n in ns:
         ajax.append(n.to_json())
     return json.dumps(ajax)
@@ -214,11 +228,20 @@ def get_notice():
 
 @driver_bp.route('/chat')
 @driver_check_login
+@driver_check_message
 def chat():
-    return render_template('Drivers module/dri-chat.html')
+    return render_template('Drivers module/dri-chat.html', name=session['driver_user_name'],
+                           count=session['message_count'])
 
 
 @driver_bp.route('/s_notice')
 @driver_check_login
+@driver_check_message
 def s_notice():
-    return render_template('Drivers module/personal-letter.html')
+    return render_template('Drivers module/notice.html', name=session['driver_user_name'],
+                           count=session['message_count'])
+
+
+@driver_bp.route('/ad_details')
+def ad_details():
+    return render_template('Drivers module/ad-details.html')

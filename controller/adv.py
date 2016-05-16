@@ -7,6 +7,8 @@ from controller.check_per import advter_check_login
 from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
+from model.sys_notice import sys_notice
+from sqlalchemy import *
 
 app = current_app
 adv_bp = Blueprint('adv', __name__)
@@ -23,7 +25,7 @@ def index():
 @adv_bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('adv.login'))
+    return redirect(url_for('index'))
 
 
 @adv_bp.route('/check_login', methods=['POST'])
@@ -90,18 +92,26 @@ def forgor_pwd():
 @adv_bp.route('/get_forgot_code/<int:phone>')
 def get_forgot_code(phone):
     adv = adv_account.query.filter_by(phone=phone)
+    session['phone_change'] = str(phone)
     if adv == None:
-        return '310'
+        return '315'
     forget_code = get_cap_code()
     session['forget_code'] = forget_code
-    session['phone'] = phone
     tool.send_forgot_pwd_message(phone, forget_code)
     return "300"
 
 
-@adv_bp.route('/check_forgot_code/')
-def check_forgot():
-    pass
+@adv_bp.route('/check_forgot_code/', methods=['POST'])
+def check_forgot_code():
+    code = request.form['code']
+    phone = session['phone_change']
+    if code == session['forget_code']:
+        driver = adv_account.query.filter_by(phone=phone).first()
+        pwd = get_salt(8)
+        driver.change_pwd(pwd)
+        return '<script>alert("您的新密码为{0},请登陆后尽快修改");location.href="/adv/login"</script>'.format(pwd)
+    else:
+        return '<script>alert("手机号或验证码有误,请重试");location.href="/adv/forgot_pwd"</script>'
 
 
 @adv_bp.route('/check_adv_submit', methods=['POST'])
@@ -183,9 +193,12 @@ def security():
 @advter_check_login
 def get_history():
     historys = adv_history.query.filter_by(advter_ID=session['adv_account_id']).all()
+    historys.reverse()
     ajax = []
     for h in historys:
         ajax.append(h.to_json())
+        if len(ajax) == 25:
+            break
     return json.dumps(ajax)
 
 
@@ -195,10 +208,47 @@ def change_pwd():
     return render_template('Advertiser module/sec-modify-pwd-bypwd.html')
 
 
+@adv_bp.route('/check_change_pwd/', methods=['POST'])
+@advter_check_login
+def check_change_pwd():
+    old_pwd = request.form['old']
+    new_pwd = request.form['new']
+    advter = adv_account.query.get(session['adv_account_id'])
+    if (advter.check(old_pwd)):
+        advter.change_pwd(new_pwd)
+        return '<script>alert("修改密码成功,请重新登录");location.href="/adv/logout"</script>'
+    else:
+        return '<script>alert("密码有误,请重试");location.reload();</script>'
+
+
 @adv_bp.route('/change_pay_pwd')
 @advter_check_login
 def change_pay_pwd():
     return render_template('Advertiser module/sec-modify-pwd-bypwd.html')
+
+
+@adv_bp.route('/check_change_pay_pwd')
+@advter_check_login
+def check_change_pay_pwd():
+    pass
+
+
+@adv_bp.route('/notice')
+@advter_check_login
+def notice():
+    return render_template('Advertiser module/notice.html')
+
+
+@adv_bp.route('/get_notice')
+@advter_check_login
+def get_notice():
+    now = time.localtime(time.time())
+    ajax = []
+    ns = sys_notice.query.filter(
+        and_(sys_notice.end_time < now, or_(sys_notice.notice_type == 1, sys_notice.notice_type == 2))).all()
+    for n in ns:
+        ajax.append(n.to_json())
+    return json.dumps(ajax)
 
 
 @adv_bp.route('/change_phone')

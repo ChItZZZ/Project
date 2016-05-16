@@ -40,6 +40,7 @@
                 <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
                 <li><a href="#"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/adv/adv_submit"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
+                <li><a href="/adv/notice"><i class="fa fa-list fa-fw"></i>系统通知</a></li>
                 <li><a href="/adv/logout"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
             </ul>
         </nav>
@@ -85,7 +86,7 @@
 
             <!--身份验证-->
             <div class="col-md-12 modify-box" id="step1" data-index="1">
-                <form action="{{ url }}" class="col-md-12" method="post" id="form1">
+                <form action="/adv/check_change_pwd/" class="col-md-12" method="post" id="form1">
                     <div class="form-group">
                         <div class="col-md-12">
                             <label for="pwd" class="col-md-4" style="text-align: right">请输入原始密码:</label>

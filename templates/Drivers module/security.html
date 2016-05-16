@@ -39,7 +39,7 @@
                 <li><a href="/driver/security" class="active"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
                 <li><a href="#"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/driver/chat"><i class="glyphicon glyphicon-envelope gly-item" ></i>消息中心<span class="badge pull-right"
-                                                                                                           style="padding: 6px 12px;border-radius: 12px">6</span></a>
+                                                                                                           style="padding: 6px 12px;border-radius: 12px">{{ count }}</span></a>
                 </li>
                 <li><a href="/driver/s_notice"><i class="glyphicon glyphicon-info-sign gly-item"></i>通知查看</a></li>
                 <li><a href="#"><i class="fa fa-cab fa-fw"></i>任务栏</a></li>
@@ -64,19 +64,11 @@
         </div>
         <div class="indivisual-security-main">
             <div class="indivisual-security-info col-md-12">
-                <p><strong>hahaha</strong>123456789(987654@qq.com)</p>
+                <p><strong>{{ name }}</strong>{{ phone }}</p>
                 <p>建议您启用全部安全设置,以保障账户安全</p>
             </div>
             <div class="indivisual-security-body col-md-12">
                 <ul class="security-list">
-                    <li>
-                        <i class="glyphicon glyphicon-envelope"></i>
-                        <h4>
-                            <strong>绑定邮箱<span></span></strong>
-                            <span>您验证的邮箱:123345411@qq.com</span>
-                            <!--<a href="#" class="pull-right">验证 ></a>-->
-                        </h4>
-                    </li>
                     <li>
                         <i class="fa fa-mobile" style="font-size: 40px"></i>
                         <h4>
