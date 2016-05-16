@@ -37,7 +37,7 @@ def check_login():
             session['driver_account_id'] = driver.account_ID
             session['driver_user_name'] = driver.user_name
             session['driver_account'] = driver.to_json()
-            session['phone']=phone
+            session['phone'] = phone
             # 这里应该写个token
             return '<script>location.href="/driver/home"</script>'
         else:
@@ -122,7 +122,7 @@ def check_forgot_pwd():
 def home():
     driver = session['driver_account']
     return render_template('Drivers module/dri-home.html', name=session['driver_user_name'],
-                           count=session['message_count'],phone=session['phone'],
+                           count=session['message_count'], phone=session['phone'],
                            account=driver['account_money'], card_pic=driver['card_pic'], user_ID=driver['user_ID'])
 
 
@@ -131,7 +131,7 @@ def home():
 @driver_check_login
 def security():
     return render_template('Drivers module/security.html', name=session['driver_user_name'],
-                           count=session['message_count'],phone=session['phone'])
+                           count=session['message_count'], phone=session['phone'])
 
 
 @driver_bp.route('/logout')
@@ -194,7 +194,8 @@ def get_message():
     ajax = []
     for m in ms:
         ajax.append(m.to_json())
-        m.read_flag = True
+        if m.flag == True:
+            m.read_flag = True
     db.session.commit()
     return json.dumps(ajax)
 

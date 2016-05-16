@@ -57,7 +57,7 @@ def check_register():
     if check_code != request.form['check_code']:
         return '<script>alert("验证码错误!");location.href="/adv/register"</script>'
     user_id = request.form['userID']
-    phone = session['register_phone'] 
+    phone = session['register_phone']
     company_name = request.form['company_name']
     user_name = request.form['user_name']
     password = request.form['password']
@@ -237,7 +237,7 @@ def check_change_pay_pwd():
 @adv_bp.route('/notice')
 @advter_check_login
 def notice():
-    return render_template('Advertiser module/notice.html')
+    return render_template('Advertiser module/notice.html',name=session['adv_charge_name'])
 
 
 @adv_bp.route('/get_notice')
