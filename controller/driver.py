@@ -220,7 +220,7 @@ def get_notice():
     now = time.localtime(time.time())
     ajax = []
     ns = sys_notice.query.filter(
-        and_(sys_notice.end_time > now, or_(sys_notice.notice_type == 3, sys_notice.notice_type == 2))).all()
+        and_(sys_notice.end_time > now, or_(sys_notice.notice_type == 3, sys_notice.notice_type == 1))).all()
     for n in ns:
         ajax.append(n.to_json())
     return json.dumps(ajax)
