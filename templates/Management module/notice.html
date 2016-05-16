@@ -10,7 +10,7 @@
     <link href="/static/css/bootstrap-table.css" rel="stylesheet">
     <link href="/static/css/styles.css" rel="stylesheet">
     <link href="/static/css/jquery-ui.min.css" rel="stylesheet" >
-
+	<link href="/static/css/dateRange.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -142,7 +142,12 @@
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="name">有效日期至</label>
                             <div class="col-md-9">
-                                <input type="text" id="datepicker" class="form-control" placeholder="" name="date">
+                                <div class="ta_date" id="div_date_demo3">
+									<span class="date_title" id="date_demo3"></span>
+									<a class="opt_sel" id="input_trigger_demo3" href="#">
+										<i class="i_orderd"></i>
+									</a>
+								</div>
                             </div>
                         </div>
 
@@ -197,6 +202,8 @@
 <script src="/static/js/bootstrap-datepicker.js"></script>
 <script src="/static/js/bootstrap-table.js"></script>
 <script src="/static/js/jquery-ui.min.js"></script>
+<script src="/static/js/dateRange.js"></script>
+
 <script>
     $(document).ready(function () {
         $.get("/admin/get_notice", function (data, status) {
@@ -307,6 +314,29 @@ function hideredspot(){		// *********************************隐藏小红点调�
 			}
 		}
 </script>
+
+
+<!-- 日期控件 -->
+<script type="text/javascript">
+			var dateRange = new pickerDateRange('date_demo3', {
+				aRecent7Days : 'aRecent7DaysDemo3', //最近7天
+				isTodayValid : false,
+				//startDate : '2013-04-14',
+				//endDate : '2013-04-21',
+				//needCompare : true,
+				//isSingleDay : true,
+				//shortOpr : true,
+				defaultText : ' 至 ',
+				inputTrigger : 'input_trigger_demo3',
+				theme : 'ta',
+				success : function(obj) {
+					$("#dCon_demo3").html('开始时间 : ' + obj.startDate + '<br/>结束时间 : ' + obj.endDate);
+				}
+			});
+
+</script>
+
+
 </body>
 
 </html>
