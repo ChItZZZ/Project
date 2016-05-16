@@ -70,22 +70,51 @@
         <div class="indivisual-security-body col-md-12">
             <ul class="security-list">
                 <li>
-                    <i class="fa fa-mobile" style="font-size: 40px"></i>
-                    <h4>
-                        <strong>手机号码<span></span></strong>
-                        <span>您绑定的手机号:{{ phone }}</span>
+                    <div style="float: left;"><img src="/Project/static/images/head1.png" alt=""
+                                                   style="width: 60px;height: 60px;"></div>
+                    <h4 style="float: left;margin-left: 30px">
+                        <strong>name<span></span></strong>
+                        <span style="display: block;margin-top: 10px">广告内容简介广告内容简介广告内容简介</span>
                         <a href="/adv/change_phone" class="pull-right">修改 ></a>
                     </h4>
+                    <div class="" style="position: absolute;right: 100px;top: 45%;font-size: 20px">
+                        2016-5-5
+                    </div>
+                    <div style="position: absolute;right: 40%;top: 45%;font-size: 20px;">
+                        300
+                    </div>
                 </li>
                 <li>
-                    <i class="fa fa-paw"></i>
-                    <h4>
-                        <strong>登录密码<span></span></strong>
-                        <span>定期修改密码,确保账号安全</span>
-                        <a href="/adv/change_pay_pwd" class="pull-right" style="margin-left: 20px">修改 ></a>
+                    <div style="float: left;"><img src="/Project/static/images/head2.png" alt=""
+                                                   style="width: 60px;height: 60px;"></div>
+                    <h4 style="float: left;margin-left: 30px">
+                        <strong>name<span></span></strong>
+                        <span style="display: block;margin-top: 10px">广告内容简介广告内容简介广告内容简介</span>
+                        <a href="/adv/change_phone" class="pull-right">修改 ></a>
                     </h4>
+                    <div class="" style="position: absolute;right: 100px;top: 45%;font-size: 20px">
+                        2016-5-5
+                    </div>
+                    <div style="position: absolute;right: 40%;top: 45%;font-size: 20px;">
+                        300
+                    </div>
                 </li>
-                <li style="clear: both;"></li>
+                <li>
+                    <div style="float: left;"><img src="/Project/static/images/head3.jpeg" alt=""
+                                                   style="width: 60px;height: 60px;"></div>
+                    <h4 class="details-info">
+                        <strong>name<span></span></strong>
+                        <span style="display: block;margin-top: 10px">广告内容简介广告内容简介广告内容简介</span>
+                        <a href="/adv/change_phone" class="pull-right">修改 ></a>
+                    </h4>
+                    <div class="details-time" >
+                        2016-5-5
+                    </div>
+                    <div class="details-money">
+                        300
+                    </div>
+                </li>
+                <li style="clear: both;border-bottom: none;height: 0px;padding: 0"></li>
             </ul>
         </div>
 
@@ -101,17 +130,36 @@
     $(document).ready(function () {
         $(window).scroll(function () {
             var lastTop = $("li:last").offset().top;
-            console.log(lastTop);
+//            console.log(lastTop);
             var scrollTop = $(window).scrollTop();
             var clientHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-            console.log(scrollTop);
-            console.log(clientHeight);
+//            console.log(scrollTop);
+//            console.log(clientHeight);
+            var li = '<li>\
+                    <div style="float: left;"><img src="/Project/static/images/head3.jpeg" alt="" style="width: 60px;height: 60px;"></div>\
+                    <h4 class="details-info">\
+                    <strong>name<span></span></strong>\
+                    <span style="display: block;margin-top: 10px">广告内容简介</span>\
+                    <a href="/adv/change_phone" class="pull-right">修改 ></a>\
+                    </h4>\
+                    <div class="details-time" >\
+                    2016-5-5\
+                    </div>\
+                     <div class="details-money">\
+                    300\
+                    </div>\
+                    </li>';
             if (lastTop < scrollTop + clientHeight) {
-                //ajax请求字符串
-                $(".security-list").append("<li>123123123</li>");
-//                $.ajax("",{
-//
+
+//                //ajax请求字符串
+//                .ajax({
+//                    type:"get",
+//                    url:  ,
+//                    success: function () {
+                $(".security-list").append(li);
+//                    }
 //                })
+
             }
         })
     })
