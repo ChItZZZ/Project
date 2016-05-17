@@ -187,7 +187,7 @@ def get_records():
     return json.dumps(ajax)
 
 
-@app_bp.route('/get_money/<float:money>')
+@app_bp.route('/get_money/<float:money>/')
 @app_check_login
 def get_money(money):
     driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
@@ -199,3 +199,9 @@ def get_money(money):
     else:
         session['driver_account'] = driver.to_json()
         return json.dumps({'status': '510'})
+
+@app_bp.route('/logout/')
+@app_check_login
+def logout():
+    session.clear()
+    return json.dumps({'status': '205'})
