@@ -16,7 +16,11 @@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 
-
+    <style>
+        .label-item {
+            font-size: 17px;
+        }
+    </style>
     <style>
         body, html {
             width: 100%;
@@ -97,7 +101,7 @@
             <ul>
                 <li><a href="/adv/home"><i class="fa fa-home fa-fw"></i>用户主页</a></li>
                 <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
-                <li><a href="/adv/ad_details"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
+                <li><a href="#"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/adv/adv_submit" class="active"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
                 <li><a href="/adv/notice"><i class="fa fa-list fa-fw"></i>系统通知</a></li>
                 <li><a href="/adv/logout"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
@@ -118,30 +122,44 @@
                 </nav>
             </div>
         </div>
-        <div class="ad-info white-bg" style="padding: 30px 30px 100px 30px ; border-radius: 10px;
-         position: relative;
-         margin: 20px;
-         box-shadow: 0px 0px 1px 1px rgba(161, 159, 159, 0.1);">
+        <div class="ad-info white-bg">
             <form role="form" class="advertisement-summit " action="/adv/check_adv_submit" method="post"
                   enctype="multipart/form-data" id="form1">
                 <div class="form-inner">
 
                     <div class="form-group">
+                        <div style="float: left;"><img src="/Project/static/images/head2.png" alt=""
+                                                       style="width: 60px;height: 60px;"></div>
+                        <h4 style="float: left;margin-left: 30px">
+                            <strong>name<span></span></strong>
+                            <span style="display: block;margin-top: 10px">联系方式:123123123</span>
+                        </h4>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div class="form-group" style="margin-top: 30px">
                         <div class="col-md-8">
-                            <label for="brief">广告简介</label>
+                            <label for="brief" class="label-item">广告简介</label>
                             <textarea name="adv_sum" class="form-control" id="brief" rows="1" required
-                                      style="margin-bottom: 10px"></textarea>
+                                      style="margin-bottom: 10px" readonly>dsadasndoqwnodasm</textarea>
                         </div>
                         <div style="clear: both;"></div>
                     </div>
-                    <div class="form-group" style="margin: 15px 18px;">
-                        <input type="radio" id="con" name="select" checked="checked" value="false">文字内容
-                        <input type="radio" id="img" name="select" value="true">广告图片
-                    </div>
+
                     <div class="form-group">
+                        <div class="col-md-12">
+                            <label style="margin-top: 10px" class=" label-item">广告内容</label>
+                            <div style="margin-top: 15px">
+                                <input type="radio" id="con" name="select" checked="checked" value="false">文字内容
+                                <input type="radio" id="img" name="select" value="true">广告图片
+                            </div>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div class="form-group" style="margin-top: 20px">
                         <div class="col-md-12 sel-con">
                             <textarea name="adv_text" class="form-control" id="content" rows="3" required
-                                      style="margin-bottom: 2px"></textarea>
+                                      style="margin-bottom: 2px"
+                                      readonly>dasobdqwwqeioasndoqwiasndwpsandoadoai</textarea>
                         </div>
                         <div class="col-md-12 sel-img" style="display: none;margin: 5px 0">
                             <p>
@@ -153,63 +171,57 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-md-6" style="margin-top: 30px">
-                            <label for="num">广告数量</label>
-                            <input type="number" class="form-control" id="num" placeholder="" name="adv_count">
+                    <div class="form-group" style="margin-top: 30px">
+                        <label class="col-md-2 label-item" style="font-size: 18px;margin-top: 30px">播放时间</label>
+                        <div class="col-md-12">
+                            <div class="col-md-3" style="padding-top: 23px;padding-right: 0px;margin-left: -15px">
+                                <input type="text" id="datepicker" class="form-control" placeholder="" name="date"
+                                       value="05/04/2016" readonly>
+                            </div>
+                            <div class="col-md-3" style="padding-top: 5px;padding-right: 0px;">
+                                <label for="time1"></label>
+                                <input type="text" id="time1" class="form-control" placeholder="" name="start_time"
+                                       value="08:30" readonly>
+                            </div>
+                            <div class="col-md-1" style="margin-top: 32px;margin-left: 20px">
+                                <p>&#8680;</p>
+                            </div>
+                            <div class="col-md-3" style="padding-top: 5px;padding-left: 0px;">
+                                <label for="time2"></label>
+                                <input type="text" id="time2" class="form-control" placeholder="" name="end_time"
+                                       value="12:00" readonly>
+                            </div>
                         </div>
-                        <div style="clear: both"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            <label for="sin-mon" class="label-item" style="margin-top: 30px">每条价格:</label>
+                            <input id="sin-mon" type="text" class="form-control" value="123" readonly>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-5">
+                            <label for="allmon" class="label-item">总支出:</label>
+                            <input type="text" id="allmon" value="112323" class="form-control" readonly>
+                        </div>
                     </div>
 
                     <div class="form-group" style="margin-top: 30px">
-                        <div class="col-md-4">
-                            <label for="datepicker">时间</label>
-                            <input type="text" id="datepicker" class="form-control" placeholder="" name="date">
-                        </div>
-                        <div class="col-md-3" style="padding-top: 5px;padding-right: 0px;">
-                            <label for="time1"></label>
-                            <input type="text" id="time1" class="form-control" placeholder="" name="start_time">
-                        </div>
-                        <div class="col-md-1" style="margin-top: 30px;margin-left: 20px">
-                            <p>至</p>
-                        </div>
-                        <div class="col-md-3" style="padding-top: 5px;padding-left: 0px;">
-                            <label for="time2"></label>
-                            <input type="text" id="time2" class="form-control" placeholder="" name="end_time">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <div class="col-md-12" style="margin-top: 10px">
-                            <label for="allmap">广告播放位置</label>
+                            <label for="allmap" class="label-item">广告播放位置</label>
                             <div id="allmap" style="overflow:hidden;zoom:1;position:relative;">
                                 <div id="map"
                                      style="border: 1px solid darkgray;border-radius:5px;height:95%;width: 88%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;">
                                 </div>
                             </div>
                             <input type="text" name="location" style="display: none;" id="location"/>
-                            <div id="result">
-                                <input type="button" class="btn btn-ad-summit" style="margin-left: 15px;" value="重新标记"
-                                       onclick="clearAll();"/>
-                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="col-md-8">
-                            <label for="cost" style="margin-top: 30px">每条价格</label>
-                            <input type="number" class="form-control" id="cost" name="cost" title="建议价格:"
-                                   data-container="body" data-toggle="popover" data-placement="right"
-                                   data-content="计算中..." onfocus="get_rec()">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <input type="button" class="btn btn-ad-summit" id="btn-ad-summit" onclick="ad_submit()"
-                                   value="提交广告">
-                        </div>
-                        <div style="clear: both;"></div>
-                    </div>
+
+                    <div style="clear: both;"></div>
                 </div>
             </form>
         </div>
@@ -243,21 +255,6 @@
         fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
         strokeStyle: 'solid' //边线的样式，solid或dashed。
     }
-    //实例化鼠标绘制工具
-    var drawingManager = new BMapLib.DrawingManager(map, {
-        isOpen: false, //是否开启绘制模式
-        enableDrawingTool: true, //是否显示工具栏
-        drawingToolOptions: {
-            anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
-            offset: new BMap.Size(5, 5) //偏离值
-        },
-        circleOptions: styleOptions, //圆的样式
-        polylineOptions: styleOptions, //线的样式
-        polygonOptions: styleOptions, //多边形的样式
-        rectangleOptions: styleOptions //矩形的样式
-    });
-    //添加鼠标绘制工具监听事件，用于获取绘制结果
-    drawingManager.addEventListener('overlaycomplete', overlaycomplete);
     function clearAll() {
         for (var i = 0; i < overlays.length; i++) {
             map.removeOverlay(overlays[i]);
@@ -317,46 +314,6 @@
             })
         }
     }
-    $(document).ready(function () {
-//        $("[data-toggle='tooltip']").tooltip();
-//        $("[data-toggle='tooltip']").on('focus',function () {
-//            $(this).tooltip('show');
-//        }.on('blur', function () {
-//            $(this).tooltip('hide');
-//        })
-
-        $("[data-toggle='popover']").popover();
-        $("#cost").blur(function () {
-            $(this).popover("hide");
-        })
-        $("#datepicker").datepicker({
-            changeMonth: true,
-            changeYear: true
-        });
-
-
-        $("#time1").timepicker({
-            autoclose: true
-        });
-        $("#time2").timepicker({
-            autoclose: true
-
-        });
-
-        $("#con").click(function () {
-            $(".sel-img").hide();
-            $(".sel-con").show();
-        })
-        $("#img").click(function () {
-            $(".sel-img").show();
-            $(".sel-con").hide();
-        })
-
-        $(".BMapLib_polygon").click(function () {
-            $("path").remove();
-
-        })
-    });
 </script>
 </body>
 </html>
