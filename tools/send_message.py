@@ -38,3 +38,8 @@ class ali_message_tools:
         sms = {'product': "MovingAD支付密码", "code": code}
         self.set_para('变更验证', sms, phone, 'SMS_7495110')
         return self.send_message()
+
+    def send_login_message(self, phone, code):
+        sms_param = {"product": "MovineAD", "code": code}
+        self.set_para("登录验证", sms_param, phone, "SMS_7495115")
+        return self.send_message()

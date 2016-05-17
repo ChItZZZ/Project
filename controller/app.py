@@ -20,13 +20,13 @@ app_bp = Blueprint('app', __name__)
 @app_bp.route('/check_register/', methods=['POST', 'GET'])
 def check_register():
     try:
-        user_id = request.values.get('userID')
+        user_id = request.values.get('userID')  # 身份证号
         phone = session['register_phone']
-        user_name = request.values.get('user_name')
-        password = request.values.get('password')
-        ID_card_image = request.files['ID_card_image']
-        permit_card_image = request.files['permit_card_image']
-        car_image = request.files['car_image']
+        user_name = request.values.get('user_name')  # 用户名
+        password = request.values.get('password')  # 密码
+        ID_card_image = request.files['ID_card_image']  # 身份证照片
+        permit_card_image = request.files['permit_card_image']  # 驾驶证照片
+        car_image = request.files['car_image']  # 行驶证照片
         ID_filename = secure_filename(ID_card_image.filename)
         permit_filename = secure_filename(permit_card_image.filename)
         ID_card_image.save(os.path.join(app.root_path, 'static/image/ID_card', ID_filename))
@@ -36,29 +36,56 @@ def check_register():
         u = driver_account(phone, password, user_name, user_id, ID_filename, permit_filename, car_pic_filename)
         db.session.add(u)
         db.session.commit()
-        return '340'
+        return json.dumps({'status': '340'})
     except:
-        return '350'
+        return json.dumps({'status': '350'})
 
 
-@app_bp.route('/check_code/', methods=['POST', 'GET'])
-def check_code():
-    check_code = session.get('check_code')
-    if check_code != request.values.get('check_code'):
-        return '330'
+@app_bp.route('/check_register_code/', methods=['POST', 'GET'])
+def check_register_code():
+    check_code = session.get('register_code')
+    if check_code != request.values.get('register_code'):
+        return json.dumps({'status': '330'})
     else:
-        return '320'
+        return json.dumps({'status': '320'})
 
 
 @app_bp.route('/get_register_code/<int:phone>/')
 def get_register_code(phone):
     driver = driver_account.query.filter_by(phone=phone).first()
     if driver != None:
-        return '310'  # 账号已经存在
+        return json.dumps({'status': '310'})  # 账号已经存在
     check_code = get_cap_code()
-    session['check_code'] = check_code
+    session['register_code'] = check_code
+    session['register_phone'] = str(phone)
     tool.send_register_message(phone, check_code)
-    return "300"
+    return json.dumps({'status': '300'})
+
+
+@app_bp.route('/get_login_code/<int:phone>/')
+def get_register_code(phone):
+    driver = driver_account.query.filter_by(phone=phone).first()
+    if driver == None:
+        return json.dumps({'status': '210'})  # 账号不存在
+    check_code = get_cap_code()
+    session['login_code'] = check_code
+    session['login_phone'] = str(phone)
+    tool.send_register_message(phone, check_code)
+    return json.dumps({'status': "300"})
+
+
+@app_bp.route('/check_login_code/', methods=['POST', 'GET'])
+def check_login_code():
+    check_code = session.get('login_code')
+    phone = session['login_phone']
+    driver = driver_account.query.filter_by(phone=phone).first()
+    if check_code != request.values.get('login_code'):
+        session['driver_account_id'] = driver.account_ID
+        session['driver_user_name'] = driver.user_name
+        session['driver_account'] = driver.to_json()
+        return json.dumps({'status': '330'})
+    else:
+        return json.dumps({'status': '320'})
 
 
 @app_bp.route('/check_login', methods=['POST', 'GET'])
@@ -68,16 +95,16 @@ def check_login():
     driver = driver_account.query.filter_by(phone=phone).first()
     result = {}
     if driver == None:
-        result['status'] = 210
+        result['status'] = '210'
     else:
         if driver.check(password):
             session['driver_account_id'] = driver.account_ID
             session['driver_user_name'] = driver.user_name
             session['driver_account'] = driver.to_json()
             # 这里应该写个token
-            result['status'] = 200
+            result['status'] = '200'
         else:
-            result['status'] = 210
+            result['status'] = '210'
     return json.dumps(result)
 
 
@@ -116,9 +143,9 @@ def post_adv(adv_ID):
         record = adv_record(adv_ID, driver_account_ID)
         db.session.add(record)
         db.session.commit()
-        return '400'
+        return json.dumps({'status': '400'})
     else:
-        return '410'  # 广告发送失败
+        return json.dumps({'status': '410'})  # 广告发送失败
 
 
 @app_bp.route('/get_driver_info/')
