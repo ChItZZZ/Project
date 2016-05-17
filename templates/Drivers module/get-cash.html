@@ -8,9 +8,9 @@
     <meta name="description" content="">
     <meta name="author" content="templatemo">
 
-    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/style-home.css" rel="stylesheet">
+    <link href="/Project/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/Project/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Project/static/css/style-home.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,7 +32,7 @@
             </div>
         </header>
         <div class="profile-photo-container">
-            <img src="/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
+            <img src="/Project/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
             <div class="profile-photo-overlay"></div>
         </div>
         <div class="mobile-menu-icon">
@@ -95,13 +95,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="sel-bank" class="money-label">收款银行</label>
+                        <label for="sel-bank" class="money-label">收款银行:</label>
                         <div id="sel-bank" class="col-md-8" style="padding-right: 5px">
-                            <p style="font-weight:bold;" id="bank-choose">请选择
-                                <span style="margin-left: 10px;color: darkgray;" id="card-choose"></span>
-                                <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal"
-                                        style="margin-top: 4px">修改
-                                </button>
+                            <p style="font-weight:bold;" id="bank-choose">
+                                <span class="span1">请选择</span>
+                                <span class="span2" style="margin-left: 10px;color: darkgray;" id="card-choose"></span>
+                                <a class=" pull-right" data-toggle="modal" data-target="#myModal"
+                                   style="cursor: pointer;margin-right: 10px">修改
+                                </a>
 
                             </p>
 
@@ -135,12 +136,12 @@
                                                         <label for="bank" class="col-md-3">选择银行</label>
                                                         <div class="col-md-6">
                                                             <select id="bank" class="form-control">
-                                                                <option value="jianshe">建设银行</option>
-                                                                <option value="nongye">农业银行</option>
-                                                                <option value="gongshang">工商银行</option>
-                                                                <option value="zhongguo">中国银行</option>
-                                                                <option value="jiaotong">交通银行</option>
-                                                                <option value="youchu">邮储银行</option>
+                                                                <option>建设银行</option>
+                                                                <option>农业银行</option>
+                                                                <option>工商银行</option>
+                                                                <option>中国银行</option>
+                                                                <option>交通银行</option>
+                                                                <option>邮储银行</option>
 
                                                             </select>
                                                         </div>
@@ -176,10 +177,42 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
-                            <button type="submit" class="btn btn-primary"
-                                    style="width: 155px;height: 45px;margin-left: 30px">立即取现
+                            <button type="submit" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#Modal"
+                                    style="width: 170px;height: 45px;margin-left: 47px">立即取现
                             </button>
                         </div>
+                    </div>
+                    <div class="modal fade" id="Modal" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" >
+                            <div class="modal-content col-md-5" style="position:absolute; left: 35%;margin-top: 150px" >
+                                <div class="modal-header">
+                                    <button type="button" class="close"
+                                            data-dismiss="modal" aria-hidden="true">
+                                        &times;
+                                    </button>
+                                    <h4 class="modal-title" id="ModalLabel">
+                                        输入交易密码
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                                <input type="password" class="form-control " style="margin-top: 10px;">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default"
+                                            data-dismiss="modal">关闭
+                                    </button>
+                                    <button type="button" class="btn btn-primary">
+                                        确定
+                                    </button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal -->
                     </div>
                 </form>
 
@@ -191,8 +224,8 @@
 </div>
 
 <!-- JS -->
-<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
-<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+<script src="/Project/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
+<script src="/Project/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
 <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -211,12 +244,14 @@
         })
 
     });
-    
+
     $('#sure').click(function () {
-        var no = $('#card-no').val();
+        var no = $('#card-no').val().slice(-4);
         var bank = $('#bank').val();
-        $('#card-choose').text(no);
-        $('#bank-choose').text(bank);
+//        $('#card-choose').text(no);
+//        $('#bank-choose').text(bank);
+        $("#sel-bank .span1").html(bank);
+        $("#sel-bank .span2").html(no);
     })
 </script>
 </body>
