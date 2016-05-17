@@ -80,10 +80,12 @@ def check_login_code():
     phone = session['login_phone']
     driver = driver_account.query.filter_by(phone=phone).first()
     if check_code != request.values.get('login_code'):
+        if not driver.check_flag:
+            return json.dumps({'status': '403'})
         session['driver_account_id'] = driver.account_ID
         session['driver_user_name'] = driver.user_name
         session['driver_account'] = driver.to_json()
-        return json.dumps({'status': '330'})
+        return json.dumps(session['driver_account'])
     else:
         return json.dumps({'status': '320'})
 
@@ -98,11 +100,14 @@ def check_login():
         result['status'] = '210'
     else:
         if driver.check(password):
-            session['driver_account_id'] = driver.account_ID
-            session['driver_user_name'] = driver.user_name
-            session['driver_account'] = driver.to_json()
-            # 这里应该写个token
-            result['status'] = '200'
+            if not driver.check_flag:
+                result['status'] = '403'
+            else:
+                session['driver_account_id'] = driver.account_ID
+                session['driver_user_name'] = driver.user_name
+                session['driver_account'] = driver.to_json()
+                # 这里应该写个token
+                return json.dumps(session['driver_account'])
         else:
             result['status'] = '210'
     return json.dumps(result)
@@ -110,7 +115,7 @@ def check_login():
 
 @app_bp.route('/get_advs/<int:meter>/<float:lng>/<float:lat>/')
 @app_check_login
-def get_all_adv(meter, lat, lng):
+def get_adv(meter, lat, lng):
     now = time.localtime(time.time())
     advs = adv_info.query.filter(and_(adv_info.amounts > 0, adv_info.start_date < now)).all()
     ajax = []
@@ -173,3 +178,17 @@ def get_records():
         if (i == 25):
             break
     return json.dumps(ajax)
+
+
+@app_bp.route('/get_money/<float:money>')
+@app_check_login
+def get_money(money):
+    driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
+    if float(driver.account_money.real) >= money:
+        driver.account_money = float(driver.account_money.real) - money
+        db.session.commit()
+        session['driver_account'] = driver.to_json()
+        return json.dumps({'status': '500'})  # 成功
+    else:
+        session['driver_account'] = driver.to_json()
+        return json.dumps({'status': '510'})
