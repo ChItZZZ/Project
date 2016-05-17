@@ -20,13 +20,13 @@ app_bp = Blueprint('app', __name__)
 @app_bp.route('/check_register/', methods=['POST', 'GET'])
 def check_register():
     try:
-        user_id = request.values.get('userID')
+        user_id = request.values.get('userID')#身份证号
         phone = session['register_phone']
-        user_name = request.values.get('user_name')
-        password = request.values.get('password')
-        ID_card_image = request.files['ID_card_image']
-        permit_card_image = request.files['permit_card_image']
-        car_image = request.files['car_image']
+        user_name = request.values.get('user_name')#用户名
+        password = request.values.get('password')#密码
+        ID_card_image = request.files['ID_card_image']#身份证照片
+        permit_card_image = request.files['permit_card_image']#驾驶证照片
+        car_image = request.files['car_image']#行驶证照片
         ID_filename = secure_filename(ID_card_image.filename)
         permit_filename = secure_filename(permit_card_image.filename)
         ID_card_image.save(os.path.join(app.root_path, 'static/image/ID_card', ID_filename))
