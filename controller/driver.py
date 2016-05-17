@@ -64,9 +64,16 @@ def check_register():
     car_image = request.files['car_image']
     ID_filename = secure_filename(ID_card_image.filename)
     permit_filename = secure_filename(permit_card_image.filename)
+    car_pic_filename = secure_filename(car_image.filename)
+    filename = []
+    filename.append(ID_filename)
+    filename.append(permit_filename)
+    filename.append(car_pic_filename)
+    for f in filename:
+        if '.' not in f or f.rspilt('.', 1)[1] not in app.config['ALLOW_FILE']:
+            return '<script>alert("非法后缀!");location.href="/adv/login"</script>'
     ID_card_image.save(os.path.join(app.root_path, 'static/image/ID_card', ID_filename))
     permit_card_image.save(os.path.join(app.root_path, 'static/image/permit_card', permit_filename))
-    car_pic_filename = secure_filename(car_image.filename)
     car_image.save(os.path.join(app.root_path, 'static/image/car', car_pic_filename))
     u = driver_account(phone, password, user_name, user_id, ID_filename, permit_filename, car_pic_filename)
     db.session.add(u)
