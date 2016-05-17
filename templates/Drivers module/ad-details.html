@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MovingAD</title>
+    <meta name="description" content="">
+    <meta name="author" content="templatemo">
+
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style-home.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+
+</head>
+<body>
+<!-- Left column -->
+<div class="flex-row">
+    <div class="sidebar">
+        <header class="site-header">
+            <div class="square" style="float: left;"></div>
+            <div class="text-center">
+                <h1>{{ name }}</h1>
+            </div>
+        </header>
+        <div class="profile-photo-container">
+            <img src="/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
+            <div class="profile-photo-overlay"></div>
+        </div>
+        <div class="mobile-menu-icon">
+            <i class="fa fa-bars"></i>
+        </div>
+        <nav class="left-nav">
+            <ul>
+
+                <li><a href="/driver/home"><i class="fa fa-home fa-fw"></i>个人主页</a></li>
+                <li><a href="/driver/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
+                <li><a href="/driver/ad_details" class="active"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
+                <li><a href="/driver/chat"><i class="glyphicon glyphicon-envelope gly-item"></i>消息中心<span
+                        class="badge pull-right"
+                        style="padding: 6px 12px;border-radius: 12px">{{ count }}</span></a>
+                </li>
+                <li><a href="/driver/s_notice"><i class="glyphicon glyphicon-info-sign gly-item"></i>通知查看</a></li>
+                <li><a href="#"><i class="fa fa-cab fa-fw"></i>任务栏</a></li>
+                <li><a href="/driver/logout"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
+
+            </ul>
+        </nav>
+    </div>
+    <!-- Main content -->
+    <div class="content col-1 light-gray-bg">
+        <nav class="top-nav-container " style="padding-bottom: 50px">
+            <div class="row pull-right">
+                <nav class="top-nav col-lg-12 col-md-12 ">
+                    <ul class="text-uppercase">
+                        <li><a href="" class="active">用户首页</a></li>
+                        <!--<li><a href="">动态信息</a></li>-->
+                        <li><a href="">任务栏</a></li>
+                        <li><a href="/driver/logout">退出登录</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </nav>
+        <div class="ad-info white-bg" style="padding: 30px 30px 100px 30px ; border-radius: 10px;
+         position: relative;
+         margin: 20px;
+         box-shadow: 0px 0px 1px 1px rgba(161, 159, 159, 0.1);min-height: 780px">
+            <div class="home-item"><p style="font-size: 22px;margin-top: 10px;padding: 0 10px"><i
+                    class="fa fa-list"></i> 广告播放记录</p></div>
+
+            <div class="indivisual-ad" style="margin-top: 30px;padding: 0px 20px;">
+                <table class="table table-striped">
+                    <thead style="background-color: #5bc0de;color: white;border-radius: 5px">
+                    <tr>
+                        <th>No.</th>
+                        <th>广告内容</th>
+                        <th>时间</th>
+                        <th>收入</th>
+                    </tr>
+                    </thead>
+                    <tbody id="record_table">
+
+                    </tbody>
+                </table>
+                <div class="col-md-12" style="text-align: center;">
+                    <ul class="pagination" style="margin-left: -50px" id="page_ul">
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var record_count ={{ count }};
+        for (var i = 0; i < record_count; i += 10) {
+            document.getElementById('page_ul').innerHTML += '<li><a onclick="show(' + i / 10 + 1 + ')">' + i / 10 + 1 + '</a></li>'
+        }
+    });
+
+    function show(i) {
+        $.get('/driver/get_records_by_page' + i, function (data, status) {
+            if (status == 'success') {
+                var json = JSON.parse(data);
+                for (var i = 0; i < json.length; i += 1) {
+                    show_table(json[i]['NO'],json[i]['adv_text'],json[i]['time'],json[i]['money']);
+                }
+            }
+        })
+    }
+
+    function show_table(NO, Text, time, money) {
+        var HTMLText = ' <tr>\
+                            <th>' + NO + '</th>\
+                            <th>' + Text + '</th>\
+                            <th>' + time + '</th>\
+                            <th>' + money + '</th>\
+                        </tr>'
+    }
+</script>
+
+<!-- JS -->
+<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
+<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+</body>
+</html> 

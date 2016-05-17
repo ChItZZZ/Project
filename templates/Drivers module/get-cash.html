@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,7 +15,7 @@
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <style>
-        #main>.form-group{
+        #main > .form-group {
             margin: 55px 0;
         }
     </style>
@@ -23,7 +23,7 @@
 </head>
 <body style="height: 100%">
 <!-- Left column -->
-<div class="flex-row" >
+<div class="flex-row">
     <div class="sidebar">
         <header class="site-header">
             <div class="square" style="float: left;"></div>
@@ -46,7 +46,7 @@
                 <li><a href="/driver/ad_details"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/driver/chat"><i class="glyphicon glyphicon-envelope gly-item"></i>消息中心<span
                         class="badge pull-right"
-                        style="padding: 6px 12px;border-radius: 12px">6</span></a>
+                        style="padding: 6px 12px;border-radius: 12px">{{ count }}</span></a>
                 </li>
                 <li><a href="/driver/s_notice"><i class="glyphicon glyphicon-info-sign gly-item"></i>通知查看</a></li>
                 <li><a href="#"><i class="fa fa-cab fa-fw"></i>任务栏</a></li>
@@ -56,7 +56,7 @@
         </nav>
     </div>
     <!-- Main content -->
-    <div class="content col-1 light-gray-bg" >
+    <div class="content col-1 light-gray-bg">
         <nav class="top-nav-container " style="padding-bottom: 50px">
             <div class="row pull-right">
                 <nav class="top-nav col-lg-12 col-md-12 ">
@@ -76,7 +76,7 @@
             </div>
             <div class="col-md-12" style="margin-top: 20px">
                 <form class="form-horizontal" id="main">
-                    <div class="form-group" >
+                    <div class="form-group">
                         <label for="money-num" class="money-label">取现金额: </label>
                         <ul id="money-num">
                             <li class="amount-item">100</li>
@@ -89,15 +89,16 @@
 
                     <div class="form-group" id="other" style="display:none;">
                         <div class="col-md-8 " style="margin-left: 185px;">
-                            <input type="text"  style="width: 100%;height: 45px;font-size: 18px;text-indent:5%" placeholder="请输入取款金额">
+                            <input type="text" style="width: 100%;height: 45px;font-size: 18px;text-indent:5%"
+                                   placeholder="请输入取款金额">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="sel-bank" class="money-label">收款银行</label>
                         <div id="sel-bank" class="col-md-8" style="padding-right: 5px">
-                            <p style="font-weight:bold;">建设银行
-                                <span style="margin-left: 10px;color: darkgray;">尾号1234</span>
+                            <p style="font-weight:bold;" id="bank-choose">请选择
+                                <span style="margin-left: 10px;color: darkgray;" id="card-choose"></span>
                                 <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal"
                                         style="margin-top: 4px">修改
                                 </button>
@@ -124,7 +125,7 @@
                                                     <div class="col-md-12">
                                                         <label for="name" class="col-md-3">持卡人姓名:</label>
                                                         <div class="col-md-6">
-                                                            <p id="name">李狗蛋</p>
+                                                            <p id="name">{{ name }}</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -164,8 +165,8 @@
                                             <button type="button" class="btn btn-default"
                                                     data-dismiss="modal">关闭
                                             </button>
-                                            <button type="button" id="sure" class="btn btn-primary">
-                                                确定
+                                            <button type="button" id="sure" class="btn btn-primary"
+                                                    data-dismiss="modal">确定
                                             </button>
                                         </div>
                                     </div><!-- /.modal-content -->
@@ -174,8 +175,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10" >
-                            <button type="submit" class="btn btn-primary" style="width: 155px;height: 45px;margin-left: 30px">立即取现</button>
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" class="btn btn-primary"
+                                    style="width: 155px;height: 45px;margin-left: 30px">立即取现
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -207,6 +210,13 @@
             $("#other").hide();
         })
 
+    });
+    
+    $('#sure').click(function () {
+        var no = $('#card-no').val();
+        var bank = $('#bank').val();
+        $('#card-choose').text(no);
+        $('#bank-choose').text(bank);
     })
 </script>
 </body>

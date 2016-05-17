@@ -277,6 +277,13 @@ def get_records_by_page(page):
     return json.dumps(ajax)
 
 
+@driver_bp.route('/get_cash/')
+@driver_check_login
+def get_cash():
+    return render_template('Drivers module/get-cash.html', name=session['driver_user_name'],
+                           count=session['message_count'])
+
+
 @driver_bp.route('/get_money/<float:money>')
 @driver_check_login
 def get_money(money):
