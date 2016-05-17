@@ -63,7 +63,7 @@ def get_register_code(phone):
 
 
 @app_bp.route('/get_login_code/<int:phone>/')
-def get_register_code(phone):
+def get_login_code(phone):
     driver = driver_account.query.filter_by(phone=phone).first()
     if driver == None:
         return json.dumps({'status': '210'})  # 账号不存在
