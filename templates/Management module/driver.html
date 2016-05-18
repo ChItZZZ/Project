@@ -23,8 +23,8 @@
                             class="glyphicon glyphicon-user"></span> {{ adm_name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
-                        <li><a href="#" onclick="clearNewMessageRemind();hideredspot();return false;"><span class="glyphicon glyphicon-cog"></span> 私信</a></li>
-                        <li><a href="/admin/login"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
+                        <li><a href="/admin/show_drivers" onclick="clearNewMessageRemind();hideredspot();return false;"><span class="glyphicon glyphicon-cog"></span> 私信</a></li>
+                        <li><a href="/admin/logout"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
                     </ul>
                 </li>
             </ul>
@@ -338,19 +338,12 @@ function clearNewMessageRemind() {    //**********************取消新消息标
 
 </script>
 
+<script type="text/javascript" src="/static/js/adm_red_point.js"></script>
 
-<!-- 新消息管理员ID右侧小红点显示 -->
 <script>
-function showredspot(){		// *********************************显示小红点调用此函数
-	document.getElementById("redspot").style.display="block";
-}
-
-function hideredspot(){		// *********************************隐藏小红点调用此函数
-	document.getElementById("redspot").style.display="none";
-}
+    show_red_point("{{ admin_message }}")
 </script>
-
-<!-- 搜索功能 -->
+<!--搜索功能-->
 <script>
   $(function() {
     var availableTags = [
@@ -371,19 +364,19 @@ function hideredspot(){		// *********************************隐藏小红点调�
 			var oTxt = document.getElementById("tags");
 			oBtn.onclick = function(){
 				if(oTxt.value == "司机用户管理"){
-					url = "file:///C:/admin/show_drivers";
+					url = "/admin/show_drivers";
 				}
 				else if(oTxt.value == "广告商用户管理"){
-					url = "file:///C:/admin/show_advters";
+					url = "/admin/show_advters";
 				}
 				else if(oTxt.value == "广告管理"){
-					url = "file:///C:/admin/show_advs";
+					url = "/admin/show_advs";
 				}
 				else if(oTxt.value == "司机领取广告记录"){
-					url = "file:///C:/admin/drivers_history";
+					url = "/admin/drivers_history";
 				}
 				else if(oTxt.value == "司机领取广告记录"){
-					url = "file:///C:/admin/advs_history";
+					url = "/admin/advs_history";
 				}
 				else{
 					url = "#";

@@ -8,7 +8,7 @@ from tools.LBS import *
 import time
 from sqlalchemy import *
 from controller.check_per import app_check_login
-from tools.security import get_cap_code, get_salt
+from tools.security import get_cap_code
 from ali_config import tool
 from werkzeug.utils import secure_filename
 import os
@@ -29,9 +29,16 @@ def check_register():
         car_image = request.files['car_image']  # 行驶证照片
         ID_filename = secure_filename(ID_card_image.filename)
         permit_filename = secure_filename(permit_card_image.filename)
+        car_pic_filename = secure_filename(car_image.filename)
+        filename = []
+        filename.append(ID_filename)
+        filename.append(permit_filename)
+        filename.append(car_pic_filename)
+        for f in filename:
+            if '.' not in f or f.rspilt('.', 1)[1] not in app.config['ALLOW_FILE']:
+                return json.dumps({'status': '404'})
         ID_card_image.save(os.path.join(app.root_path, 'static/image/ID_card', ID_filename))
         permit_card_image.save(os.path.join(app.root_path, 'static/image/permit_card', permit_filename))
-        car_pic_filename = secure_filename(car_image.filename)
         car_image.save(os.path.join(app.root_path, 'static/image/car', car_pic_filename))
         u = driver_account(phone, password, user_name, user_id, ID_filename, permit_filename, car_pic_filename)
         db.session.add(u)
@@ -80,7 +87,7 @@ def check_login_code():
     phone = session['login_phone']
     driver = driver_account.query.filter_by(phone=phone).first()
     if check_code != request.values.get('login_code'):
-        if not driver.check_flag:
+        if driver.check_flag == False:
             return json.dumps({'status': '403'})
         session['driver_account_id'] = driver.account_ID
         session['driver_user_name'] = driver.user_name
@@ -90,7 +97,7 @@ def check_login_code():
         return json.dumps({'status': '320'})
 
 
-@app_bp.route('/check_login', methods=['POST', 'GET'])
+@app_bp.route('/check_login/', methods=['POST', 'GET'])
 def check_login():
     phone = request.values.get('phone')
     password = request.values.get('password')
@@ -100,7 +107,7 @@ def check_login():
         result['status'] = '210'
     else:
         if driver.check(password):
-            if not driver.check_flag:
+            if driver.check_flag == False:
                 result['status'] = '403'
             else:
                 session['driver_account_id'] = driver.account_ID
@@ -143,20 +150,28 @@ def post_adv(adv_ID):
     driver = driver_account.query.filter_by(account_ID=driver_account_ID).first()
     adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
     if adv.amounts > 0:
-        adv.amounts -= 1
-        driver.account_money += adv.cost
-        record = adv_record(adv_ID, driver_account_ID)
-        db.session.add(record)
-        db.session.commit()
-        return json.dumps({'status': '400'})
+        if not adv.check_time():
+            return json.dumps({'status': '430'})  # 时间不对
+        records = adv_record.query.filter(
+            and_(adv_record.driver_account_ID == driver_account_ID, adv_record.adv_ID == adv_ID)).all()
+        if records == [] or records[-1].check_play(3600):  # 同一条广告3600秒内同一个人最多发布一次
+            adv.amounts -= 1
+            driver.account_money += adv.cost
+            record = adv_record(adv_ID, driver_account_ID)
+            db.session.add(record)
+            db.session.commit()
+            return json.dumps({'status': '400'})
+        else:
+            return json.dumps({'status': '420'})  # 广告发送太频繁
     else:
-        return json.dumps({'status': '410'})  # 广告发送失败
+        return json.dumps({'status': '410'})  # 广告发送失败(广告已经被发完)
 
 
 @app_bp.route('/get_driver_info/')
 @app_check_login
 def get_driver_info():
     driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
+    session['driver_account'] = driver.to_json()
     return json.dumps(driver.to_json())
 
 
@@ -180,7 +195,7 @@ def get_records():
     return json.dumps(ajax)
 
 
-@app_bp.route('/get_money/<float:money>')
+@app_bp.route('/get_money/<float:money>/')
 @app_check_login
 def get_money(money):
     driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
@@ -191,4 +206,11 @@ def get_money(money):
         return json.dumps({'status': '500'})  # 成功
     else:
         session['driver_account'] = driver.to_json()
-        return json.dumps({'status': '510'})
+        return json.dumps({'status': '510'})  # 账号余额不足
+
+
+@app_bp.route('/logout/')
+@app_check_login
+def logout():
+    session.clear()
+    return json.dumps({'status': '205'})

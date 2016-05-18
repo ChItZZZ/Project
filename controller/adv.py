@@ -72,6 +72,12 @@ def check_register():
     company_img = request.files['company_img']
     ID_filename = secure_filename(ID_card_image.filename)
     company_img_filename = secure_filename(company_img.filename)
+    filename = []
+    filename.append(company_img_filename)
+    filename.append(ID_filename)
+    for f in filename:
+        if '.' not in f or f.rspilt('.', 1)[1] not in app.config['ALLOW_FILE']:
+            return '<script>alert("非法后缀!");location.href="/adv/login"</script>'
     ID_card_image.save(os.path.join(app.root_path, 'static/image/ID_card', ID_filename))
     company_img.save(os.path.join(app.root_path, 'static/image/company', company_img_filename))
     u = adv_account(password, company_name, user_name, phone, company_img_filename, ID_filename, user_id)
@@ -147,6 +153,8 @@ def check_adv_submit():
     if flag:
         img = request.files['adv_img']
         img_filename = secure_filename(img.filename)
+        if '.' not in img_filename or img_filename.rspilt('.', 1)[1] not in app.config['ALLOW_FILE']:
+            return '<script>alert("非法后缀!");location.href="/adv/adv_submit"</script>'
         img.save(os.path.join(app.root_path, 'static/image/adv_img', img_filename))
         adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_sum, flag,
                        img_filename)

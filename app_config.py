@@ -7,4 +7,5 @@ app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:123456@localhost:3306/Project'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['ALLOW_FILE'] = ['jpg', 'jpeg', 'gif', 'png', 'bmp']
 db = SQLAlchemy(app)

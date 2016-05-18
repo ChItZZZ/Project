@@ -6,3 +6,5 @@ db_config.py
 *.pyc
 
 *.pyc
+
+*.jpeg

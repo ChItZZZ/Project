@@ -9,8 +9,8 @@
     <link href="/static/css/datepicker3.css" rel="stylesheet">
     <link href="/static/css/bootstrap-table.css" rel="stylesheet">
     <link href="/static/css/styles.css" rel="stylesheet">
-    <link href="/static/css/jquery-ui.min.css" rel="stylesheet" >
-	<link href="/static/css/dateRange.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="/static/css/dateRange.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -22,24 +22,27 @@
             <ul class="user-menu">
                 <li class="dropdown pull-right">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
-                            class="glyphicon glyphicon-user">{{ name }}<span class="caret"></span></a>
+                            class="glyphicon glyphicon-user">{{ name }}<span class="caret"></span></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
-                        <li><a href="#" onclick="clearNewMessageRemind();hideredspot();return false;"><span class="glyphicon glyphicon-cog"></span> 私信</a></li>
-                        <li><a href="/admin/login"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
+                        <li><a href="/admin/show_drivers" onclick="clearNewMessageRemind();hideredspot();return false;"><span
+                                class="glyphicon glyphicon-cog"></span> 私信</a></li>
+                        <li><a href="/admin/logout"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
                     </ul>
                 </li>
             </ul>
-            <i id="redspot" style="display:none;background:#f00;border-radius:50%;width:10px;height:10px;top:20px;right:10px;position:absolute;"></i>
+            <i id="redspot"
+               style="display:none;background:#f00;border-radius:50%;width:10px;height:10px;top:20px;right:10px;position:absolute;"></i>
         </div>
     </div><!-- /.container-fluid -->
 </nav>
 
-<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar"  style="z-index:-1">
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar" style="z-index:-1">
 
     <form role="search">
         <div class="form-group">
-            <input type="text" id="tags" placeholder="搜索" class="form-control" style="width:135px;display:inline">  <input type="button" style="display:inline" class="btn btn-primary" value="跳转" id="btn" />
+            <input type="text" id="tags" placeholder="搜索" class="form-control" style="width:135px;display:inline">
+            <input type="button" style="display:inline" class="btn btn-primary" value="跳转" id="btn"/>
         </div>
     </form>
 
@@ -143,11 +146,11 @@
                             <label class="col-md-3 control-label" for="name">有效日期至</label>
                             <div class="col-md-9">
                                 <div class="ta_date" id="div_date_demo3">
-									<span class="date_title" id="date_demo3"></span>
-									<a class="opt_sel" id="input_trigger_demo3" href="#">
-										<i class="i_orderd"></i>
-									</a>
-								</div>
+                                    <span class="date_title" id="date_demo3"></span>
+                                    <a class="opt_sel" id="input_trigger_demo3" href="#">
+                                        <i class="i_orderd"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -219,120 +222,73 @@
 </script>
 
 
-<!-- 新消息标题栏闪烁显示 -->
+<script type="text/javascript" src="/static/js/adm_red_point.js"></script>
+
 <script>
-
-var newMessageRemind={
-	_step: 0,
-	_title: document.title,
-	_timer: null,
-
-	//显示新消息提示
-	show:function(){
-		var temps = newMessageRemind._title.replace("【　　　】", "").replace("【新消息】", "");
-		newMessageRemind._timer = setTimeout(function() {
-			newMessageRemind.show();
-
-			//这里写Cookie操作
-			newMessageRemind._step++;
-			if (newMessageRemind._step == 3) { newMessageRemind._step = 1 };
-			if (newMessageRemind._step == 1) { document.title = "【　　　】" + temps };
-			if (newMessageRemind._step == 2) { document.title = "【新消息】" + temps };
-		}, 
-		800);
-		return [newMessageRemind._timer, newMessageRemind._title];
-	},
-			
-	//取消新消息提示
-	clear: function(){
-		clearTimeout(newMessageRemind._timer );
-		document.title = newMessageRemind._title;
-		//这里写Cookie操作
-	}
-};
-
-//newMessageRemind.show();  // *********************************显示新消息标题栏闪烁提示 调用此函数
-
-function clearNewMessageRemind() {    //**********************取消新消息标题栏闪烁提示 调用此函数
-	newMessageRemind.clear();
-}
-
+    show_red_point("{{ admin_message }}")
 </script>
-
-
-<!-- 新消息管理员ID右侧小红点显示 -->
+<!--搜索功能-->
 <script>
-function showredspot(){		// *********************************显示小红点调用此函数
-	document.getElementById("redspot").style.display="block";
-}
-
-function hideredspot(){		// *********************************隐藏小红点调用此函数
-	document.getElementById("redspot").style.display="none";
-}
-</script>
-
-<!-- 搜索功能 -->
-<script>
-  $(function() {
-    var availableTags = [
-      "司机用户管理",
-      "广告商用户管理",
-      "广告管理",
-      "司机领取广告记录",
-      "广告被领取记录",
-    ];
-    $( "#tags" ).autocomplete({
-      source: availableTags
+    $(function () {
+        var availableTags = [
+            "司机用户管理",
+            "广告商用户管理",
+            "广告管理",
+            "司机领取广告记录",
+            "广告被领取记录",
+        ];
+        $("#tags").autocomplete({
+            source: availableTags
+        });
     });
-  });
 </script>
 <script type="text/javascript">
-		window.onload = function(){
-			var oBtn = document.getElementById("btn");
-			var oTxt = document.getElementById("tags");
-			oBtn.onclick = function(){
-				if(oTxt.value == "司机用户管理"){
-					url = "file:///C:/admin/show_drivers";
-				}
-				else if(oTxt.value == "广告商用户管理"){
-					url = "file:///C:/admin/show_advters";
-				}
-				else if(oTxt.value == "广告管理"){
-					url = "file:///C:/admin/show_advs";
-				}
-				else if(oTxt.value == "司机领取广告记录"){
-					url = "file:///C:/admin/drivers_history";
-				}
-				else if(oTxt.value == "司机领取广告记录"){
-					url = "file:///C:/admin/advs_history";
-				}
-				else{
-					url = "#";
-					alert("不存在该页面！");
-				}
-				window.location.href = url;
-			}
-		}
+    window.onload = function () {
+        var oBtn = document.getElementById("btn");
+        var oTxt = document.getElementById("tags");
+        oBtn.onclick = function () {
+            if (oTxt.value == "司机用户管理") {
+                url = "/admin/show_drivers";
+            }
+            else if (oTxt.value == "广告商用户管理") {
+                url = "/admin/show_advters";
+            }
+            else if (oTxt.value == "广告管理") {
+                url = "/admin/show_advs";
+            }
+            else if (oTxt.value == "司机领取广告记录") {
+                url = "/admin/drivers_history";
+            }
+            else if (oTxt.value == "司机领取广告记录") {
+                url = "/admin/advs_history";
+            }
+            else {
+                url = "#";
+                alert("不存在该页面！");
+            }
+            window.location.href = url;
+        }
+    }
 </script>
 
 
 <!-- 日期控件 -->
 <script type="text/javascript">
-			var dateRange = new pickerDateRange('date_demo3', {
-				aRecent7Days : 'aRecent7DaysDemo3', //最近7天
-				isTodayValid : false,
-				//startDate : '2013-04-14',
-				//endDate : '2013-04-21',
-				//needCompare : true,
-				//isSingleDay : true,
-				//shortOpr : true,
-				defaultText : ' 至 ',
-				inputTrigger : 'input_trigger_demo3',
-				theme : 'ta',
-				success : function(obj) {
-					$("#dCon_demo3").html('开始时间 : ' + obj.startDate + '<br/>结束时间 : ' + obj.endDate);
-				}
-			});
+    var dateRange = new pickerDateRange('date_demo3', {
+        aRecent7Days: 'aRecent7DaysDemo3', //最近7天
+        isTodayValid: false,
+        //startDate : '2013-04-14',
+        //endDate : '2013-04-21',
+        //needCompare : true,
+        //isSingleDay : true,
+        //shortOpr : true,
+        defaultText: ' 至 ',
+        inputTrigger: 'input_trigger_demo3',
+        theme: 'ta',
+        success: function (obj) {
+            $("#dCon_demo3").html('开始时间 : ' + obj.startDate + '<br/>结束时间 : ' + obj.endDate);
+        }
+    });
 
 </script>
 
