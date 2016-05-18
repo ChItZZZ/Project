@@ -4,6 +4,7 @@ import time
 from tools.LBS import get_distance
 import json
 from tools import security
+import datetime
 
 
 class adv_info(db.Model):
@@ -30,7 +31,7 @@ class adv_info(db.Model):
         self.start_date = start_date
         self.start_time = start_time
         self.end_time = end_time
-        self.location = str(location)
+        self.location = json.dumps(location)
         self.advter_account_ID = advter_account_ID
         self.adv_text = adv_text
         self.adv_sum = adv_sum
@@ -51,6 +52,13 @@ class adv_info(db.Model):
             if get_distance(lat, lng, point[1], point[0]) < meter / 1000.0:
                 return True
         return False
+
+    def check_time(self):
+        now = time.strptime(time.strftime('%H:%M'), '%H:%M')
+        if now >= self.start_time and now <= self.end_time:
+            return True
+        else:
+            return False
 
 
 class adv_account(db.Model):
@@ -105,6 +113,14 @@ class adv_record(db.Model):
         self.adv_ID = adv_ID
         self.driver_account_ID = driver_account_ID
         self.play_time = time.localtime()
+
+    def check_play(self, second):
+        now = datetime.datetime.now()
+        record_time = self.play_time.tm_hour + datetime.timedelta(seconds=second)
+        if now <= record_time:
+            return False
+        else:
+            return True
 
 
 class adv_history(db.Model):

@@ -16,6 +16,7 @@ import os
 app = current_app
 app_bp = Blueprint('app', __name__)
 
+
 @app_bp.route('/check_register/', methods=['POST', 'GET'])
 def check_register():
     try:
@@ -149,14 +150,22 @@ def post_adv(adv_ID):
     driver = driver_account.query.filter_by(account_ID=driver_account_ID).first()
     adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
     if adv.amounts > 0:
-        adv.amounts -= 1
-        driver.account_money += adv.cost
-        record = adv_record(adv_ID, driver_account_ID)
-        db.session.add(record)
-        db.session.commit()
-        return json.dumps({'status': '400'})
+        if not adv.check_time():
+            return json.dumps({'status': '430'})  # 时间不对
+        records = adv_record.query.filter(
+            and_(adv_record.driver_account_ID == driver_account_ID, adv_record.adv_ID == adv_ID)).all()
+        record = records[-1]
+        if record.check_play(3600):  # 同一条广告3600秒内同一个人最多发布一次
+            adv.amounts -= 1
+            driver.account_money += adv.cost
+            record = adv_record(adv_ID, driver_account_ID)
+            db.session.add(record)
+            db.session.commit()
+            return json.dumps({'status': '400'})
+        else:
+            return json.dumps({'status': '420'})  # 广告发送太频繁
     else:
-        return json.dumps({'status': '410'})  # 广告发送失败
+        return json.dumps({'status': '410'})  # 广告发送失败(广告已经被发完)
 
 
 @app_bp.route('/get_driver_info/')
@@ -198,7 +207,8 @@ def get_money(money):
         return json.dumps({'status': '500'})  # 成功
     else:
         session['driver_account'] = driver.to_json()
-        return json.dumps({'status': '510'})
+        return json.dumps({'status': '510'})  # 账号余额不足
+
 
 @app_bp.route('/logout/')
 @app_check_login
