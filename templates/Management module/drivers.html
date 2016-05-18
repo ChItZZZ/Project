@@ -136,7 +136,7 @@
                         		<td style="width:120px; text-align:center;">18930082585</td>
                         		<td style="width:120px; text-align:center;">true</td>
                         		<td style="width:120px; text-align:center;">查看</td>
-                        		<td style="width:10px; text-align:center;"><a href="#" onclick="clearNewMessageRemind();hideredspot();return false;">私信</a></td>
+                        		<td style="width:10px; text-align:center;"><a href="#" onclick="hideredspot2();">私信</a></td>
                         		<td style="width:10px; text-align:center;"><i id="redspot2" style="display:block;background:#f00;border-radius:50%;width:10px;height:10px;"></i></td>
                         	</tr>
                         </tbody>
@@ -231,14 +231,24 @@ function clearNewMessageRemind() {    //**********************取消新消息标
 <script>
 function showredspot(){		// *********************************显示小红点调用此函数
 	document.getElementById("redspot").style.display="block";
-	document.getElementById("redspot2").style.display="block";
+
 }
 
 function hideredspot(){		// *********************************隐藏小红点调用此函数
 	document.getElementById("redspot").style.display="none";
-	document.getElementById("redspot2").style.display="none";
+
+}
+</script>
+
+<!-- 司机私信右侧小红点显示 -->
+<script>
+function showredspot2(){	// *********************************显示小红点调用此函数
+	document.getElementById("redspot2").style.display="block";
 }
 
+function hideredspot2(){	// *********************************隐藏小红点调用此函数
+	document.getElementById("redspot2").style.display="none";
+}
 
 </script>
 
