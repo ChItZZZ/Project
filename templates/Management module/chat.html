@@ -25,9 +25,9 @@
                             class="glyphicon glyphicon-user">{{ adm_name }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
-                        <li><a href="#" onclick="clearNewMessageRemind();hideredspot();return false;"><span
+                        <li><a href="/admin/show_drivers" onclick="clearNewMessageRemind();hideredspot();return false;"><span
                                 class="glyphicon glyphicon-cog"></span> 私信</a></li>
-                        <li><a href="/admin/logout"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
+                        <li><a href="/admin/login"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
                     </ul>
                 </li>
             </ul>
@@ -198,69 +198,12 @@
 </script>
 
 
-<!-- 新消息标题栏闪烁显示 -->
+<script type="text/javascript" src="/static/js/adm_red_point.js"></script>
+
 <script>
-
-    var newMessageRemind = {
-        _step: 0,
-        _title: document.title,
-        _timer: null,
-
-        //显示新消息提示
-        show: function () {
-            var temps = newMessageRemind._title.replace("【　　　】", "").replace("【新消息】", "");
-            newMessageRemind._timer = setTimeout(function () {
-                        newMessageRemind.show();
-
-                        //这里写Cookie操作
-                        newMessageRemind._step++;
-                        if (newMessageRemind._step == 3) {
-                            newMessageRemind._step = 1
-                        }
-                        ;
-                        if (newMessageRemind._step == 1) {
-                            document.title = "【　　　】" + temps
-                        }
-                        ;
-                        if (newMessageRemind._step == 2) {
-                            document.title = "【新消息】" + temps
-                        }
-                        ;
-                    },
-                    800);
-            return [newMessageRemind._timer, newMessageRemind._title];
-        },
-
-        //取消新消息提示
-        clear: function () {
-            clearTimeout(newMessageRemind._timer);
-            document.title = newMessageRemind._title;
-            //这里写Cookie操作
-        }
-    };
-
-    //newMessageRemind.show();  // *********************************显示新消息标题栏闪烁提示 调用此函数
-
-    function clearNewMessageRemind() {    //**********************取消新消息标题栏闪烁提示 调用此函数
-        newMessageRemind.clear();
-    }
-
+    show_red_point("{{ admin_message }}")
 </script>
-
-
-<!-- 新消息管理员ID右侧小红点显示 -->
-<script>
-    function showredspot() {		// *********************************显示小红点调用此函数
-        document.getElementById("redspot").style.display = "block";
-    }
-
-    function hideredspot() {		// *********************************隐藏小红点调用此函数
-        document.getElementById("redspot").style.display = "none";
-    }
-</script>
-
-
-<!-- 搜索功能 -->
+<!--搜索功能-->
 <script>
     $(function () {
         var availableTags = [

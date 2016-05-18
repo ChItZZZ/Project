@@ -204,8 +204,9 @@ def check_change_pwd():
 def get_message():
     driver_ID = session['driver_account_id']
     ms = message.query.filter(or_(and_(message.receiver_ID == driver_ID, message.flag == True),
-                                  and_(message.sender_ID == driver_ID, message.flag == False)))
+                                  and_(message.sender_ID == driver_ID, message.flag == False))).all()
     ajax = []
+    ms.reverse()
     for m in ms:
         ajax.append(m.to_json())
         if m.flag == True:

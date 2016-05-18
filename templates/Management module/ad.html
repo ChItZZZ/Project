@@ -9,7 +9,7 @@
     <link href="/static/css/datepicker3.css" rel="stylesheet">
     <link href="/static/css/bootstrap-table.css" rel="stylesheet">
     <link href="/static/css/styles.css" rel="stylesheet">
-    <link href="/static/css/jquery-ui.min.css" rel="stylesheet" >
+    <link href="/static/css/jquery-ui.min.css" rel="stylesheet">
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
 </head>
 
@@ -24,12 +24,14 @@
                             class="glyphicon glyphicon-user">{{ adm_name }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
-                        <li><a href="#" onclick="clearNewMessageRemind();hideredspot();return false;"><span class="glyphicon glyphicon-cog"></span> 私信</a></li>
+                        <li><a href="/admin/show_drivers" onclick="clearNewMessageRemind();hideredspot();return false;"><span
+                                class="glyphicon glyphicon-cog"></span> 私信</a></li>
                         <li><a href="/admin/logout"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
                     </ul>
                 </li>
             </ul>
-            <i id="redspot" style="display:none;background:#f00;border-radius:50%;width:10px;height:10px;top:20px;right:10px;position:absolute;"></i>
+            <i id="redspot"
+               style="display:none;background:#f00;border-radius:50%;width:10px;height:10px;top:20px;right:10px;position:absolute;"></i>
         </div>
     </div><!-- /.container-fluid -->
 </nav>
@@ -38,7 +40,8 @@
 
     <form role="search">
         <div class="form-group">
-            <input type="text" id="tags" placeholder="搜索" class="form-control" style="width:135px;display:inline">  <input type="button" style="display:inline" class="btn btn-primary" value="跳转" id="btn" />
+            <input type="text" id="tags" placeholder="搜索" class="form-control" style="width:135px;display:inline">
+            <input type="button" style="display:inline" class="btn btn-primary" value="跳转" id="btn"/>
         </div>
     </form>
 
@@ -73,10 +76,10 @@
         <li class="parent ">
             <a href="#">
                 <span class="glyphicon glyphicon-list-alt"></span> 查看记录 <span data-toggle="collapse" href="#sub-item-2"
-                                                                          class="icon pull-right"><em
+                                                                              class="icon pull-right"><em
                     class="glyphicon glyphicon-s glyphicon-plus"></em></span>
             </a>
-            <ul  class="children collapse" id="sub-item-2">
+            <ul class="children collapse" id="sub-item-2">
                 <li>
                     <a class="" href="/admin/drivers_history">
                         <span class="glyphicon glyphicon-share-alt"></span> 司机领取广告记录
@@ -329,106 +332,56 @@
         "height": "29px",
         "border": "none",
         "padding": "2px",
-        "background": "url(../../static/images/place.png) no-repeat",
+        "background": "url(../../static/images/place.png) no-repeat"
     });
     map.addOverlay(secRingLabel2);
 
 </script>
 
-<!-- 新消息标题栏闪烁显示 -->
-<script>
 
-var newMessageRemind={
-	_step: 0,
-	_title: document.title,
-	_timer: null,
-
-	//显示新消息提示
-	show:function(){
-		var temps = newMessageRemind._title.replace("【　　　】", "").replace("【新消息】", "");
-		newMessageRemind._timer = setTimeout(function() {
-			newMessageRemind.show();
-
-			//这里写Cookie操作
-			newMessageRemind._step++;
-			if (newMessageRemind._step == 3) { newMessageRemind._step = 1 };
-			if (newMessageRemind._step == 1) { document.title = "【　　　】" + temps };
-			if (newMessageRemind._step == 2) { document.title = "【新消息】" + temps };
-		}, 
-		800);
-		return [newMessageRemind._timer, newMessageRemind._title];
-	},
-			
-	//取消新消息提示
-	clear: function(){
-		clearTimeout(newMessageRemind._timer );
-		document.title = newMessageRemind._title;
-		//这里写Cookie操作
-	}
-};
-
-//newMessageRemind.show();  // *********************************显示新消息标题栏闪烁提示 调用此函数
-
-function clearNewMessageRemind() {    //**********************取消新消息标题栏闪烁提示 调用此函数
-	newMessageRemind.clear();
-}
-
-</script>
-
-
-<!-- 新消息管理员ID右侧小红点显示 -->
-<script>
-function showredspot(){		// *********************************显示小红点调用此函数
-	document.getElementById("redspot").style.display="block";
-}
-
-function hideredspot(){		// *********************************隐藏小红点调用此函数
-	document.getElementById("redspot").style.display="none";
-}
-</script>
-
+<script type="text/javascript" src="/static/js/adm_red_point.js"></script>
 <!-- 搜索功能 -->
 <script>
-  $(function() {
-    var availableTags = [
-      "司机用户管理",
-      "广告商用户管理",
-      "广告管理",
-      "司机领取广告记录",
-      "广告被领取记录",
-    ];
-    $( "#tags" ).autocomplete({
-      source: availableTags
+    $(function () {
+        var availableTags = [
+            "司机用户管理",
+            "广告商用户管理",
+            "广告管理",
+            "司机领取广告记录",
+            "广告被领取记录",
+        ];
+        $("#tags").autocomplete({
+            source: availableTags
+        });
     });
-  });
 </script>
 <script type="text/javascript">
-		window.onload = function(){
-			var oBtn = document.getElementById("btn");
-			var oTxt = document.getElementById("tags");
-			oBtn.onclick = function(){
-				if(oTxt.value == "司机用户管理"){
-					url = "/admin/show_drivers";
-				}
-				else if(oTxt.value == "广告商用户管理"){
-					url = "/admin/show_advters";
-				}
-				else if(oTxt.value == "广告管理"){
-					url = "/admin/show_advs";
-				}
-				else if(oTxt.value == "司机领取广告记录"){
-					url = "/admin/drivers_history";
-				}
-				else if(oTxt.value == "司机领取广告记录"){
-					url = "/admin/advs_history";
-				}
-				else{
-					url = "#";
-					alert("不存在该页面！");
-				}
-				window.location.href = url;
-			}
-		}
+    window.onload = function () {
+        var oBtn = document.getElementById("btn");
+        var oTxt = document.getElementById("tags");
+        oBtn.onclick = function () {
+            if (oTxt.value == "司机用户管理") {
+                url = "/admin/show_drivers";
+            }
+            else if (oTxt.value == "广告商用户管理") {
+                url = "/admin/show_advters";
+            }
+            else if (oTxt.value == "广告管理") {
+                url = "/admin/show_advs";
+            }
+            else if (oTxt.value == "司机领取广告记录") {
+                url = "/admin/drivers_history";
+            }
+            else if (oTxt.value == "司机领取广告记录") {
+                url = "/admin/advs_history";
+            }
+            else {
+                url = "#";
+                alert("不存在该页面！");
+            }
+            window.location.href = url;
+        }
+    }
 </script>
 </body>
 

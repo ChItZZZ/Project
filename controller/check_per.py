@@ -49,9 +49,7 @@ def admin_check_message(f):
         number = message.query.filter(
             and_(message.receiver_ID == admin_ID, message.flag == False, message.read_flag == False)).all()
         length = len(number)
-        if length == 0:
-            length = ''
-        session['admin_message_count'] = length
+        session['admin_message'] = length > 0
 
         return f(*args, **kwargs)
 
