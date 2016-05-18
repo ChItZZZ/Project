@@ -119,16 +119,26 @@
                 <div class="panel-body">
                     <table class="table">
                         <thead>
-                        <tr>
-                            <th style="width:120px; text-align:center;">用户ID</th>
-                            <th style="width:120px; text-align:center;">司机姓名</th>
-                            <th style="width:120px; text-align:center;">手机号</th>
-                            <th style="width:120px; text-align:center;">账号状态</th>
-                            <th style="width:120px; text-align:center;">详细信息</th>
-                            <th style="width:120px; text-align:center;">私信</th>
-                        </tr>
+	                        <tr>
+	                            <th style="width:120px; text-align:center;">用户ID</th>
+	                            <th style="width:120px; text-align:center;">司机姓名</th>
+	                            <th style="width:120px; text-align:center;">手机号</th>
+	                            <th style="width:120px; text-align:center;">账号状态</th>
+	                            <th style="width:120px; text-align:center;">详细信息</th>
+	                            <th style="width:10px; text-align:center;">私信</th>
+	                            <th style="width:10px; text-align:center;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+	                        </tr>
                         </thead>
                         <tbody id="change">
+                        	<tr>
+                        		<td style="width:120px; text-align:center;">1</td>
+                        		<td style="width:120px; text-align:center;">张三</td>
+                        		<td style="width:120px; text-align:center;">18930082585</td>
+                        		<td style="width:120px; text-align:center;">true</td>
+                        		<td style="width:120px; text-align:center;">查看</td>
+                        		<td style="width:10px; text-align:center;"><a href="#" onclick="clearNewMessageRemind();hideredspot();return false;">私信</a></td>
+                        		<td style="width:10px; text-align:center;"><i id="redspot2" style="display:block;background:#f00;border-radius:50%;width:10px;height:10px;"></i></td>
+                        	</tr>
                         </tbody>
                     </table>
                 </div>
@@ -221,11 +231,15 @@ function clearNewMessageRemind() {    //**********************取消新消息标
 <script>
 function showredspot(){		// *********************************显示小红点调用此函数
 	document.getElementById("redspot").style.display="block";
+	document.getElementById("redspot2").style.display="block";
 }
 
 function hideredspot(){		// *********************************隐藏小红点调用此函数
 	document.getElementById("redspot").style.display="none";
+	document.getElementById("redspot2").style.display="none";
 }
+
+
 </script>
 
 <!-- 搜索功能 -->
