@@ -189,7 +189,7 @@ def drivers_history():
 def driver_history(driver_ID):
     driver = driver_account.query.filter_by(account_ID=driver_ID).first()
     return render_template('Management module/driver_history.html', account_ID=driver.account_ID, name=driver.user_name,
-                           phone=driver.phone, flag=driver.check_flag,adm_name=session['admin_account_name'])
+                           phone=driver.phone, flag=driver.check_flag, adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/get_records_by_driver/<int:driver_ID>/')
@@ -220,34 +220,44 @@ def adv_history(adv_ID):
     last_time = '{0}至{1}'.format(adv.start_time.strftime('%H:%M:%S'), adv.end_time.strftime('%H:%M:%S'))
     advter = adv_account.query.filter_by(account_ID=adv.advter_account_ID).first()
     return render_template('Management module/ad_history.html', adv_ID=adv_ID, last_time=last_time,
-                           company=advter.company_name,adm_name=session['admin_account_name'])
+                           company=advter.company_name, adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/get_records_by_adv/<int:adv_ID>/')
 @admin_check_login
 def get_records_by_adv(adv_ID):
     records = adv_record.query.filter_by(adv_ID=adv_ID).all()
-    ajax = []
+    result = {'word': [], 'chart': {}}
+    ajax1 = []
+    dic2 = {}
     for record in records:
-        dic = {}
-        dic['driver_ID'] = record.driver_account_ID
-        dic['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
-        ajax.append(dic)
-    return json.dumps(ajax)
+        dic1 = {}
+        dic1['driver_ID'] = record.driver_account_ID
+        dic1['time'] = record.play_time.strftime("%Y-%m-%d %H:%M:%S")
+        ajax1.append(dic1)
+        if record.play_time.strftime("%Y.%m.%d") not in dic2:
+            dic2[record.play_time.strftime("%Y.%m.%d")] = 1
+        else:
+            dic2[record.play_time.strftime("%Y.%m.%d")] += 1
+    result['word'] = ajax1
+    result['chart'] = dic2
+
+    return json.dumps(result)
 
 
 @admin_bp.route('/chat/<int:receiver_ID>')
 @admin_check_login
 def chat(receiver_ID):
     name = driver_account.query.filter_by(account_ID=receiver_ID).first().user_name
-    return render_template('Management module/chat.html', receiver_ID=receiver_ID, name=name,adm_name=session['admin_account_name'])
+    return render_template('Management module/chat.html', receiver_ID=receiver_ID, name=name,
+                           adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/chats')
 @admin_bp.route('/chats.html')
 @admin_check_login
 def chats():
-    return render_template('Management module/chats.html',adm_name=session['admin_account_name'])
+    return render_template('Management module/chats.html', adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/get_message/<int:driver_ID>')
@@ -278,7 +288,7 @@ def send_message():
 @admin_bp.route('/notice')
 @admin_check_login
 def notice():
-    return render_template('Management module/notice.html',adm_name=session['admin_account_name'])
+    return render_template('Management module/notice.html', adm_name=session['admin_account_name'])
 
 
 @admin_bp.route('/send_notice', methods=['POST'])
