@@ -263,8 +263,6 @@ def chats():
 @admin_bp.route('/get_message/<int:driver_ID>')
 @admin_check_login
 def get_message(driver_ID):
-    # ms = message.query.filter_by(receiver_ID=driver_ID, flag=True)
-    # ms += message.query.filter_by(sender_ID=driver_ID, flag=False)
     ms = message.query.filter(or_(and_(message.receiver_ID == driver_ID, message.flag == True),
                                   and_(message.sender_ID == driver_ID, message.flag == False)))
     ajax = []
@@ -304,6 +302,11 @@ def send_notice():
     db.session.commit()
     return '<script>alert("发布成功!");location.href="/admin/notice"</script>'
 
+@admin_bp.route('/logout')
+@admin_check_login
+def logout():
+    session.clear()
+    return redirect(url_for('admin.login'))
 
 @admin_bp.route('/get_notice')
 @admin_check_login
