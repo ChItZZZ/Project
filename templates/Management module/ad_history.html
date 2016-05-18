@@ -201,27 +201,7 @@
         if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
     });
 
-    var json;
 
-    $(document).ready(function () {
-        var url = "/admin/get_records_by_adv/" + '{{ adv_ID }}' + ' ';
-        $.get(url, function (data, status) {
-            if (status == 'success') {
-                json = JSON.parse(data);
-                var json1 = json['word'];
-                for (var i = 0; i < json1.length; i++) {
-                    var record = json1[i];
-                    show_advs(record['driver_ID'], record['time']);
-                }
-                lineChartData.labels = get_labels(11);
-                lineChartData.datasets.data = getData(lineChartData.labels);
-                var chart1 = document.getElementById("line-chart").getContext("2d");
-                window.myLine = new Chart(chart1).Line(lineChartData, {
-                    responsive: true
-                });
-            }
-        });
-    });
 </script>
 
 <!-- 新消息标题栏闪烁显示 -->
@@ -340,9 +320,17 @@
         var str = '20';
         str += date.getYear() - 100;
         str += '.';
-        str += date.getMonth() + 1;
+        if (date.getMonth() + 1 < 10) {
+            str = str + '0' + (date.getMonth() + 1)
+        } else {
+            str += (date.getMonth() + 1)
+        }
         str += '.';
-        str += date.getDate();
+        if (date.getDate() < 10) {
+            str = str + '0' + (date.getDate())
+        } else {
+            str += (date.getDate())
+        }
         return str;
     }
 
@@ -357,36 +345,64 @@
         l.reverse();
         return l;
     }
-    var lineChartData = {
-        //****************日期****************
-        labels: ["2016.5.16", "2016.5.17", "2016.5.18", "2016.5.19", "2016.5.20", "2016.5.21", "2016.5.22", "2016.5.23", "2016.5.24", "2016.5.25", "2016.5.26"],
-        datasets: [
 
-            {
-                label: "My Second dataset",
-                fillColor: "rgba(48, 164, 255, 0.2)",
-                strokeColor: "rgba(48, 164, 255, 1)",
-                pointColor: "rgba(48, 164, 255, 1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(48, 164, 255, 1)",
-                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]    //***************播放次数
-            }
-        ]
-
-    };
 
     function getData(ls) {
-        var data = json['chart'];
+        var data_chart = json['chart'];
         var datas = [];
         for (var i = 0; i < ls.length; i++) {
-            if (data[ls[0]] == null) {
+            if (data_chart[ls[i]] == null) {
                 datas.push(0);
             } else {
-                datas.push(data[ls[0]])
+                datas.push(data_chart[ls[i]])
             }
         }
         return datas;
+    }
+
+    var json;
+
+    $(document).ready(function () {
+        var url = "/admin/get_records_by_adv/" + '{{ adv_ID }}' + ' ';
+        $.get(url, function (data, status) {
+            if (status == 'success') {
+                json = JSON.parse(data);
+                var json1 = json['word'];
+                for (var i = 0; i < json1.length; i++) {
+                    var record = json1[i];
+                    show_advs(record['driver_ID'], record['time']);
+                }
+
+                var chart_date = get_labels(11);
+
+                var lineChartData = {
+                    //****************日期****************
+                    labels: chart_date,
+                    datasets: [
+
+                        {
+                            label: "My Second dataset",
+                            fillColor: "rgba(48, 164, 255, 0.2)",
+                            strokeColor: "rgba(48, 164, 255, 1)",
+                            pointColor: "rgba(48, 164, 255, 1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(48, 164, 255, 1)",
+                            data: getData(chart_date)
+                        }
+                    ]
+                };
+
+                show_chart(lineChartData);
+            }
+        });
+    });
+
+    function show_chart(lineChartData) {
+        var chart1 = document.getElementById("line-chart").getContext("2d");
+        window.myLine = new Chart(chart1).Line(lineChartData, {
+            responsive: true
+        });
     }
 </script>
 </body>

@@ -154,8 +154,7 @@ def post_adv(adv_ID):
             return json.dumps({'status': '430'})  # 时间不对
         records = adv_record.query.filter(
             and_(adv_record.driver_account_ID == driver_account_ID, adv_record.adv_ID == adv_ID)).all()
-        record = records[-1]
-        if record.check_play(3600):  # 同一条广告3600秒内同一个人最多发布一次
+        if records == [] or records[-1].check_play(3600):  # 同一条广告3600秒内同一个人最多发布一次
             adv.amounts -= 1
             driver.account_money += adv.cost
             record = adv_record(adv_ID, driver_account_ID)

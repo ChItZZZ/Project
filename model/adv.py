@@ -54,8 +54,10 @@ class adv_info(db.Model):
         return False
 
     def check_time(self):
-        now = time.strptime(time.strftime('%H:%M'), '%H:%M')
-        if now >= self.start_time and now <= self.end_time:
+        now = time.strptime(time.strftime('%H:%M:%S'), '%H:%M:%S')
+        start = time.strptime(str(self.start_time), '%H:%M:%S')
+        end = time.strptime(str(self.end_time), '%H:%M:%S')
+        if now >= start and now <= end:
             return True
         else:
             return False
