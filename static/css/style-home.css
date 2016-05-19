@@ -906,7 +906,59 @@ nav li {
     line-height: 20px;
 }
 
-#list-sec li{
+#list-sec li {
     padding: 50px;
     border-bottom: 1px solid lightgray;
+}
+
+body {
+    font-size: 14px;
+    line-height: 200%;
+    color: #333;
+}
+
+a {
+    color: #333;
+}
+
+.picker {
+    width: 500px;
+    margin-top: 20px;
+}
+
+.picker input {
+    border: 1px solid #CCC;
+    padding: 5px;
+    display: block;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    color: #666;
+    font-size: 16px;
+    -moz-box-shadow: 0 0 5px #ccc inset;
+    -webkit-box-shadow: 0 0 5px #ccc inset;
+    box-shadow: 0 0 5px #ccc inset;
+}
+
+.clearfix:after {
+    content: '\0020';
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+    clear: both;
+}
+
+#regions-info {
+    width: 800px;
+    margin: 0 auto;
+}
+
+#regions-info ul {
+    float: left;
+    list-style: none;
+    padding: 10px;
+    margin: 10px;
+    border-left: 1px dotted #DDD;
 }
