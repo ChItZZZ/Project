@@ -39,9 +39,8 @@
 
                 <li><a href="/driver/home" class="active"><i class="fa fa-home fa-fw"></i>个人主页</a></li>
                 <li><a href="/driver/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
-                <li><a href="/driver/chat"><i class="glyphicon glyphicon-envelope gly-item"></i>消息中心<span
-                        class="badge pull-right"
-                        style="padding: 6px 12px;border-radius: 12px">{{ count }}</span></a>
+                <li><a href="/driver/chat"><i class="glyphicon glyphicon-envelope gly-item" ></i>消息中心<span class="badge pull-right"
+                                                                                                           style="padding: 6px 12px;border-radius: 12px">{{ count }}</span></a>
                 </li>
                 <li><a href="/driver/s_notice"><i class="glyphicon glyphicon-info-sign gly-item"></i>通知查看</a></li>
                 <li><a href="#"><i class="fa fa-cab fa-fw"></i>任务栏</a></li>
@@ -66,22 +65,22 @@
         </div>
         <div class="indivisual-security-main">
             <div class="indivisual-security-info col-md-12" style="padding: 30px 40px">
-                <p><strong style="font-size: 27px">找回交易密码</strong></p>
+                <p><strong style="font-size: 27px">修改登录密码</strong></p>
             </div>
             <div class="col-md-12" style="background-color: #fff;padding: 0;">
                 <ul class="step-list">
-                    <li class="step-1 col-md-4 on">
+                    <li class="step-1 col-md-6 on">
                         <span class="num">01</span>
-                        <span class="text">身份验证</span>
+                        <span class="text">根据登录密码修改</span>
                         <span></span>
                     </li>
-                    <li class="step-2 col-md-4">
+                    <!--<li class="step-2 col-md-4">-->
+                    <!--<span class="num">02</span>-->
+                    <!--<span class="text">设置交易密码</span>-->
+                    <!--<span></span>-->
+                    <!--</li>-->
+                    <li class="step-3 col-md-6">
                         <span class="num">02</span>
-                        <span class="text">设置交易密码</span>
-                        <span></span>
-                    </li>
-                    <li class="step-3 col-md-4">
-                        <span class="num">03</span>
                         <span class="text">成功</span>
                         <span></span>
                     </li>
@@ -92,39 +91,34 @@
 
             <!--身份验证-->
             <div class="col-md-12 modify-box" id="step1" data-index="1">
-                <form action="/driver/check_forgot_pay_code/" method="POST" class="col-md-12">
+                <form action="/driver/check_change_pay_pwd/" class="col-md-12" method="post" id="form1">
                     <div class="form-group">
                         <div class="col-md-12">
-                            <label for="phoneNum" class="col-md-4" style="text-align: right">手机号码:</label>
-                            <p style="display: inline-block" id="phoneNum" class="col-md-3">{{ phone }}</p>
-                            <input type="button" class="btn btn-primary col-md-5" id="getID" style="width: 155px"
-                                   value="获取验证码">
-                        </div>
-
-
-                        <div style="clear: both"></div>
-
-
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label for="con-pwd" class="col-md-4" style="text-align: right">验证码:</label>
-                            <input type="text" id="con-pwd" class="col-md-5 " placeholder="请输入验证码" name="code">
+                            <label for="pwd" class="col-md-4" style="text-align: right">请输入原始密码:</label>
+                            <input type="password" id="pwd" class="col-md-5 " placeholder="" name="old">
                         </div>
                         <div style="clear: both"></div>
 
                     </div>
+
                     <div class="form-group">
                         <div class="col-md-12">
-                            <label for="IDCard" class="col-md-4 " style="text-align: right">身份证号码:</label>
-                            <input type="text" id="IDCard" placeholder="请输入您的身份证号码" class="col-md-5 " name="ID">
+                            <label for="new-pwd" class="col-md-4" style="text-align: right">新密码:</label>
+                            <input type="password" id="new-pwd" class="col-md-5 " placeholder="" name="new">
+                        </div>
+                        <div style="clear: both"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="con-pwd" class="col-md-4" style="text-align: right">再次输入:</label>
+                            <input type="password" id="con-pwd" class="col-md-5 " placeholder="" onblur="check_re()">
                         </div>
                         <div style="clear: both"></div>
 
                     </div>
                     <div class="form-group">
                         <div class="col-md-12" style="text-align: center;margin-top: 20px">
-                            <input type="submit" value="下一步" class="btn btn-primary" style="width: 180px;height: 50px;">
+                            <input type="button" value="下一步" class="btn btn-primary" style="width: 180px;height: 50px;" onclick="sub()">
                         </div>
                     </div>
 
@@ -163,14 +157,20 @@
     $(document).ready(function () {
         $("#getID").click(function () {
             time(this);
-            var url = '/driver/get_forgot_pay_code/' + parseInt($('#phoneNum').text()) + '/';
-            $.get(url, function (data, status) {
-                if (status == 'success' && data == 'success') {
-                    alert('验证码已经发送');
-                }
-            })
         })
-    })
+    });
+    function check_re() {
+        if (document.getElementById('con-pwd').value != document.getElementById('new-pwd').value) {
+            alert('两次输入密码不一致')
+        }
+    }
+    function sub(){
+        if (document.getElementById('con-pwd').value != document.getElementById('new-pwd').value) {
+            alert('两次输入密码不一致')
+        }else{
+            document.getElementById('form1').submit();
+        }
+    }
 </script>
 
 </body>
