@@ -248,18 +248,6 @@ def check_change_pwd():
         return '<script>alert("密码有误,请重试");location.reload();</script>'
 
 
-@adv_bp.route('/change_pay_pwd')
-@advter_check_login
-def change_pay_pwd():
-    return render_template('Advertiser module/sec-modify-pwd-bypwd.html')
-
-
-@adv_bp.route('/check_change_pay_pwd')
-@advter_check_login
-def check_change_pay_pwd():
-    pass
-
-
 @adv_bp.route('/notice')
 @advter_check_login
 def notice():
@@ -282,13 +270,6 @@ def get_notice():
 @advter_check_login
 def change_phone():
     return render_template('Advertiser module/sec-phone.html')
-
-
-@adv_bp.route('/find_pay_pwd')
-@advter_check_login
-def find_pay_pwd():
-    phone = session['phone']
-    return render_template('Advertiser module/sec-find-pay-pwd.html', phone=phone)
 
 
 @adv_bp.route('/adv_details')
