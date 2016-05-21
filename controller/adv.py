@@ -305,3 +305,50 @@ def pay(money):
     db.session.commit()
     session['money'] = float(advter.account_money.real)
     return '<script>alert("充值成功!");location.href="/adv/home"</script>'
+
+
+@adv_bp.route('/change_pay_pwd/', methods=['POST', 'GET'])
+@advter_check_login
+def change_pay_pwd():
+    return render_template('Advertiser module/sec-modify-pay-pwd-bypwd.html', name=session['driver_user_name'])
+
+
+@adv_bp.route('/check_change_pay_pwd/', methods=['POST'])
+@advter_check_login
+def check_change_pay_pwd():
+    old_pwd = request.form['old']
+    new_pwd = request.form['new']
+    driver = adv_account.query.get(session['driver_account_id'])
+    if (driver.check_pay_pwd(old_pwd)):
+        driver.change_pay_pwd(new_pwd)
+        return '<script>alert("修改支付密码成功!");location.href="/driver/home"</script>'
+    else:
+        return '<script>alert("密码有误,请重试");location.reload();</script>'
+
+
+@adv_bp.route('/find_pay_pwd/', methods=['POST', 'GET'])
+@advter_check_login
+def find_pay_pwd():
+    return render_template('Advertiser module/sec-find-pay-pwd.html', name=session['driver_user_name'],
+                           count=session['message_count'], phone=session['phone'])
+
+
+@adv_bp.route('/get_forgot_pay_code/<int:phone>/')
+@advter_check_login
+def get_forgot_pay_code(phone):
+    forget_code = get_cap_code()
+    session['forget_code'] = forget_code
+    tool.send_forgot_pay_message(phone, forget_code)
+    return "success"
+
+
+@adv_bp.route('/check_forgot_pay_code/', methods=['POST', 'GET'])
+@advter_check_login
+def check_forgot_pay_code(phone):
+    forgot_code = request.form['forget_code']
+    ID = request.form['ID']
+    driver = adv_account.query.get(session['driver_account_id'])
+    if (driver.user_ID == ID and forgot_code == session['forget_code']):
+        return render_template('Advertiser module/')
+    else:
+        return '<script>alert("验证码或身份证号码有误,请重试");location.href="/driver/security";</script>'

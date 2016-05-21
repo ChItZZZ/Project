@@ -115,15 +115,7 @@ def advs_ajax():
     advs = adv_info.query.all()
     ajax = []
     for adv in advs:
-        dic = {}
-        dic['adv_ID'] = adv.adv_ID
-        dic['adv_amounts'] = adv.amounts
-        dic['adv_text'] = adv.adv_text
-        dic['cost'] = float(adv.cost.real)
-        dic['date'] = str(adv.start_date)
-        advter = adv_account.query.filter_by(account_ID=adv.advter_account_ID).first()
-        dic['company'] = advter.company_name
-        ajax.append(dic)
+        ajax.append(adv.to_json())
     return json.dumps(ajax)
 
 

@@ -23,6 +23,7 @@ class adv_info(db.Model):
     img_src = db.Column('img_src', db.String(50))
     img_flag = db.Column('img_flag', db.Boolean)
     center = db.Column('center', db.String(40))
+    remark = db.Column('remark', db.String(50))
 
     def __init__(self, cost, amounts, start_date, start_time, end_time, location, advter_account_ID, adv_sum, img_flag,
                  adv_text=None, img_src=None):
@@ -61,6 +62,18 @@ class adv_info(db.Model):
             return True
         else:
             return False
+
+    def to_json(self):
+        dic = {}
+        dic['adv_ID'] = self.adv_ID
+        dic['adv_amounts'] = self.amounts
+        dic['adv_text'] = self.adv_text
+        dic['cost'] = float(self.cost.real)
+        dic['date'] = str(self.start_date)
+        advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
+        dic['company'] = advter.company_name
+        dic['remark'] = self.remark
+        return dic
 
 
 class adv_account(db.Model):
