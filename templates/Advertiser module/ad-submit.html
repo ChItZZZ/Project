@@ -206,13 +206,13 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <input type="button" class="btn btn-primary" id="btn-ad-summit" data-toggle="modal"
-                                   data-target="#Modal" onclick="ad_submit()"
-                                   value="提交广告">
+                                   data-target="#Modal" value="提交广告">
                         </div>
                         <div class="modal fade" id="Modal" tabindex="-1" role="dialog"
                              aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" >
-                                <div class="modal-content col-md-5" style="position:absolute; left: 35%;margin-top: 150px" >
+                            <div class="modal-dialog">
+                                <div class="modal-content col-md-5"
+                                     style="position:absolute; left: 35%;margin-top: 150px">
                                     <div class="modal-header">
                                         <button type="button" class="close"
                                                 data-dismiss="modal" aria-hidden="true">
@@ -225,7 +225,8 @@
                                     <div class="modal-body">
                                         <form>
                                             <div class="form-group">
-                                                <input type="password" class="form-control " style="margin-top: 10px;">
+                                                <input type="password" name="pay-password" class="form-control "
+                                                       style="margin-top: 10px;">
                                             </div>
                                         </form>
                                     </div>
@@ -233,7 +234,7 @@
                                         <button type="button" class="btn btn-default"
                                                 data-dismiss="modal">关闭
                                         </button>
-                                        <button type="button" class="btn btn-primary">
+                                        <button type="button" class="btn btn-primary" onclick="ad_submit()">
                                             确定
                                         </button>
                                     </div>

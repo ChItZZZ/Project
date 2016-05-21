@@ -143,12 +143,14 @@ def check_adv_submit():
     cost = float(request.form['cost'])
     adv_sum = request.form['adv_sum']
     advter = adv_account.query.filter_by(account_ID=session['adv_account_id']).first()
+    if not advter.check_pay_pwd(request.form['pay-password']):
+        return '<script>alert("交易密码输入有误");location.href="/adv/adv_submit"</script>'
     if advter.check_flag == None or advter.check_flag == False:
         return '<script>alert("尚未通过验证");location.href="/adv/home"</script>'
     if advter.account_money < cost * adv_count:
         return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
     else:
-        advter.account_money -= cost * adv_count
+        advter.account_money = float(advter.account_money.real) - cost * adv_count
         session['money'] = float(advter.account_money.real)
     if flag:
         img = request.files['adv_img']

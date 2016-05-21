@@ -62,3 +62,18 @@ class driver_account(db.Model):
         self.account_pwd = hashlib.md5((pwd + self.salt).encode('ascii')).hexdigest()
         db.session.commit()
         return True
+
+    def check_pay_pwd(self, pwd):
+        if pwd == None:
+            return False
+        password = hashlib.md5((pwd + self.salt).encode('ascii')).hexdigest()
+        if password == self.pay_password:
+            return True
+        else:
+            return False
+
+    def change_pay_pwd(self, pwd):
+        password = hashlib.md5((pwd + self.salt).encode('ascii')).hexdigest()
+        self.pay_password = password
+        db.session.commit()
+        return True

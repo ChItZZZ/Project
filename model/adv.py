@@ -90,6 +90,7 @@ class adv_account(db.Model):
         self.ID_card = ID_card
         self.user_ID = user_ID
         self.adv_amount = 0
+        self.pay_password = hashlib.md5((account_pwd + self.salt).encode('ascii')).hexdigest()
 
     def check(self, password):
         password = hashlib.md5((password + self.salt).encode('ascii')).hexdigest()
@@ -100,6 +101,19 @@ class adv_account(db.Model):
 
     def change_pwd(self, pwd):
         self.account_pwd = hashlib.md5((pwd + self.salt).encode('ascii')).hexdigest()
+        db.session.commit()
+        return True
+
+    def check_pay_pwd(self, pwd):
+        password = hashlib.md5((pwd + self.salt).encode('ascii')).hexdigest()
+        if password == self.pay_password:
+            return True
+        else:
+            return False
+
+    def change_pay_pwd(self, password):
+        password = hashlib.md5((password + self.salt).encode('ascii')).hexdigest()
+        self.pay_password = password
         db.session.commit()
         return True
 
