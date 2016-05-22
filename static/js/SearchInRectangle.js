@@ -18,6 +18,10 @@
 /**
  * @namespace BMap的所有library类均放在BMapLib命名空间下
  */
+
+var advs_submit_result = [];
+var advs_submit_hash = {};
+
 var BMapLib = window.BMapLib = BMapLib || {};
 
 (function () {
@@ -725,16 +729,17 @@ var BMapLib = window.BMapLib = BMapLib || {};
                     for (var i = 0; i < results.getCurrentNumPois(); i++) {
                         adds.push(results.getPoi(i).address);
                     }
-                    document.getElementById("r-result").innerHTML = adds.join("<br/>");
+                    //document.getElementById("r-result").innerHTML = adds.join("<br/>");
 
                     var index = 0;
                     (function bdGEO() {
-                        while(index<adds.length) {
+                        while (index < adds.length) {
                             var add = adds[index];
                             geocodeSearch(add);
                             index++;
                         }
                     })();
+
 
                     function geocodeSearch(add) {
                         //if (index < adds.length) {
@@ -743,8 +748,13 @@ var BMapLib = window.BMapLib = BMapLib || {};
                         myGeo.getPoint(add, function (point) {
                             if (point) {
                                 document.getElementById("r-result").innerHTML += index + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
+                                var point_str = JSON.stringify([point.lng, point.lat]);
+                                if (advs_submit_hash[point_str] == null) {
+                                    advs_submit_result.push([point.lng, point.lat]);
+                                    advs_submit_hash[point_str] = true;
+                                }
                             }
-                        },"上海市");
+                        }, "上海市");
                     }
                 }
                 //}

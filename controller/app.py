@@ -35,7 +35,7 @@ def check_register():
         filename.append(permit_filename)
         filename.append(car_pic_filename)
         for f in filename:
-            if '.' not in f or f.rspilt('.', 1)[1] not in app.config['ALLOW_FILE']:
+            if '.' not in f or f.rsplit('.', 1)[1] not in app.config['ALLOW_FILE']:
                 return json.dumps({'status': '404'})
         ID_card_image.save(os.path.join(app.root_path, 'static/image/ID_card', ID_filename))
         permit_card_image.save(os.path.join(app.root_path, 'static/image/permit_card', permit_filename))
