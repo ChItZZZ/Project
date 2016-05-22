@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, current_app
 from model.adv import *
+from model.driver import *
 from tools.LBS import *
 from tools.security import *
 from ali_config import tool
@@ -379,15 +380,27 @@ def ad_history(adv_ID):
     adv = adv_info.query.get(adv_ID)
     if adv == None or adv.advter_account_ID != session['adv_account_id']:
         return redirect(url_for('adv.ad_list'))
-    return render_template('Advertiser module/ad-history.html', name=session['adv_charge_name'])
+    return render_template('Advertiser module/ad-history.html', name=session['adv_charge_name'], adv_ID=adv_ID)
 
 
-@adv_bp.route('/ad_history_ajax/<int:adv_ID>/')
+@adv_bp.route('/ad_history_ajax/<int:adv_ID>/<int:record_ID>/')
 @advter_check_login
-def ad_history_ajax(adv_ID):
+def ad_history_ajax(adv_ID, record_ID):
     adv = adv_info.query.get(adv_ID)
     if adv == None or adv.advter_account_ID != session['adv_account_id']:
         return json.dumps({'error': '无权限'})
+    else:
+        records = adv_record.query.filter(
+            and_(adv_record.adv_ID == adv_ID, adv_record.record_ID > record_ID)).order_by(
+            adv_record.record_ID.desc()).limit(10).all()
+        ajax = []
+        for record in records:
+            driver = driver_account.query.get(record.driver_account_ID)
+            dic = record.to_json()
+            dic['phone'] = driver.phone
+            dic['user_name'] = driver.user_name
+            ajax.append(dic)
+        return json.dumps(ajax)
 
 
 @adv_bp.route('/ad_details/<int:adv_ID>/')

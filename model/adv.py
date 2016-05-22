@@ -219,13 +219,21 @@ class adv_record(db.Model):
         self.driver_account_ID = driver_account_ID
         self.play_time = time.localtime()
 
-    def check_play(self, second):
+    def check_play(self, second):  # 判断是否可以再次播放这条广告
         now = datetime.datetime.now()
         record_time = self.play_time.tm_hour + datetime.timedelta(seconds=second)
         if now <= record_time:
             return False
         else:
             return True
+
+    def to_json(self):
+        dic = {}
+        dic['record_ID'] = self.record_ID
+        dic['adv_ID'] = self.adv_ID
+        dic['driver_account_ID'] = self.driver_account_ID
+        dic['play_time'] = str(self.play_time)
+        return dic
 
 
 class adv_history(db.Model):

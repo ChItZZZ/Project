@@ -66,49 +66,7 @@
 
         <div class="indivisual-security-body col-md-12">
             <ul class="security-list">
-                <li class="details">
-                    <div style="float: left;"><img src="/static/images/head2.png" alt=""
-                                                   style="width: 60px;height: 60px;"></div>
-                    <h4 style="float: left;margin-left: 30px">
-                        <strong>name<span>联系方式:123123123</span></strong>
-                        <span style="display: block;margin-top: 10px">广告内容简介广告内容简介广告内容简介</span>
-                        <a href="/adv/change_phone" class="pull-right operate dropdown-toggle del"
-                           data-toggle="dropdown">删除 </span> </a>
-                    </h4>
-                    <div class="" style="position: absolute;right: 100px;top: 45%;font-size: 20px">
-                        2016-5-5
-                    </div>
-                </li>
-                <li class="details">
-                    <div style="float: left;"><img src="/static/images/head3.jpeg" alt=""
-                                                   style="width: 60px;height: 60px;"></div>
-                    <h4 style="float: left;margin-left: 30px">
-                        <strong>name<span>联系方式:123123123</span></strong>
-                        <span style="display: block;margin-top: 10px">广告内容简介广告内容简介广告内容简介</span>
-                        <a href="/adv/change_phone" class="pull-right operate dropdown-toggle del"
-                           data-toggle="dropdown">删除 </span> </a>
-                    </h4>
-                    <div class="" style="position: absolute;right: 100px;top: 45%;font-size: 20px">
-                        2016-5-5
-                    </div>
-                </li>
-                <li class="details">
-                    <div style="float: left;"><img src="/static/images/head4.jpeg" alt=""
-                                                   style="width: 60px;height: 60px;"></div>
-                    <h4 class="details-info">
-                        <strong>name<span>联系方式:123123123</span></strong>
-                        <span style="display: block;margin-top: 10px">广告内容简介广告内容简介广告内容简介</span>
-                        <!--<div class="dropdown">-->
-                        <a href="/adv/change_phone" class="pull-right operate dropdown-toggle del"
-                           data-toggle="dropdown">删除 </a>
-                        <!--</div>-->
-                    </h4>
-                    <div class="details-time">
-                        2016-5-5
-                    </div>
 
-
-                </li>
                 <li style="clear: both;border-bottom: none;height: 0px;padding: 0"></li>
             </ul>
 
@@ -123,8 +81,9 @@
 <script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
 <script src="/static/js/jquery.lazyload.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
-
+<script src="/static/js/string_format.js"></script>
 <script>
+    var last = 0;
     $(document).ready(function () {
 
         $(window).scroll(function (e) {
@@ -147,33 +106,54 @@
                     <div style="float: left;"><img src="/static/images/head2.png" alt=""\
                     style="width: 60px;height: 60px;"></div>\
                     <h4 class="details-info">\
-                    <strong>name<span>联系方式:123123123</span></strong>\
-                    <span style="display: block;margin-top: 10px">广告内容简介</span>\
-                    <a href="/adv/change_phone" class="pull-right operate dropdown-toggle del"\
-                    data-toggle="dropdown">删除  </a>\
+                    <strong>{0}<span>联系方式:{1}</span></strong>\
+                    <span style="display: block;margin-top: 10px"></span>\
                     </h4>\
                     <div class="details-time" >\
-                    2016-5-5\
+                    {2}\
                     </div>\
                     </li>';
             if (lastTop < scrollTop + clientHeight) {
-
-//                //ajax请求字符串
-//                .ajax({
-//                    type:"get",
-//                    url:  ,
-//                    success: function () {
-                $(".security-list").append(item);
-//                    }
-//                })
+                //ajax请求字符串
+                $.get('/adv/ad_history_ajax/{{ adv_ID }}/{0}/'.format(last + ''), function (data, status) {
+                    if (status == 'success') {
+                        var json = JSON.parse(data);
+                        if (json.length > 0) {
+                            last = json.slice(-1)['record_ID'];
+                            $(".security-list").append(item.format(json['user_name'], json['phone'], json['play_time']));
+                        }
+                    }
+                });
 
             }
-        })
+        });
 
         $(".del").click(function () {
             $(this).parents(".details").remove();
 
-        })
+        });
+        $.get('/adv/ad_history_ajax/{{ adv_ID }}/{0}/'.format(last + ''), function (data, status) {
+            var item = '<li class="details">\
+                    <div style="float: left;"><img src="/static/images/head2.png" alt=""\
+                    style="width: 60px;height: 60px;"></div>\
+                    <h4 class="details-info">\
+                    <strong>{0}<span>联系方式:{1}</span></strong>\
+                    <span style="display: block;margin-top: 10px">广告内容简介</span>\
+                    </h4>\
+                    <div class="details-time" >\
+                    {2}\
+                    </div>\
+                    </li>';
+            if (status == 'success') {
+                var json = JSON.parse(data);
+                if (json.length > 0) {
+                    last = json.slice(-1)['record_ID'];
+                    for (var i = 0; i < json.length; i++) {
+                        $(".security-list").append(item.format(json[i]['user_name'], json[i]['phone'], json[i]['play_time']));
+                    }
+                }
+            }
+        });
     })
 </script>
 </body>
