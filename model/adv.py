@@ -73,7 +73,7 @@ class adv_info(db.Model):
         dic['adv_ID'] = self.adv_ID
         dic['adv_amounts'] = self.amounts
         dic['adv_sum'] = self.adv_sum
-        dic['cost'] = float(self.cost.real)
+        dic['cost'] = float(self.cost)
         dic['date'] = str(self.start_date)
         advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
         dic['company'] = advter.company_name
@@ -109,6 +109,11 @@ class adv_info(db.Model):
         dic['company_name'] = advter.company_name
         center = json.loads(self.center)
         dic['center'] = json.dumps(gcj02tobd09(center[0], center[1]))
+        dic['adv_sum'] = self.adv_sum
+        dic['start_time'] = str(self.start_time)
+        dic['end_time'] = str(self.end_time)
+        dic['date'] = str(self.start_date)
+        dic['cost'] = float(self.cost)
         if self.remark == None:
             dic['remark'] = '无'
         else:
