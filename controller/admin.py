@@ -59,12 +59,9 @@ def show_drivers():
 def drivers_ajax():
     drivers = driver_account.query.all()
     ajax = []
+    drivers.reverse()
     for driver in drivers:
-        dic = {}
-        dic["account_ID"] = driver.account_ID
-        dic["user_name"] = driver.user_name
-        dic["phone"] = driver.phone
-        dic["check_flag"] = str(driver.check_flag)
+        dic = driver.to_json()
         m = message.query.filter(
             and_(message.sender_ID == driver.account_ID, message.flag == False, message.read_flag == False)).count()
         dic['red_point'] = m > 0
@@ -113,6 +110,7 @@ def show_advs():
 @admin_check_message
 def advs_ajax():
     advs = adv_info.query.all()
+    advs.reverse()
     ajax = []
     for adv in advs:
         ajax.append(adv.to_json())
@@ -127,14 +125,11 @@ def show_adv(adv_ID):
         return redirect(url_for('admin.show_advs'))
     else:
         adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
-        advter = adv_account.query.filter_by(account_ID=adv.advter_account_ID).first()
-        date = str(adv.start_time) + '-' + str(adv.end_time)
-        location = []
-        location_json = json.loads(adv.location)
-        for point in location_json:
-            location.append(gcj02tobd09(point[0], point[1]))
-        return render_template('Management module/ad.html', adv_ID=adv.adv_ID, text=adv.adv_text, datetime=date,
-                               location=location, company=advter.company_name, adm_name=session['admin_account_name'],
+        result = adv.get_details()
+        return render_template('Management module/ad.html', adv_ID=result['adv_ID'], text=result['adv_text'],
+                               datetime=result['time'],
+                               location=result['location'], company=result['company_name'],
+                               adm_name=session['admin_account_name'],
                                admin_message=session['admin_message'])
 
 
@@ -153,12 +148,7 @@ def advters_ajax():
     advters = adv_account.query.all()
     ajax = []
     for advter in advters:
-        dic = {}
-        dic["account_ID"] = advter.account_ID
-        dic["charge_name"] = advter.charge_name
-        dic["company_name"] = advter.company_name
-        dic["check_flag"] = str(advter.check_flag)
-        ajax.append(dic)
+        ajax.append(advter.to_json())
     return json.dumps(ajax)
 
 

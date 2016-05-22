@@ -9,7 +9,7 @@
     <link href="/static/css/datepicker3.css" rel="stylesheet">
     <link href="/static/css/bootstrap-table.css" rel="stylesheet">
     <link href="/static/css/styles.css" rel="stylesheet">
-    <link href="/static/css/jquery-ui.min.css" rel="stylesheet" >
+    <link href="/static/css/jquery-ui.min.css" rel="stylesheet">
 
 
 </head>
@@ -25,21 +25,24 @@
                             class="glyphicon glyphicon-user">{{ adm_name }}<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
-                        <li><a href="/admin/show_drivers" onclick="clearNewMessageRemind();hideredspot();return false;"><span class="glyphicon glyphicon-cog"></span> 私信</a></li>
+                        <li><a href="/admin/show_drivers" onclick="clearNewMessageRemind();hideredspot();return false;"><span
+                                class="glyphicon glyphicon-cog"></span> 私信</a></li>
                         <li><a href="/admin/logout"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
                     </ul>
                 </li>
             </ul>
-            <i id="redspot" style="display:none;background:#f00;border-radius:50%;width:10px;height:10px;top:20px;right:10px;position:absolute;"></i>
+            <i id="redspot"
+               style="display:none;background:#f00;border-radius:50%;width:10px;height:10px;top:20px;right:10px;position:absolute;"></i>
         </div>
     </div><!-- /.container-fluid -->
 </nav>
 
-<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar"  style="z-index:-1">
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar" style="z-index:-1">
 
     <form role="search">
         <div class="form-group">
-            <input type="text" id="tags" placeholder="搜索" class="form-control" style="width:137px;display:inline">  <input type="button" style="display:inline" class="btn btn-primary" value="跳转" id="btn" />
+            <input type="text" id="tags" placeholder="搜索" class="form-control" style="width:137px;display:inline">
+            <input type="button" style="display:inline" class="btn btn-primary" value="跳转" id="btn"/>
         </div>
     </form>
 
@@ -72,7 +75,7 @@
         <li class="parent ">
             <a href="#">
                 <span class="glyphicon glyphicon-list-alt"></span> 查看记录 <span data-toggle="collapse" href="#sub-item-2"
-                                                                          class="icon pull-right"><em
+                                                                              class="icon pull-right"><em
                     class="glyphicon glyphicon-s glyphicon-plus"></em></span>
             </a>
             <ul class="children collapse" id="sub-item-2">
@@ -106,7 +109,7 @@
     </div><!--/.row-->
 
     <script language="javascript" type="text/javascript">
-        function show(adv_ID, amounts, text, cost, start_date, company) {
+        function show(adv_ID, amounts, text, cost, start_date, company, remarks) {
             var strS = '<tr><td style="width:50px; text-align:left;"><input type="checkbox" value="' + adv_ID + '"></td><td style="width:100px; text-align:center;">' + adv_ID + '</td><td style="width:100px; text-align:center;">' + amounts + '</td><td style="width:300px; text-align:center;">' + text + '</td><td style="width:100px; text-align:center;">' + cost + '</td><td style="width:100px; text-align:center;">' + start_date + '</td><td style="width:150px; text-align:center;">' + company + '</td><td style="width:180px; text-align:center;">' + remarks + '</td><td style="width:80px; text-align:center;"><a href="adv/' + adv_ID + '">查看</a> </td></tr>';
             document.getElementById("change").innerHTML += strS;
         }
@@ -119,50 +122,28 @@
                 <div class="panel-body">
                     <table class="table">
                         <thead>
-	                        <tr>
-	                        	<th style="width:50px; text-align:right;"><input type="checkbox" id="all">全选</th>
-	                            <th style="width:100px; text-align:center;">广告编号</th>
-	                            <th style="width:100px; text-align:center;">发布条数</th>
-	                            <th style="width:300px; text-align:center;">广告内容</th>
-	                            <th style="width:100px; text-align:center;">价格</th>
-	                            <th style="width:100px; text-align:center;">开始日期</th>
-	                            <th style="width:150px; text-align:center;">广告商</th>
-	                            <th style="width:180px; text-align:center;">备注</th>
-	                            <th style="width:80px; text-align:center;">详细信息</th>
-	                        </tr>
+                        <tr>
+                            <th style="width:50px; text-align:right;"><input type="checkbox" id="all">全选</th>
+                            <th style="width:100px; text-align:center;">广告编号</th>
+                            <th style="width:100px; text-align:center;">发布条数</th>
+                            <th style="width:300px; text-align:center;">广告摘要</th>
+                            <th style="width:100px; text-align:center;">价格</th>
+                            <th style="width:100px; text-align:center;">开始日期</th>
+                            <th style="width:150px; text-align:center;">广告商</th>
+                            <th style="width:180px; text-align:center;">备注</th>
+                            <th style="width:80px; text-align:center;">详细信息</th>
+                        </tr>
                         </thead>
                         <tbody id="change">
-                        
+
                         <!-- 看静态效果用的两行表格 -->
-                        	<tr>
-                        		<td style="width:50px; text-align:left;"><input type="checkbox" value="1"></td>
-	                            <td style="width:100px; text-align:center;">1</td>
-	                            <td style="width:100px; text-align:center;">100</td>
-	                            <td style="width:300px; text-align:center;">广告内容广告内容广告内容</td>
-	                            <td style="width:100px; text-align:center;">521</td>
-	                            <td style="width:100px; text-align:center;">2015-05-21</td>
-	                            <td style="width:150px; text-align:center;">肯打鸡</td>
-	                            <td style="width:180px; text-align:center;">肯打鸡</td>
-	                            <td style="width:80px; text-align:center;">查看</td>
-                        	</tr>
-                        	<tr>
-                        		<td style="width:50px; text-align:left;"><input type="checkbox" value="2"></td>
-	                            <td style="width:100px; text-align:center;">2</td>
-	                            <td style="width:100px; text-align:center;">100</td>
-	                            <td style="width:300px; text-align:center;">广告内容广告内容广告内容</td>
-	                            <td style="width:100px; text-align:center;">521</td>
-	                            <td style="width:100px; text-align:center;">2015-05-21</td>
-	                            <td style="width:150px; text-align:center;">肯打鸡</td>
-	                            <td style="width:180px; text-align:center;">肯打鸡</td>
-	                            <td style="width:80px; text-align:center;">查看</td>
-                        	</tr>
-                        	
+
                         </tbody>
                     </table>
                     <br>
                     <div style="text-align:center">
-                    	<input type="button" class="btn btn-primary" value="通过" id="pass" />
-                    	<input type="button" class="btn btn-primary" value="不通过" id="nopass" />
+                        <input type="button" class="btn btn-primary" value="通过" id="pass"/>
+                        <input type="button" class="btn btn-primary" value="不通过" id="nopass"/>
                     </div>
 
                 </div>
@@ -202,7 +183,7 @@
                 var json = JSON.parse(data);
                 for (var i = 0; i < json.length; i++) {
                     var adv = json[i];
-                    show(adv['adv_ID'], adv['adv_amounts'], adv['adv_text'], adv['cost'], adv['date'], adv['company'])
+                    show(adv['adv_ID'], adv['adv_amounts'], adv['adv_sum'], adv['cost'], adv['date'], adv['company'], adv['remark'])
                 }
             }
         });
@@ -216,99 +197,102 @@
 
 <!--搜索功能-->
 <script>
-  $(function() {
-    var availableTags = [
-      "司机用户管理",
-      "广告商用户管理",
-      "广告管理",
-      "司机领取广告记录",
-      "广告被领取记录",
-    ];
-    $( "#tags" ).autocomplete({
-      source: availableTags
+    $(function () {
+        var availableTags = [
+            "司机用户管理",
+            "广告商用户管理",
+            "广告管理",
+            "司机领取广告记录",
+            "广告被领取记录",
+        ];
+        $("#tags").autocomplete({
+            source: availableTags
+        });
     });
-  });
 </script>
 <script type="text/javascript">
-		window.onload = function(){
-			var oBtn = document.getElementById("btn");
-			var oTxt = document.getElementById("tags");
-			oBtn.onclick = function(){
-				if(oTxt.value == "司机用户管理"){
-					url = "/admin/show_drivers";
-				}
-				else if(oTxt.value == "广告商用户管理"){
-					url = "/admin/show_advters";
-				}
-				else if(oTxt.value == "广告管理"){
-					url = "/admin/show_advs";
-				}
-				else if(oTxt.value == "司机领取广告记录"){
-					url = "/admin/drivers_history";
-				}
-				else if(oTxt.value == "司机领取广告记录"){
-					url = "/admin/advs_history";
-				}
-				else{
-					url = "#";
-					alert("不存在该页面！");
-				}
-				window.location.href = url;
-			}
-		}
+    window.onload = function () {
+        var oBtn = document.getElementById("btn");
+        var oTxt = document.getElementById("tags");
+        oBtn.onclick = function () {
+            if (oTxt.value == "司机用户管理") {
+                url = "/admin/show_drivers";
+            }
+            else if (oTxt.value == "广告商用户管理") {
+                url = "/admin/show_advters";
+            }
+            else if (oTxt.value == "广告管理") {
+                url = "/admin/show_advs";
+            }
+            else if (oTxt.value == "司机领取广告记录") {
+                url = "/admin/drivers_history";
+            }
+            else if (oTxt.value == "司机领取广告记录") {
+                url = "/admin/advs_history";
+            }
+            else {
+                url = "#";
+                alert("不存在该页面！");
+            }
+            window.location.href = url;
+        }
+    }
 </script>
 
 <script>
-$(function () { 
-	
-    //全选或全不选 
-    $("#all").click(function(){    
-        if(this.checked){    
-            $("#change :checkbox").prop("checked", true);   
-        }else{    
-            $("#change :checkbox").prop("checked", false); 
-        }    
-     });  
-     
+    $(function () {
 
-    
-    //获取选中选项的值生成json对象 
-    $("#pass").click(function(){ 
-        var valArr = new Array; 
-        $("#change :checkbox[checked]").each(function(i){ 
-            valArr[i] = parseInt($(this).val()); 
-        }); 
-        var vals = valArr.join(','); 
-        
-        if (vals==""){alert("没有选中任何广告，请重新选择！");}
-        else{
-	        var jsonObj = {};
-	        jsonObj.flag = "true";
-	        jsonObj.ID = valArr;
-	        var json = JSON.stringify(jsonObj); 
-	        alert(json); 
-        }
+        //全选或全不选
+        $("#all").click(function () {
+            if (this.checked) {
+                $("#change :checkbox").prop("checked", true);
+            } else {
+                $("#change :checkbox").prop("checked", false);
+            }
+        });
+
+
+        //获取选中选项的值生成json对象
+        $("#pass").click(function () {
+            var valArr = new Array;
+            $("#change :checkbox[checked]").each(function (i) {
+                valArr[i] = parseInt($(this).val());
+            });
+            var vals = valArr.join(',');
+
+            if (vals == "") {
+                alert("没有选中任何广告，请重新选择！");
+            }
+            else {
+                var jsonObj = {};
+                jsonObj.flag = "true";
+                jsonObj.ID = valArr;
+                var json = JSON.stringify(jsonObj);
+                alert(json);
+            }
+        });
+
+
+        $("#nopass").click(function () {
+            var valArr = new Array;
+            $("#change :checkbox[checked]").each(function (i) {
+                valArr[i] = parseInt($(this).val());
+            });
+            var vals = valArr.join(',');
+
+            if (vals == "") {
+                alert("没有选中任何广告，请重新选择！");
+            }
+            else {
+                var jsonObj = {};
+                jsonObj.flag = "false";
+                jsonObj.ID = valArr;
+                var json = JSON.stringify(jsonObj);
+                alert(json);
+            }
+        });
+
     });
-    
-    
-    $("#nopass").click(function(){ 
-        var valArr = new Array; 
-        $("#change :checkbox[checked]").each(function(i){ 
-            valArr[i] = parseInt($(this).val());
-        }); 
-        var vals = valArr.join(','); 
-        
-        if (vals==""){alert("没有选中任何广告，请重新选择！");}
-        else{        
-	        var jsonObj = {};
-	        jsonObj.flag = "false";
-	        jsonObj.ID = valArr;
-	        var json = JSON.stringify(jsonObj); 
-	        alert(json); 
-        }
-    });
-    
-});  
 
 </script>
 

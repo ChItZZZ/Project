@@ -1,7 +1,7 @@
 from app_config import db
 import hashlib
 import time
-from tools.LBS import get_distance
+from tools.LBS import get_distance, gcj02tobd09
 import json
 from tools import security
 import datetime
@@ -26,7 +26,7 @@ class adv_info(db.Model):
     remark = db.Column('remark', db.String(50))
 
     def __init__(self, cost, amounts, start_date, start_time, end_time, location, advter_account_ID, adv_sum, img_flag,
-                 adv_text=None, img_src=None):
+                 adv_text=None, img_src=None, remark=None):
         self.cost = cost
         self.amounts = amounts
         self.start_date = start_date
@@ -46,6 +46,7 @@ class adv_info(db.Model):
             lat_all += point[1]
         center = [lng_all / len(location), lat_all / len(location)]
         self.center = str(center)
+        self.remark = remark
 
     def check_in(self, lat, lng, meter):
         points = json.loads(self.location)
@@ -67,12 +68,34 @@ class adv_info(db.Model):
         dic = {}
         dic['adv_ID'] = self.adv_ID
         dic['adv_amounts'] = self.amounts
-        dic['adv_text'] = self.adv_text
+        dic['adv_sum'] = self.adv_sum
         dic['cost'] = float(self.cost.real)
         dic['date'] = str(self.start_date)
         advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
         dic['company'] = advter.company_name
-        dic['remark'] = self.remark
+        if self.remark == None:
+            dic['remark'] = '无'
+        else:
+            dic['remark'] = self.remark
+        return dic
+
+    def get_details(self):
+        dic = {}
+        dic['adv_ID'] = self.adv_ID
+        dic['img_flag'] = self.img_flag
+        if self.img_flag:
+            dic['img_src'] = self.img_src
+        else:
+            dic['adv_text'] = self.adv_text
+        dic['time'] = str(self.start_time) + '-' + str(self.end_time)
+        dic['adv_amounts'] = self.amounts
+        location = []
+        location_json = json.loads(self.location)
+        for point in location_json:
+            location.append(gcj02tobd09(point[0], point[1]))
+        dic['location'] = json.dumps(location)
+        advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
+        dic['company_name'] = advter.company_name
         return dic
 
 
@@ -129,6 +152,15 @@ class adv_account(db.Model):
         self.pay_password = password
         db.session.commit()
         return True
+
+    def to_json(self):
+        dic = {}
+        check_flag = {None: '未审核', True: '审核通过', False: '被封禁'}
+        dic["account_ID"] = self.account_ID
+        dic["charge_name"] = self.charge_name
+        dic["company_name"] = self.company_name
+        dic["check_flag"] = check_flag[self.check_flag]
+        return dic
 
 
 class adv_record(db.Model):
