@@ -130,7 +130,7 @@ def show_adv(adv_ID):
                                datetime=result['time'],
                                location=result['location'], company=result['company_name'],
                                adm_name=session['admin_account_name'],
-                               admin_message=session['admin_message'])
+                               admin_message=session['admin_message'], remark=result['remark'])
 
 
 @admin_bp.route('/show_advters')
@@ -341,11 +341,24 @@ def logout():
 
 @admin_bp.route('/get_notice')
 @admin_check_login
-@admin_check_message
 def get_notice():
     ns = sys_notice.query.all()
     ajax = []
     for n in ns:
         dic = n.to_json()
         ajax.append(dic)
+    return json.dumps(ajax)
+
+
+@admin_bp.route('/check_advs/', methods=['POST', 'GET'])
+@admin_check_login
+def check_advs():
+    para = json.loads(request.values.get('json'))
+    flag = para['flag']
+    advs_ID = para['ID']
+    ajax = {True: [], False: []}
+    for adv_ID in advs_ID:
+        adv = adv_info.query.get(adv_ID)
+        result = adv.check_adv(flag)
+        ajax[result].append(adv_ID)
     return json.dumps(ajax)

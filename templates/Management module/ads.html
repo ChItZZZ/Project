@@ -22,7 +22,7 @@
             <ul class="user-menu">
                 <li class="dropdown pull-right">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
-                            class="glyphicon glyphicon-user">{{ adm_name }}<span class="caret"></span></a>
+                            class="glyphicon glyphicon-user">{{ adm_name }}<span class="caret"></span></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
                         <li><a href="/admin/show_drivers" onclick="clearNewMessageRemind();hideredspot();return false;"><span
@@ -109,8 +109,8 @@
     </div><!--/.row-->
 
     <script language="javascript" type="text/javascript">
-        function show(adv_ID, amounts, text, cost, start_date, company, remarks) {
-            var strS = '<tr><td style="width:50px; text-align:left;"><input type="checkbox" value="' + adv_ID + '"></td><td style="width:100px; text-align:center;">' + adv_ID + '</td><td style="width:100px; text-align:center;">' + amounts + '</td><td style="width:300px; text-align:center;">' + text + '</td><td style="width:100px; text-align:center;">' + cost + '</td><td style="width:100px; text-align:center;">' + start_date + '</td><td style="width:150px; text-align:center;">' + company + '</td><td style="width:180px; text-align:center;">' + remarks + '</td><td style="width:80px; text-align:center;"><a href="adv/' + adv_ID + '">查看</a> </td></tr>';
+        function show(adv_ID, amounts, text, cost, start_date, company, remarks, check_flag) {
+            var strS = '<tr><td style="width:50px; text-align:left;"><input type="checkbox" value="' + adv_ID + '"></td><td style="width:100px; text-align:center;">' + adv_ID + '</td><td style="width:100px; text-align:center;">' + amounts + '</td><td style="width:300px; text-align:center;">' + text + '</td><td style="width:100px; text-align:center;">' + cost + '</td><td style="width:100px; text-align:center;">' + start_date + '</td><td style="width:150px; text-align:center;">' + company + '</td><td style="width:180px; text-align:center;">' + remarks + '</td><td style="width:80px; text-align:center;">' + check_flag + '</td><td style="width:80px; text-align:center;"><a href="adv/' + adv_ID + '">查看</a> </td></tr>';
             document.getElementById("change").innerHTML += strS;
         }
     </script>
@@ -131,6 +131,7 @@
                             <th style="width:100px; text-align:center;">开始日期</th>
                             <th style="width:150px; text-align:center;">广告商</th>
                             <th style="width:180px; text-align:center;">备注</th>
+                            <th style="width:80px; text-align:center;">状态</th>
                             <th style="width:80px; text-align:center;">详细信息</th>
                         </tr>
                         </thead>
@@ -183,7 +184,7 @@
                 var json = JSON.parse(data);
                 for (var i = 0; i < json.length; i++) {
                     var adv = json[i];
-                    show(adv['adv_ID'], adv['adv_amounts'], adv['adv_sum'], adv['cost'], adv['date'], adv['company'], adv['remark'])
+                    show(adv['adv_ID'], adv['adv_amounts'], adv['adv_sum'], adv['cost'], adv['date'], adv['company'], adv['remark'], adv['check_flag'])
                 }
             }
         });
@@ -265,10 +266,16 @@
             }
             else {
                 var jsonObj = {};
-                jsonObj.flag = "true";
+                jsonObj.flag = true;
                 jsonObj.ID = valArr;
                 var json = JSON.stringify(jsonObj);
-                alert(json);
+                $.post('/admin/check_advs/', {'json': json}, function (data, status) {
+                    if (status = 'success') {
+                        var result = JSON.parse(data);
+                        var log = '成功:' + JSON.stringify(result[true]) + '!失败:' + JSON.stringify(result[false]);
+                        alert(log);
+                    }
+                })
             }
         });
 
@@ -285,10 +292,16 @@
             }
             else {
                 var jsonObj = {};
-                jsonObj.flag = "false";
+                jsonObj.flag = false;
                 jsonObj.ID = valArr;
                 var json = JSON.stringify(jsonObj);
-                alert(json);
+                $.post('/admin/check_advs/', {'json': json}, function (data, status) {
+                    if (status = 'success') {
+                        var result = JSON.parse(data);
+                        var log = '成功:' + JSON.stringify(result[true]) + '失败:' + JSON.stringify(result[false]);
+                        alert(log);
+                    }
+                })
             }
         });
 

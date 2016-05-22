@@ -73,6 +73,8 @@ class adv_info(db.Model):
         dic['date'] = str(self.start_date)
         advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
         dic['company'] = advter.company_name
+        check_flag = {None: '未审核', True: '审核通过', False: '被封禁'}
+        dic['check_flag'] = check_flag[self.check_flag]
         if self.remark == None:
             dic['remark'] = '无'
         else:
@@ -96,7 +98,22 @@ class adv_info(db.Model):
         dic['location'] = json.dumps(location)
         advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
         dic['company_name'] = advter.company_name
+        if self.remark == None:
+            dic['remark'] = '无'
+        else:
+            dic['remark'] = self.remark
         return dic
+
+    def check_adv(self, check_flag):
+        if self.check_flag == None:
+            self.check_flag = check_flag
+            if not check_flag:  # 审核不过要退费
+                advter = adv_account.query.get(self.advter_account_ID)
+                advter.change_money(self.cost * self.amounts)
+            db.session.commit()
+            return True
+        else:
+            return False  # 已经被审核过的不能再改变
 
 
 class adv_account(db.Model):
@@ -161,6 +178,14 @@ class adv_account(db.Model):
         dic["company_name"] = self.company_name
         dic["check_flag"] = check_flag[self.check_flag]
         return dic
+
+    def money_change(self, money):  # 正为增加钱 负为扣费
+        if float(self.account_money.real) + money > 0:
+            self.account_money = float(self.account_money.real) + money
+            db.session.commit()
+            return True
+        else:
+            return False
 
 
 class adv_record(db.Model):
