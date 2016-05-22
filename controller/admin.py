@@ -92,8 +92,7 @@ def check_driver():
     phone = request.args['phone']
     flag = bool(int(request.args['flag']))
     driver = driver_account.query.filter_by(phone=phone).first()
-    driver.check_flag = flag
-    db.session.commit()
+    driver.check_driver(flag)
     return "success"
 
 
@@ -361,4 +360,18 @@ def check_advs():
         adv = adv_info.query.get(adv_ID)
         result = adv.check_adv(flag)
         ajax[result].append(adv_ID)
+    return json.dumps(ajax)
+
+
+@admin_bp.route('/check_drivers/', methods=['POST', 'GET'])
+@admin_check_login
+def check_drivers():
+    para = json.loads(request.values.get('json'))
+    flag = para['flag']
+    drivers_ID = para['ID']
+    ajax = {True: [], False: []}
+    for driver_ID in drivers_ID:
+        adv = driver_account.query.get(driver_ID)
+        result = adv.check_driver(flag)
+        ajax[result].append(driver_ID)
     return json.dumps(ajax)

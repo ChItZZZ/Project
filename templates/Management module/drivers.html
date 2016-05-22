@@ -292,10 +292,17 @@
             }
             else {
                 var jsonObj = {};
-                jsonObj.flag = "true";
+                jsonObj.flag = true;
                 jsonObj.ID = valArr;
                 var json = JSON.stringify(jsonObj);
-                alert(json);
+                $.post('/admin/check_drivers/', {'json': json}, function (data, status) {
+                    if (status = 'success') {
+                        var result = JSON.parse(data);
+                        var log = '成功:' + JSON.stringify(result[true]) + '!失败:' + JSON.stringify(result[false]);
+                        alert(log);
+                        location.reload();
+                    }
+                })
             }
         });
 
@@ -312,10 +319,17 @@
             }
             else {
                 var jsonObj = {};
-                jsonObj.flag = "false";
+                jsonObj.flag = false;
                 jsonObj.ID = valArr;
                 var json = JSON.stringify(jsonObj);
-                alert(json);
+                $.post('/admin/check_drivers/', {'json': json}, function (data, status) {
+                    if (status = 'success') {
+                        var result = JSON.parse(data);
+                        var log = '成功:' + JSON.stringify(result[true]) + '!失败:' + JSON.stringify(result[false]);
+                        alert(log);
+                        location.reload();
+                    }
+                })
             }
         });
 

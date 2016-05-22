@@ -78,3 +78,8 @@ class driver_account(db.Model):
         self.pay_password = password
         db.session.commit()
         return True
+
+    def check_driver(self,flag):
+        self.check_flag=flag
+        db.session.commit()
+        return True
