@@ -11,6 +11,22 @@
     <link href="/static/css/styles.css" rel="stylesheet">
     <link href="/static/css/jquery-ui.min.css" rel="stylesheet">
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+    <script language="javascript" type="text/javascript">
+    function show_content(flag, content) { //*********************************此处需要flag
+        //var flag;
+        //flag=0;
+        if (flag == "0") {  //*********************************  文字广告！根据实际flag调整
+            var strS = '<label class="col-md-4 control-label" for="adtext">广告内容</label><div class="col-md-4"><textarea class="form-control" readonly id="adtetx" name="adtext" placeholder="' + content + '" rows="10"></textarea></div>';
+            //↑具体请修改
+            document.getElementById("adcontent").innerHTML += strS;
+        }
+        else if (flag == "1") {  //*********************************  图片广告！根据实际flag调整
+            var strS = '<label class="col-md-4 control-label" for="adphoto">广告图片</label><div class="col-md-4"><img id="driverphoto" src="/static/image/permit_card/' + content + '" height="150" width="200"/></div>';
+            //↑具体请修改
+            document.getElementById("adcontent").innerHTML += strS;
+        }
+    }
+</script>
 </head>
 
 <body>
@@ -123,13 +139,10 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-md-4 control-label" for="adtext">广告内容</label>
-                                <div class="col-md-4">
-                                    <textarea class="form-control" readonly id="adtetx" name="adtext"
-                                              placeholder="{{ text }}" rows="10"></textarea>
-                                </div>
+                            <div class="form-group" id="adcontent">
+                                <!-- 此处根据flag生成img或者text -->
                             </div>
+
 
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="adtime">广告时间</label>
@@ -164,7 +177,7 @@
                                 <div class="col-md-4">
 										<textarea class="form-control" id="message" name="message"
                                                   placeholder="如需要请输入备注..." rows="3
-										"></textarea>
+										" readonly>{{ remark }}</textarea>
                                 </div>
                             </div>
 
@@ -185,16 +198,13 @@
                                     document.getElementById("change").innerHTML += strS;
                                 }
                             }
-
                             function check() {  //获得通过或不通过的值
                                 var ifpass = document.getElementById("yespass").value;
                                 var ifpass = document.getElementById("nopass").value;
                             }
-
                             function deleteuser() {
                                 //删除操作相应代码
                             }
-
                         </script>
 
 
@@ -231,8 +241,6 @@
 
 
 <script>
-    $('#calendar').datepicker({});
-
     !function ($) {
         $(document).on("click", "ul.nav li.parent > a > span.icon", function () {
             $(this).find('em:first').toggleClass("glyphicon-minus");
@@ -246,8 +254,12 @@
     $(window).on('resize', function () {
         if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
     })
-</script>
 
+    //生成广告内容标签js在第131行
+    $(document).ready(function () {
+
+    });
+</script>
 <script type="text/javascript">
     $(function () {
         $("#carphoto").click(function () {
@@ -261,7 +273,6 @@
                 $(this).height(150);
             }
         });
-
         $("#driverphoto").click(function () {
             var width = $(this).width();
             if (width == 200) {
@@ -292,7 +303,6 @@
     var secRingCenter = new BMap.Point(points[0][0], points[0][1]);
     //var secRing = [new BMap.Point(121.221834, 31.295441), new BMap.Point(121.223326, 31.295039), new BMap.Point(121.221852, 31.292895),
     //    new BMap.Point(121.220523, 31.293851)];
-
     var secRing = [];
     for (var i = 0; i < points.length; i++) {
         point = new BMap.Point(points[i][0], points[i][1]);
@@ -323,7 +333,6 @@
     {#        position: secRingCenter#}
     {#    });#}
     secRingLabel.setStyle({"z-index": "999999", "padding": "10px", "width": "140px", "border": "1px solid #ccff00"});
-
     var secRingLabel2 = new BMap.Label("操场", {offset: new BMap.Size(10, -30), position: secRingCenter});
     secRingLabel2.setStyle({
         "line-height": "20px",
@@ -335,7 +344,6 @@
         "background": "url(../../static/images/place.png) no-repeat"
     });
     map.addOverlay(secRingLabel2);
-
 </script>
 
 
@@ -383,6 +391,9 @@
         }
     }
 </script>
+
+<!-- ajax部分从第260行开始 -->
+
 </body>
 
 </html>

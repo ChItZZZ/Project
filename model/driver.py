@@ -46,11 +46,12 @@ class driver_account(db.Model):
 
     def to_json(self):
         dic = {}
+        check_flag = {None: '未审核', True: '审核通过', False: '被封禁'}
         dic['account_ID'] = self.account_ID
         dic['phone'] = self.phone
         dic['account_money'] = float(self.account_money.real)
         dic['email'] = self.email
-        dic['check_flag'] = self.check_flag
+        dic['check_flag'] = check_flag[self.check_flag]
         dic['deposit'] = float(self.deposit.real)
         dic['pad_flag'] = self.pad_flag
         dic['user_ID'] = self.user_ID
@@ -75,5 +76,10 @@ class driver_account(db.Model):
     def change_pay_pwd(self, pwd):
         password = hashlib.md5((pwd + self.salt).encode('ascii')).hexdigest()
         self.pay_password = password
+        db.session.commit()
+        return True
+
+    def check_driver(self,flag):
+        self.check_flag=flag
         db.session.commit()
         return True

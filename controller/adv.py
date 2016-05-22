@@ -147,11 +147,6 @@ def check_adv_submit():
         return '<script>alert("交易密码输入有误");location.href="/adv/adv_submit"</script>'
     if advter.check_flag == None or advter.check_flag == False:
         return '<script>alert("尚未通过验证");location.href="/adv/home"</script>'
-    if advter.account_money < cost * adv_count:
-        return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
-    else:
-        advter.account_money = float(advter.account_money.real) - cost * adv_count
-        session['money'] = float(advter.account_money.real)
     if flag:
         img = request.files['adv_img']
         img_filename = secure_filename(img.filename)
@@ -164,7 +159,10 @@ def check_adv_submit():
         adv_text = request.form['adv_text']
         adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_sum, flag,
                        adv_text)
-
+    if not advter.change_money(-1 * cost * adv_count):
+        return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
+    else:
+        session['money'] = float(advter.account_money.real)
     db.session.add(adv)
     db.session.commit()
     his = adv_history(adv.adv_ID, session['adv_account_id'], cost * adv_count)
@@ -282,8 +280,7 @@ def task_details():
 @advter_check_login
 def pay(money):
     advter = adv_account.query.filter_by(account_ID=session['adv_account_id']).first()
-    advter.account_money = money + float(advter.account_money.real)
-    db.session.commit()
+    advter.change_money(money)
     session['money'] = float(advter.account_money.real)
     return '<script>alert("充值成功!");location.href="/adv/home"</script>'
 

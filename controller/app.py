@@ -124,7 +124,8 @@ def check_login():
 @app_check_login
 def get_adv(meter, lat, lng):
     now = time.localtime(time.time())
-    advs = adv_info.query.filter(and_(adv_info.amounts > 0, adv_info.start_date < now)).all()
+    advs = adv_info.query.filter(
+        and_(adv_info.amounts > 0, adv_info.start_date < now, adv_info.check_flag == True)).all()
     ajax = []
     for adv in advs:
         if adv.check_in(lat, lng, meter):
