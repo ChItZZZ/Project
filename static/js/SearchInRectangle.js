@@ -20,12 +20,12 @@
  */
 var BMapLib = window.BMapLib = BMapLib || {};
 
-(function() {
+(function () {
     /**
      * BMAP_ZOOM_IN 拉框后执行放大操作
      * @type {int}
      */
-    var BMAP_ZOOM_IN  = 0;
+    var BMAP_ZOOM_IN = 0;
 
     /**
      * @exports SearchInRectangle as BMapLib.SearchInRectangle
@@ -60,7 +60,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * var map = new BMap.Map("container");<br /><br />var searchInRect = new BMapLib.SearchInRectangle(map,"餐馆",{strokeWeight : 2});
      */
-        BMapLib.SearchInRectangle = function(map, searchWords ,opts){
+        BMapLib.SearchInRectangle = function (map, searchWords, opts) {
             if (!map) {
                 return;
             }
@@ -77,7 +77,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
              * @private
              * @type {String}
              */
-            this._searchWords = searchWords ;
+            this._searchWords = searchWords;
             /**
              * 各种状态的默认参数
              * @private
@@ -87,31 +87,31 @@ var BMapLib = window.BMapLib = BMapLib || {};
                 //搜索结果显示设置
                 map: map,
                 // 开启拉框搜索状态后，鼠标跟随的文字
-                followText : "",
+                followText: "",
                 // 遮盖层外框的线宽
-                strokeWeight : 2,
+                strokeWeight: 2,
                 // 遮盖层外框的颜色
-                strokeColor : "#111",
+                strokeColor: "#111",
                 // 遮盖层外框的样式
-                style : "solid",
+                style: "solid",
                 // 遮盖层的填充色
-                fillColor : "#ccc",
+                fillColor: "#ccc",
                 // 遮盖层的透明度
-                opacity : 0.4,
+                opacity: 0.4,
                 // 鼠标样式
-                cursor : "crosshair",
+                cursor: "crosshair",
                 // 是否在每次操作后，自动关闭拉框搜索状态, 私有属性
-                autoClose : true,
+                autoClose: true,
                 //是否自动调整视野
-                autoViewport : false,
+                autoViewport: false,
                 //是否一直显示拉框后的覆盖物
                 alwaysShowOverlay: true,
                 //显示面板
-                panel:"",
+                panel: "",
                 //是否显示第一个搜索结果
                 selectFirstResult: "false",
                 // 拉框后放大
-                _zoomType : BMAP_ZOOM_IN
+                _zoomType: BMAP_ZOOM_IN
             };
 
             // 通过使用者输入的opts，修改这些默认参数
@@ -161,19 +161,19 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @param {Json Object} opts 用户输入的修改参数
      * @return 无返回值
      */
-    SearchInRectangle.prototype._setOptions = function(opts) {
+    SearchInRectangle.prototype._setOptions = function (opts) {
         if (!opts) {
             return;
         }
-        if(opts.renderOptions){
+        if (opts.renderOptions) {
             for (var p in opts.renderOptions) {
                 if (typeof(opts.renderOptions[p]) != "undefined") {
                     this._opts[p] = opts.renderOptions[p];
                 }
             }
         }
-        if(opts.onSearchComplete){
-            this._opts["onSearchComplete"] = opts.onSearchComplete ;
+        if (opts.onSearchComplete) {
+            this._opts["onSearchComplete"] = opts.onSearchComplete;
         }
     };
 
@@ -185,7 +185,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.setStrokeColor("#fff");
      */
-    SearchInRectangle.prototype.setStrokeColor = function(color) {
+    SearchInRectangle.prototype.setStrokeColor = function (color) {
         if (typeof color == "string") {
             this._opts.strokeColor = color;
             this._updateStyle();
@@ -200,7 +200,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.setLineStroke(3);
      */
-    SearchInRectangle.prototype.setLineStroke = function(width) {
+    SearchInRectangle.prototype.setLineStroke = function (width) {
         if (typeof width == "number" && Math.round(width) > 0) {
             this._opts.strokeWeight = Math.round(width);
             this._updateStyle();
@@ -215,7 +215,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.setLineStyle("dashed");
      */
-    SearchInRectangle.prototype.setLineStyle = function(style) {
+    SearchInRectangle.prototype.setLineStyle = function (style) {
         if (style == "solid" || style == "dashed") {
             this._opts.style = style;
             this._updateStyle();
@@ -230,7 +230,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.setOpacity(0.5);
      */
-    SearchInRectangle.prototype.setOpacity = function(opacity) {
+    SearchInRectangle.prototype.setOpacity = function (opacity) {
         if (typeof opacity == "number" &&
             opacity >= 0 &&
             opacity <= 1) {
@@ -247,7 +247,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.setFillColor("#F0F");
      */
-    SearchInRectangle.prototype.setFillColor = function(color) {
+    SearchInRectangle.prototype.setFillColor = function (color) {
         this._opts.fillColor = color;
         this._updateStyle();
     };
@@ -260,7 +260,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.setCursor("crosshair");
      */
-    SearchInRectangle.prototype.setCursor = function(cursor) {
+    SearchInRectangle.prototype.setCursor = function (cursor) {
         this._opts.cursor = cursor;
         // 设置鼠标样式
         OperationMask.setCursor(this._opts.cursor);
@@ -270,8 +270,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * 根据配置信息更新样式
      * @return 无返回值
      */
-    SearchInRectangle.prototype._updateStyle = function() {
-        if (this._fDiv){
+    SearchInRectangle.prototype._updateStyle = function () {
+        if (this._fDiv) {
             this._fDiv.style.border =
                 [this._opts.strokeWeight,
                     "px ",
@@ -296,7 +296,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.getCursor();
      */
-    SearchInRectangle.prototype.getCursor = function() {
+    SearchInRectangle.prototype.getCursor = function () {
         return this._opts.cursor;
     };
 
@@ -304,12 +304,12 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * 控件项的事件绑定
      * @return 无返回值
      */
-    SearchInRectangle.prototype._bind = function(){
+    SearchInRectangle.prototype._bind = function () {
         // 设置鼠标样式
         this.setCursor(this._opts.cursor);
         var me = this;
         // 在装载地图的页面元素上，绑定鼠标移动事件
-        addEvent(this._map.getContainer(), "mousemove", function(e){
+        addEvent(this._map.getContainer(), "mousemove", function (e) {
             if (!me._isOpen) {
                 return;
             }
@@ -332,8 +332,11 @@ var BMapLib = window.BMapLib = BMapLib || {};
         });
         // 创建鼠标跟随的文字提示框
         if (this._opts.followText) {
-            var t = this._followTitle = new BMap.Label(this._opts.followText, {offset : new BMap.Size(14, 16),enableMassClear: false});
-            this._followTitle.setStyles({color : "#333", borderColor : "#ff0103"});
+            var t = this._followTitle = new BMap.Label(this._opts.followText, {
+                offset: new BMap.Size(14, 16),
+                enableMassClear: false
+            });
+            this._followTitle.setStyles({color: "#333", borderColor: "#ff0103"});
         }
     };
 
@@ -346,7 +349,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.open();
      */
-    SearchInRectangle.prototype.open = function() {
+    SearchInRectangle.prototype.open = function () {
         // 判断拉框搜索状态是否已经开启
         if (this._isOpen == true) {
             return true;
@@ -377,17 +380,16 @@ var BMapLib = window.BMapLib = BMapLib || {};
         // 返回IE版本号
         var ieVersion = 0;
         if (/msie (\d+\.\d)/i.test(navigator.userAgent)) {
-            ieVersion = document.documentMode || + RegExp['\x241']
+            ieVersion = document.documentMode || +RegExp['\x241']
         }
 
-        var moveDistance = 0 ;//移动距离，如果是0，说明进行的是点击操作
+        var moveDistance = 0;//移动距离，如果是0，说明进行的是点击操作
         // 开启拉框搜索状态后，鼠标在地图上按下时的操作
-        var beginDrawRect = function(e) {
+        var beginDrawRect = function (e) {
             // 由于在IE和非IE浏览器下，e对象对鼠标按下键的返回值不一样
             // 所以需要分两种情况判断，当不是鼠标左键时，返回无操作
             e = window.event || e;
-            if (e.button != 0 &&
-                !ieVersion ||
+            if (e.button != 0 && !ieVersion ||
                 ieVersion &&
                 e.button != 1) {
                 return;
@@ -401,7 +403,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
             if (!me._isOpen) {
                 return;
             }
-            moveDistance = 0 ;
+            moveDistance = 0;
             me._bind.isZooming = true;
 
             // 添加拖拽鼠标画框时，鼠标移动事件，和鼠标弹起事件
@@ -429,11 +431,13 @@ var BMapLib = window.BMapLib = BMapLib || {};
         };
 
         // 开启拉框搜索状态后，鼠标在地图上按下、并拖拽时的操作
-        var drawingRect = function(e) {
+        var drawingRect = function (e) {
             if (me._isOpen == true && me._bind.isZooming == true) {
 
                 //再次拉框的时候，如果地图上还有其他框存在，则先清除掉
-                if(me._overlay){ me._map.removeOverlay(me._overlay); }
+                if (me._overlay) {
+                    me._map.removeOverlay(me._overlay);
+                }
                 // 通过鼠标当前所在位置，计算矩形半透明效果框的高宽
                 var e = window.event || e;
                 var curX = e.pageX || e.clientX || 0;
@@ -492,16 +496,18 @@ var BMapLib = window.BMapLib = BMapLib || {};
         };
 
         // 开启拉框搜索状态后，鼠标在地图上拖拽时、弹起的操作
-        var endDrawRect = function(e) {
-            if(!moveDistance) me._fDiv.parentNode.removeChild(me._fDiv);
+        var endDrawRect = function (e) {
+            if (!moveDistance) me._fDiv.parentNode.removeChild(me._fDiv);
             if (me._isOpen == true) {
                 // 删除拖拽鼠标画框时，鼠标移动事件，和鼠标弹起事件
                 removeEvent(document, "mousemove", drawingRect);
                 removeEvent(document, "mouseup", endDrawRect);
-                if(!moveDistance){ return;}
+                if (!moveDistance) {
+                    return;
+                }
 
                 // 释放IE浏览器下对事件的捕获
-                if (!!ieVersion && OperationMask.getDom(map).releaseCapture){
+                if (!!ieVersion && OperationMask.getDom(map).releaseCapture) {
                     OperationMask.getDom(map).releaseCapture();
                 }
 
@@ -539,21 +545,21 @@ var BMapLib = window.BMapLib = BMapLib || {};
                 // 当ratio无计算结果时，只进行普通的1个级别的缩放改变
                 if (!isNaN(ratio)) {
                     //当用户设置启用自动视野调整
-                    if (me._opts._zoomType == BMAP_ZOOM_IN){
+                    if (me._opts._zoomType == BMAP_ZOOM_IN) {
                         // 拉框放大的情况
                         targetZoomLv = Math.round(map.getZoom() + (Math.log(ratio) / Math.log(2)));
-                        if (targetZoomLv < map.getZoom()){
+                        if (targetZoomLv < map.getZoom()) {
                             targetZoomLv = map.getZoom();
                         }
                     }
-                } else{
+                } else {
                     targetZoomLv = map.getZoom() + (me._opts._zoomType == BMAP_ZOOM_IN ? 1 : -1);
                 }
 
                 // 进行层级缩放，并定位新中心点
-                var targetCenterPt = map.pixelToPoint({x : centerX, y : centerY}, map.getZoom());
+                var targetCenterPt = map.pixelToPoint({x: centerX, y: centerY}, map.getZoom());
                 //如果启用自动调整视野
-                if(me._opts.autoViewport){
+                if (me._opts.autoViewport) {
                     map.centerAndZoom(targetCenterPt, targetZoomLv);
                 }
 
@@ -593,19 +599,19 @@ var BMapLib = window.BMapLib = BMapLib || {};
             map.addOverlay(rect);
 
             //拉框选取完成，然后调用搜索
-            me.local.searchInBounds(me._searchWords,bds);
+            me.local.searchInBounds(me._searchWords, bds);
 
             // 渐隐藏动画效果
-            if(!me._opts.alwaysShowOverlay){
+            if (!me._opts.alwaysShowOverlay) {
                 new Animation({
-                    duration : 240,
-                    fps : 20,
-                    delay : 500,
-                    render : function(t) {
+                    duration: 240,
+                    fps: 20,
+                    delay: 500,
+                    render: function (t) {
                         var opacity = 0.3 * (1 - t);
                         rect.setStrokeOpacity(opacity);
                     },
-                    finish : function() {
+                    finish: function () {
                         map.removeOverlay(me._overlay);
                         rect.dispose();
                         me._overlay = null;
@@ -614,7 +620,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
             }
             // 设置为自动关闭缩放状态时，修改相关状态值
             if (me._opts.autoClose) {
-                setTimeout(function() {
+                setTimeout(function () {
                     if (me._isOpen == true) {
                         me.close();
                     }
@@ -646,7 +652,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.close();
      */
-    SearchInRectangle.prototype.close = function() {
+    SearchInRectangle.prototype.close = function () {
         if (!this._isOpen) {
             return;
         }
@@ -663,14 +669,14 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.search("餐馆");
      */
-    SearchInRectangle.prototype.setKeyword = function(keyword){
+    SearchInRectangle.prototype.setKeyword = function (keyword) {
         this._searchWords = keyword;
     }
     /**
      * 生成透明效果层
      * @return 透明层的html字符串
      */
-    SearchInRectangle.prototype._generateHTML = function() {
+    SearchInRectangle.prototype._generateHTML = function () {
         return ["<div style='position:absolute;z-index:300;border:",
             this._opts.strokeWeight,
             "px ",
@@ -692,21 +698,60 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @example <b>参考示例：</b><br />
      * searchInRect.localSearch(this);
      */
-    SearchInRectangle.prototype.localSearch = function(me){
-        return new BMap.LocalSearch(me._map,{
-            renderOptions:{
-                map: me._opts.map,
-                autoViewport : false,
-                panel: me._opts.panel,
-                selectFirstResult: me._opts.selectFirstResult
-            },
-            onSearchComplete: function(result){
-                if(me._opts["onSearchComplete"]){
-                    me._opts["onSearchComplete"](result);
+    SearchInRectangle.prototype.localSearch = function (me) {
+        return new BMap.LocalSearch(me._map, {
+                renderOptions: {
+                    map: me._opts.map,
+                    autoViewport: false,
+                    panel: me._opts.panel,
+                    selectFirstResult: me._opts.selectFirstResult
+                },
+                onSearchComplete: function (results) {
+                    if (me._opts["onSearchComplete"]) {
+                        me._opts["onSearchComplete"](result);
+                    }
+                    //判断状态是否正确
+
+                    var myGeo = new BMap.Geocoder();
+
+                    //if (local.getStatus() == BMAP_STATUS_SUCCESS) {
+                    //    var s = [];
+                    //    for (var i = 0; i < results.getCurrentNumPois(); i++) {
+                    //        s.push(results.getPoi(i).title + ", " + results.getPoi(i).address);
+                    //    }
+                    //    document.getElementById("r-result").innerHTML = s.join("<br/>");
+                    //}
+                    var adds = [];
+                    for (var i = 0; i < results.getCurrentNumPois(); i++) {
+                        adds.push(results.getPoi(i).address);
+                    }
+                    document.getElementById("r-result").innerHTML = adds.join("<br/>");
+
+                    var index = 0;
+                    (function bdGEO() {
+                        while(index<adds.length) {
+                            var add = adds[index];
+                            geocodeSearch(add);
+                            index++;
+                        }
+                    })();
+
+                    function geocodeSearch(add) {
+                        //if (index < adds.length) {
+                        //    setTimeout(window.bdGEO, 400);
+                        //}
+                        myGeo.getPoint(add, function (point) {
+                            if (point) {
+                                document.getElementById("r-result").innerHTML += index + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
+                            }
+                        },"上海市");
+                    }
                 }
+                //}
             }
-        })
-    };
+        )
+    }
+    ;
 
     /**
      * 在目标元素的指定位置插入HTML代码，
@@ -719,7 +764,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @return {HTMLElement} 目标元素
      */
     function insertHTML(element, position, html) {
-        var range,begin;
+        var range, begin;
         if (element.insertAdjacentHTML) {
             element.insertAdjacentHTML(position, html);
         } else {
@@ -745,7 +790,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * 闭包，对外不暴露
      *
      * @param {Object} parent 父容器
-     * @param {Object} chlidHTML	插入的HTML
+     * @param {Object} chlidHTML    插入的HTML
      * @return Dom元素
      */
     function beforeEndHTML(parent, chlidHTML) {
@@ -759,7 +804,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      *
      * @type {Event} e e对象
      */
-    function stopBubble(e){
+    function stopBubble(e) {
         var e = window.event || e;
         e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true;
     }
@@ -784,6 +829,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * @type {String} type 需要添加的事件名
      * @type {Function} listener 需要触发的操作
      */
+
     function addEvent(element, type, listener) {
         if (!element) {
             return;
@@ -826,19 +872,19 @@ var BMapLib = window.BMapLib = BMapLib || {};
          * map对象
          * @type {Map}
          */
-        _map : null,
+        _map: null,
 
         /**
          * HTML字符串
          * @type {String}
          */
-        _html : "<div style='background:transparent url(http://api.map.baidu.com/images/blank.gif);position:absolute;left:0;top:0;width:100%;height:100%;z-index:1000' unselectable='on'></div>",
+        _html: "<div style='background:transparent url(http://api.map.baidu.com/images/blank.gif);position:absolute;left:0;top:0;width:100%;height:100%;z-index:1000' unselectable='on'></div>",
 
         /**
          * html元素
          * @type {HTMLElement}
          */
-        _maskElement : null,
+        _maskElement: null,
 
         /**
          * 鼠标指针
@@ -858,7 +904,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
          * @param {Map} map map对象
          * @return 无返回值
          */
-        show : function(map) {
+        show: function (map) {
             if (!this._map) {
                 this._map = map;
             }
@@ -875,18 +921,18 @@ var BMapLib = window.BMapLib = BMapLib || {};
          * @param {Map} map map对象
          * @return 无返回值
          */
-        _createMask : function(map) {
+        _createMask: function (map) {
             this._map = map;
             if (!this._map) {
                 return;
             }
             var elem = this._maskElement = beforeEndHTML(this._map.getContainer(), this._html);
 
-            var stopAndPrevent = function(e) {
+            var stopAndPrevent = function (e) {
                 stopBubble(e);
                 return preventDefault(e);
             }
-            addEvent(elem, 'mouseup', function(e) {
+            addEvent(elem, 'mouseup', function (e) {
                 if (e.button == 2) {
                     stopAndPrevent(e);
                 }
@@ -902,7 +948,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
          * @param {Boolean} n 是否向上查到相对于地图container元素的坐标位置
          * @return Point对象的位置信息
          */
-        getDrawPoint : function(e, n) {
+        getDrawPoint: function (e, n) {
             e = window.event || e;
             var x = e.layerX || e.offsetX || 0;
             var y = e.layerY || e.offsetY || 0;
@@ -939,7 +985,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
          *
          * @return 无返回值
          */
-        hide : function() {
+        hide: function () {
             if (!this._map) {
                 return;
             }
@@ -955,7 +1001,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
          * @param {Map} map map对象
          * @return HTML容器元素
          */
-        getDom : function(map) {
+        getDom: function (map) {
             if (!this._maskElement) {
                 this._createMask(map);
             }
@@ -968,7 +1014,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
          * @type {String} cursor 鼠标样式
          * @return 无返回值
          */
-        setCursor : function(cursor) {
+        setCursor: function (cursor) {
             this._cursor = cursor || 'default';
             if (this._maskElement) {
                 this._maskElement.style.cursor = this._cursor;
@@ -1002,7 +1048,8 @@ var BMapLib = window.BMapLib = BMapLib || {};
             // 变换效果的曲线
             transition: Transitions.linear,
             // 调用stop停止时的回调函数
-            onStop: function(){}
+            onStop: function () {
+            }
         };
 
         // 修改默认参数
@@ -1015,7 +1062,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
         if (defaultOptions.delay) {
             var me = this;
-            setTimeout(function() {
+            setTimeout(function () {
                 me._beginTime = new Date().getTime();
                 me._endTime = me._beginTime + me._opts.duration;
                 me._launch();
@@ -1031,7 +1078,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * 动画执行过程中的操作
      * @return 无返回值
      */
-    Animation.prototype._launch = function() {
+    Animation.prototype._launch = function () {
         var me = this;
         var now = new Date().getTime();
 
@@ -1054,7 +1101,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
         }
         // 执行下一个动作
         if (!me.terminative) {
-            me._timer = setTimeout(function() {
+            me._timer = setTimeout(function () {
                 me._launch()
             }, 1000 / me._opts.fps);
         }
@@ -1064,41 +1111,42 @@ var BMapLib = window.BMapLib = BMapLib || {};
      * 变换效果函数库
      */
     var Transitions = {
-        linear : function(t) {
+        linear: function (t) {
             return t;
         },
-        reverse : function(t) {
+        reverse: function (t) {
             return 1 - t;
         },
-        easeInQuad : function(t) {
+        easeInQuad: function (t) {
             return t * t;
         },
-        easeInCubic : function(t) {
+        easeInCubic: function (t) {
             return Math.pow(t, 3);
         },
-        easeOutQuad : function(t) {
-            return - (t * (t - 2));
+        easeOutQuad: function (t) {
+            return -(t * (t - 2));
         },
-        easeOutCubic : function(t) {
+        easeOutCubic: function (t) {
             return Math.pow((t - 1), 3) + 1;
         },
-        easeInOutQuad : function(t) {
+        easeInOutQuad: function (t) {
             if (t < 0.5) {
                 return t * t * 2;
             } else {
-                return - 2 * (t - 2) * t - 1;
+                return -2 * (t - 2) * t - 1;
             }
             return;
         },
-        easeInOutCubic : function(t) {
+        easeInOutCubic: function (t) {
             if (t < 0.5) {
                 return Math.pow(t, 3) * 4;
             } else {
                 return Math.pow(t - 1, 3) * 4 + 1;
             }
         },
-        easeInOutSine : function(t) {
+        easeInOutSine: function (t) {
             return (1 - Math.cos(Math.PI * t)) / 2;
         }
     };
-})();
+})
+();
