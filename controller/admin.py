@@ -80,10 +80,12 @@ def show_driver(ID):
         return redirect(url_for('admin.show_drivers'))
     else:
         driver = driver_account.query.filter_by(account_ID=ID).first()
+        if driver == None:
+            return redirect(url_for('admin.show_drivers'))
         return render_template('Management module/driver.html', phone=driver.phone, flag=str(driver.check_flag),
                                name=driver.user_name, user_id=driver.user_ID, permit_image=driver.permit_pic,
                                ID_card_image=driver.card_pic, adm_name=session['admin_account_name'],
-                               admin_message=session['admin_message'])
+                               admin_message=session['admin_message'], car_pic=driver.car_pic)
 
 
 @admin_bp.route('/check_driver', methods=['GET'])
@@ -113,15 +115,7 @@ def advs_ajax():
     advs = adv_info.query.all()
     ajax = []
     for adv in advs:
-        dic = {}
-        dic['adv_ID'] = adv.adv_ID
-        dic['adv_amounts'] = adv.amounts
-        dic['adv_text'] = adv.adv_text
-        dic['cost'] = float(adv.cost.real)
-        dic['date'] = str(adv.start_date)
-        advter = adv_account.query.filter_by(account_ID=adv.advter_account_ID).first()
-        dic['company'] = advter.company_name
-        ajax.append(dic)
+        ajax.append(adv.to_json())
     return json.dumps(ajax)
 
 
@@ -179,7 +173,8 @@ def show_advter(account_ID):
         return render_template('Management module/aduser.html', account_ID=account_ID, flag=advter.check_flag,
                                company=advter.company_name, amount=advter.adv_amount, name=advter.charge_name,
                                phone=advter.phone, remark=advter.remark, adm_name=session['admin_account_name'],
-                               admin_message=session['admin_message'])
+                               admin_message=session['admin_message'], company_img=advter.company_img,
+                               ID_card=advter.ID_card)
 
 
 @admin_bp.route('/check_advter', methods=['GET'])

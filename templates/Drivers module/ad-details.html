@@ -96,20 +96,30 @@
     </div>
 </div>
 
+
+<!-- JS -->
+<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
+<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+
 <script>
     $(document).ready(function () {
-        var record_count ={{ count }};
+        var record_count ={{ record_count }};
         for (var i = 0; i < record_count; i += 10) {
-            document.getElementById('page_ul').innerHTML += '<li><a onclick="show(' + i / 10 + 1 + ')">' + i / 10 + 1 + '</a></li>'
+            document.getElementById('page_ul').innerHTML += '<li><a href="#" onclick="show(' + i / 10 + 1 + ')">' + i / 10 + 1 + '</a></li>'
+
+        }
+        if (record_count > 0) {
+            show(1);
         }
     });
 
     function show(i) {
-        $.get('/driver/get_records_by_page' + i, function (data, status) {
+        document.getElementById('record_table').innerHTML = '';
+        $.get('/driver/get_records_by_page/' + i + '/', function (data, status) {
             if (status == 'success') {
                 var json = JSON.parse(data);
                 for (var i = 0; i < json.length; i += 1) {
-                    show_table(json[i]['NO'],json[i]['adv_text'],json[i]['time'],json[i]['money']);
+                    show_table(json[i]['NO'], json[i]['adv_text'], json[i]['time'], json[i]['money']);
                 }
             }
         })
@@ -122,11 +132,9 @@
                             <th>' + time + '</th>\
                             <th>' + money + '</th>\
                         </tr>'
+        document.getElementById('record_table').innerHTML += HTMLText;
     }
 </script>
 
-<!-- JS -->
-<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
-<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
 </body>
 </html> 

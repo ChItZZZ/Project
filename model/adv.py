@@ -23,6 +23,7 @@ class adv_info(db.Model):
     img_src = db.Column('img_src', db.String(50))
     img_flag = db.Column('img_flag', db.Boolean)
     center = db.Column('center', db.String(40))
+    remark = db.Column('remark', db.String(50))
 
     def __init__(self, cost, amounts, start_date, start_time, end_time, location, advter_account_ID, adv_sum, img_flag,
                  adv_text=None, img_src=None):
@@ -62,6 +63,18 @@ class adv_info(db.Model):
         else:
             return False
 
+    def to_json(self):
+        dic = {}
+        dic['adv_ID'] = self.adv_ID
+        dic['adv_amounts'] = self.amounts
+        dic['adv_text'] = self.adv_text
+        dic['cost'] = float(self.cost.real)
+        dic['date'] = str(self.start_date)
+        advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
+        dic['company'] = advter.company_name
+        dic['remark'] = self.remark
+        return dic
+
 
 class adv_account(db.Model):
     __tablename__ = 'adv_account'
@@ -90,6 +103,7 @@ class adv_account(db.Model):
         self.ID_card = ID_card
         self.user_ID = user_ID
         self.adv_amount = 0
+        self.pay_password = hashlib.md5((account_pwd + self.salt).encode('ascii')).hexdigest()
 
     def check(self, password):
         password = hashlib.md5((password + self.salt).encode('ascii')).hexdigest()
@@ -100,6 +114,19 @@ class adv_account(db.Model):
 
     def change_pwd(self, pwd):
         self.account_pwd = hashlib.md5((pwd + self.salt).encode('ascii')).hexdigest()
+        db.session.commit()
+        return True
+
+    def check_pay_pwd(self, pwd):
+        password = hashlib.md5((pwd + self.salt).encode('ascii')).hexdigest()
+        if password == self.pay_password:
+            return True
+        else:
+            return False
+
+    def change_pay_pwd(self, password):
+        password = hashlib.md5((password + self.salt).encode('ascii')).hexdigest()
+        self.pay_password = password
         db.session.commit()
         return True
 

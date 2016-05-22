@@ -8,9 +8,9 @@
     <meta name="description" content="">
     <meta name="author" content="templatemo">
 
-    <link href="/Project/static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/Project/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/Project/static/css/style-home.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style-home.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,7 +32,7 @@
             </div>
         </header>
         <div class="profile-photo-container">
-            <img src="/Project/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
+            <img src="/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
             <div class="profile-photo-overlay"></div>
         </div>
         <div class="mobile-menu-icon">
@@ -90,7 +90,7 @@
                     <div class="form-group" id="other" style="display:none;">
                         <div class="col-md-8 " style="margin-left: 185px;">
                             <input type="text" style="width: 100%;height: 45px;font-size: 18px;text-indent:5%"
-                                   placeholder="请输入取款金额">
+                                   placeholder="请输入取款金额" id="money">
                         </div>
                     </div>
 
@@ -185,8 +185,8 @@
                     </div>
                     <div class="modal fade" id="Modal" tabindex="-1" role="dialog"
                          aria-labelledby="myModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" >
-                            <div class="modal-content col-md-5" style="position:absolute; left: 35%;margin-top: 150px" >
+                        <div class="modal-dialog">
+                            <div class="modal-content col-md-5" style="position:absolute; left: 35%;margin-top: 150px">
                                 <div class="modal-header">
                                     <button type="button" class="close"
                                             data-dismiss="modal" aria-hidden="true">
@@ -199,7 +199,8 @@
                                 <div class="modal-body">
                                     <form>
                                         <div class="form-group">
-                                                <input type="password" class="form-control " style="margin-top: 10px;">
+                                            <input type="password" class="form-control " style="margin-top: 10px;"
+                                                   id="pay_pwd">
                                         </div>
                                     </form>
                                 </div>
@@ -207,7 +208,7 @@
                                     <button type="button" class="btn btn-default"
                                             data-dismiss="modal">关闭
                                     </button>
-                                    <button type="button" class="btn btn-primary">
+                                    <button type="button" class="btn btn-primary" onclick="get_money()">
                                         确定
                                     </button>
                                 </div>
@@ -224,8 +225,8 @@
 </div>
 
 <!-- JS -->
-<script src="/Project/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
-<script src="/Project/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
+<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
 <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -246,13 +247,37 @@
     });
 
     $('#sure').click(function () {
-        var no = $('#card-no').val().slice(-4);
+        var no = $('#card-no').val();
         var bank = $('#bank').val();
 //        $('#card-choose').text(no);
 //        $('#bank-choose').text(bank);
         $("#sel-bank .span1").html(bank);
         $("#sel-bank .span2").html(no);
     })
+
+    function get_money() {
+        var money = $('li.on').text();
+        if (money == '其他金额') {
+            money = $('#money').val()
+        } else {
+            money += '.0';
+        }
+        var url = '/driver/get_money/' + money + '/';
+        $.post(url, {'pay_pwd': $('#pay_pwd').val()}, function (data, status) {
+            if (status == 'success') {
+                data = JSON.parse(data);
+                if (data['status'] == '600') {
+                    alert('取现成功!');
+                    location.href = '/driver/home/'
+                } else if (data['status'] == '610') {
+                    alert('余额不足!');
+                    location.href = '/driver/get_cash/'
+                } else if (data['status'] == '620') {
+                    alert('密码错误!');
+                }
+            }
+        })
+    }
 </script>
 </body>
 </html>

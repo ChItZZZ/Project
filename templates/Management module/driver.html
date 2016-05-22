@@ -9,7 +9,7 @@
     <link href="/static/css/datepicker3.css" rel="stylesheet">
     <link href="/static/css/bootstrap-table.css" rel="stylesheet">
     <link href="/static/css/styles.css" rel="stylesheet">
-    <link href="/static/css/jquery-ui.min.css" rel="stylesheet" >
+    <link href="/static/css/jquery-ui.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -23,21 +23,24 @@
                             class="glyphicon glyphicon-user"></span> {{ adm_name }} <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
                         <li><a href="#"><span class="glyphicon glyphicon-user"></span> 个人信息</a></li>
-                        <li><a href="/admin/show_drivers" onclick="clearNewMessageRemind();hideredspot();return false;"><span class="glyphicon glyphicon-cog"></span> 私信</a></li>
+                        <li><a href="/admin/show_drivers" onclick="clearNewMessageRemind();hideredspot();return false;"><span
+                                class="glyphicon glyphicon-cog"></span> 私信</a></li>
                         <li><a href="/admin/logout"><span class="glyphicon glyphicon-log-out"></span> 退出账号</a></li>
                     </ul>
                 </li>
             </ul>
-            <i id="redspot" style="display:none;background:#f00;border-radius:50%;width:10px;height:10px;top:20px;right:10px;position:absolute;"></i>
+            <i id="redspot"
+               style="display:none;background:#f00;border-radius:50%;width:10px;height:10px;top:20px;right:10px;position:absolute;"></i>
         </div>
     </div><!-- /.container-fluid -->
 </nav>
 
-<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar"  style="z-index:-1">
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar" style="z-index:-1">
 
     <form role="search">
         <div class="form-group">
-            <input type="text" id="tags" placeholder="搜索" class="form-control" style="width:135px;display:inline">  <input type="button" style="display:inline" class="btn btn-primary" value="跳转" id="btn" />
+            <input type="text" id="tags" placeholder="搜索" class="form-control" style="width:135px;display:inline">
+            <input type="button" style="display:inline" class="btn btn-primary" value="跳转" id="btn"/>
         </div>
     </form>
 
@@ -72,7 +75,7 @@
         <li class="parent ">
             <a href="#">
                 <span class="glyphicon glyphicon-list-alt"></span> 查看记录 <span data-toggle="collapse" href="#sub-item-2"
-                                                                          class="icon pull-right"><em
+                                                                              class="icon pull-right"><em
                     class="glyphicon glyphicon-s glyphicon-plus"></em></span>
             </a>
             <ul class="children collapse" id="sub-item-2">
@@ -116,7 +119,7 @@
                                 <label class="col-md-4 control-label" for="account">手机号</label>
                                 <div class="col-md-4">
                                     <input id="account" readonly name="account" type="text"
-                                           placeholder={{ phone }} class="form-control">
+                                           placeholder="{{ phone }}" class="form-control">
                                 </div>
                             </div>
 
@@ -124,7 +127,7 @@
                                 <label class="col-md-4 control-label" for="status">状态</label>
                                 <div class="col-md-4">
                                     <input id="status" readonly name="status" type="text"
-                                           placeholder={{ flag }} class="form-control">
+                                           placeholder="{{ flag }}" class="form-control">
                                 </div>
                             </div>
 
@@ -141,7 +144,7 @@
                                 <label class="col-md-4 control-label" for="drivernum">身份证编号</label>
                                 <div class="col-md-4">
                                     <input id="drivernum" readonly name="drivernum" type="text"
-                                           placeholder={{ user_id }} class="form-control">
+                                           placeholder="{{ user_id }}" class="form-control">
                                 </div>
                             </div>
 
@@ -168,11 +171,11 @@
                                          width="200"/>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
-                                <label class="col-md-4 control-label" for="carphoto">图片3</label>
+                                <label class="col-md-4 control-label" for="carphoto">行驶证照片</label>
                                 <div class="col-md-4">
-                                    <img id="carphoto" src="/static/image/ID_card/{{  }}" height="150"
+                                    <img id="carphoto" src="/static/image/car/{{ car_pic }}" height="150"
                                          width="200"/>
                                 </div>
                             </div>
@@ -197,7 +200,7 @@
 
                         </fieldset>
 
-                        <script language="javascript" type="text/javascript">
+                        <script language="jav`ascript" type="text/javascript">
                             function check(flag) {  //获得通过或不通过的值
                                 var url = "/admin/check_driver?phone=";
                                 url += $("input#account").attr('placeholder');
@@ -301,40 +304,49 @@
 <!-- 新消息标题栏闪烁显示 -->
 <script>
 
-var newMessageRemind={
-	_step: 0,
-	_title: document.title,
-	_timer: null,
+    var newMessageRemind = {
+        _step: 0,
+        _title: document.title,
+        _timer: null,
 
-	//显示新消息提示
-	show:function(){
-		var temps = newMessageRemind._title.replace("【　　　】", "").replace("【新消息】", "");
-		newMessageRemind._timer = setTimeout(function() {
-			newMessageRemind.show();
+        //显示新消息提示
+        show: function () {
+            var temps = newMessageRemind._title.replace("【　　　】", "").replace("【新消息】", "");
+            newMessageRemind._timer = setTimeout(function () {
+                        newMessageRemind.show();
 
-			//这里写Cookie操作
-			newMessageRemind._step++;
-			if (newMessageRemind._step == 3) { newMessageRemind._step = 1 };
-			if (newMessageRemind._step == 1) { document.title = "【　　　】" + temps };
-			if (newMessageRemind._step == 2) { document.title = "【新消息】" + temps };
-		}, 
-		800);
-		return [newMessageRemind._timer, newMessageRemind._title];
-	},
-			
-	//取消新消息提示
-	clear: function(){
-		clearTimeout(newMessageRemind._timer );
-		document.title = newMessageRemind._title;
-		//这里写Cookie操作
-	}
-};
+                        //这里写Cookie操作
+                        newMessageRemind._step++;
+                        if (newMessageRemind._step == 3) {
+                            newMessageRemind._step = 1
+                        }
+                        ;
+                        if (newMessageRemind._step == 1) {
+                            document.title = "【　　　】" + temps
+                        }
+                        ;
+                        if (newMessageRemind._step == 2) {
+                            document.title = "【新消息】" + temps
+                        }
+                        ;
+                    },
+                    800);
+            return [newMessageRemind._timer, newMessageRemind._title];
+        },
 
-//newMessageRemind.show();  // *********************************显示新消息标题栏闪烁提示 调用此函数
+        //取消新消息提示
+        clear: function () {
+            clearTimeout(newMessageRemind._timer);
+            document.title = newMessageRemind._title;
+            //这里写Cookie操作
+        }
+    };
 
-function clearNewMessageRemind() {    //**********************取消新消息标题栏闪烁提示 调用此函数
-	newMessageRemind.clear();
-}
+    //newMessageRemind.show();  // *********************************显示新消息标题栏闪烁提示 调用此函数
+
+    function clearNewMessageRemind() {    //**********************取消新消息标题栏闪烁提示 调用此函数
+        newMessageRemind.clear();
+    }
 
 </script>
 
@@ -345,46 +357,46 @@ function clearNewMessageRemind() {    //**********************取消新消息标
 </script>
 <!--搜索功能-->
 <script>
-  $(function() {
-    var availableTags = [
-      "司机用户管理",
-      "广告商用户管理",
-      "广告管理",
-      "司机领取广告记录",
-      "广告被领取记录",
-    ];
-    $( "#tags" ).autocomplete({
-      source: availableTags
+    $(function () {
+        var availableTags = [
+            "司机用户管理",
+            "广告商用户管理",
+            "广告管理",
+            "司机领取广告记录",
+            "广告被领取记录",
+        ];
+        $("#tags").autocomplete({
+            source: availableTags
+        });
     });
-  });
 </script>
 <script type="text/javascript">
-		window.onload = function(){
-			var oBtn = document.getElementById("btn");
-			var oTxt = document.getElementById("tags");
-			oBtn.onclick = function(){
-				if(oTxt.value == "司机用户管理"){
-					url = "/admin/show_drivers";
-				}
-				else if(oTxt.value == "广告商用户管理"){
-					url = "/admin/show_advters";
-				}
-				else if(oTxt.value == "广告管理"){
-					url = "/admin/show_advs";
-				}
-				else if(oTxt.value == "司机领取广告记录"){
-					url = "/admin/drivers_history";
-				}
-				else if(oTxt.value == "司机领取广告记录"){
-					url = "/admin/advs_history";
-				}
-				else{
-					url = "#";
-					alert("不存在该页面！");
-				}
-				window.location.href = url;
-			}
-		}
+    window.onload = function () {
+        var oBtn = document.getElementById("btn");
+        var oTxt = document.getElementById("tags");
+        oBtn.onclick = function () {
+            if (oTxt.value == "司机用户管理") {
+                url = "/admin/show_drivers";
+            }
+            else if (oTxt.value == "广告商用户管理") {
+                url = "/admin/show_advters";
+            }
+            else if (oTxt.value == "广告管理") {
+                url = "/admin/show_advs";
+            }
+            else if (oTxt.value == "司机领取广告记录") {
+                url = "/admin/drivers_history";
+            }
+            else if (oTxt.value == "司机领取广告记录") {
+                url = "/admin/advs_history";
+            }
+            else {
+                url = "#";
+                alert("不存在该页面！");
+            }
+            window.location.href = url;
+        }
+    }
 </script>
 </body>
 

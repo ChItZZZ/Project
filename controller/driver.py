@@ -5,7 +5,6 @@ from werkzeug.utils import secure_filename
 from model import db
 from model.driver import driver_account
 from model.sys_notice import sys_notice
-from model.message import message
 from tools.security import get_cap_code, get_salt
 from ali_config import tool
 from controller.check_per import *
@@ -261,11 +260,13 @@ def s_notice():
 @driver_check_login
 @driver_check_message
 def ad_details():
+    account_ID = session['driver_account_id']
+    record_count = adv_record.query.filter_by(driver_account_ID=account_ID).count()
     return render_template('Drivers module/ad-details.html', name=session['driver_user_name'],
-                           count=session['message_count'])
+                           count=session['message_count'], record_count=record_count)
 
 
-@driver_bp.route('/get_records_by_page/<int:page>')
+@driver_bp.route('/get_records_by_page/<int:page>/')
 @driver_check_login
 @driver_check_message
 def get_records_by_page(page):
@@ -273,6 +274,7 @@ def get_records_by_page(page):
     records = adv_record.query.filter_by(driver_account_ID=account_ID).all()
     ajax = []
     i = 0
+    page -= 1
     records = records[10 * page:10 * page + 10]
     for record in records:
         dic = {}
@@ -287,20 +289,75 @@ def get_records_by_page(page):
 
 @driver_bp.route('/get_cash/')
 @driver_check_login
+@driver_check_message
 def get_cash():
     return render_template('Drivers module/get-cash.html', name=session['driver_user_name'],
                            count=session['message_count'])
 
 
-@driver_bp.route('/get_money/<float:money>')
+@driver_bp.route('/get_money/<float:money>/', methods=['POST', 'GET'])
 @driver_check_login
 def get_money(money):
     driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
-    if float(driver.account_money.real) >= money:
-        driver.account_money = float(driver.account_money.real) - money
-        db.session.commit()
-        session['driver_account'] = driver.to_json()
-        return '<script>alert("取款成功");location.href="/driver/home"</script>'
+    pay_password = request.values.get('pay_pwd')
+    if driver.check_pay_pwd(pay_password):
+        if float(driver.account_money.real) >= money:
+            driver.account_money = float(driver.account_money.real) - money
+            db.session.commit()
+            session['driver_account'] = driver.to_json()
+            return json.dumps({'status': '600'})  # 取款成功
+        else:
+            session['driver_account'] = driver.to_json()
+            return json.dumps({'status': '610'})  # 余额不足
     else:
-        session['driver_account'] = driver.to_json()
-        return '<script>alert("账号余额不足");location.href="/driver/home"</script>'
+        return json.dumps({'status': '620'})  # 交易密码输入错误
+
+
+@driver_bp.route('/change_pay_pwd/', methods=['POST', 'GET'])
+@driver_check_login
+@driver_check_message
+def change_pay_pwd():
+    return render_template('Drivers module/sec-modify-pay-pwd-bypwd.html', name=session['driver_user_name'],
+                           count=session['message_count'])
+
+
+@driver_bp.route('/check_change_pay_pwd/', methods=['POST'])
+@driver_check_login
+def check_change_pay_pwd():
+    old_pwd = request.form['old']
+    new_pwd = request.form['new']
+    driver = driver_account.query.get(session['driver_account_id'])
+    if (driver.check_pay_pwd(old_pwd)):
+        driver.change_pay_pwd(new_pwd)
+        return '<script>alert("修改支付密码成功!");location.href="/driver/home"</script>'
+    else:
+        return '<script>alert("密码有误,请重试");location.reload();</script>'
+
+
+@driver_bp.route('/find_pay_pwd/', methods=['POST', 'GET'])
+@driver_check_login
+@driver_check_message
+def find_pay_pwd():
+    return render_template('Drivers module/sec-find-pay-pwd.html', name=session['driver_user_name'],
+                           count=session['message_count'], phone=session['phone'])
+
+
+@driver_bp.route('/get_forgot_pay_code/<int:phone>/')
+@driver_check_login
+def get_forgot_pay_code(phone):
+    forget_code = get_cap_code()
+    session['forget_code'] = forget_code
+    tool.send_forgot_pay_message(phone, forget_code)
+    return "success"
+
+
+@driver_bp.route('/check_forgot_pay_code/', methods=['POST', 'GET'])
+@driver_check_login
+def check_forgot_pay_code(phone):
+    forgot_code = request.form['forget_code']
+    ID = request.form['ID']
+    driver = driver_account.query.get(session['driver_account_id'])
+    if (driver.user_ID == ID and forgot_code == session['forget_code']):
+        return render_template('Drivers module/')
+    else:
+        return '<script>alert("验证码或身份证号码有误,请重试");location.href="/driver/security";</script>'
