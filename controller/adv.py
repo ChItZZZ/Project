@@ -46,7 +46,7 @@ def check_login():
             session['adv_account_id'] = advter.account_ID
             session['adv_charge_name'] = advter.charge_name
             session['phone'] = advter.phone
-            session['money'] = float(advter.account_money.real)
+            session['money'] = float(advter.account_money)
             # 这里应该写个token
             return '<script>location.href="/adv/home"</script>'
         else:
@@ -137,6 +137,7 @@ def check_adv_submit():
     gcj02_loc = []
     for point in location:
         gcj02_loc.append(bd09togcj02(point[0], point[1]))
+    loc = {'type': '1', 'points': gcj02_loc}  # type为1为多边形
     date = datetime.strptime(request.form['date'], '%m/%d/%Y')
     start_time = time.strptime(request.form['start_time'], '%H:%M')
     end_time = time.strptime(request.form['end_time'], '%H:%M')
@@ -153,11 +154,11 @@ def check_adv_submit():
         if '.' not in img_filename or img_filename.rsplit('.', 1)[1] not in app.config['ALLOW_FILE']:
             return '<script>alert("非法后缀!");location.href="/adv/adv_submit"</script>'
         img.save(os.path.join(app.root_path, 'static/image/adv_img', img_filename))
-        adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_sum, flag,
+        adv = adv_info(cost, adv_count, date, start_time, end_time, loc, session['adv_account_id'], adv_sum, flag,
                        img_src=img_filename)
     else:
         adv_text = request.form['adv_text']
-        adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_sum, flag,
+        adv = adv_info(cost, adv_count, date, start_time, end_time, loc, session['adv_account_id'], adv_sum, flag,
                        adv_text)
     if not advter.money_change(-1 * cost * adv_count):
         return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
@@ -176,10 +177,11 @@ def check_adv_submit():
 def adv_submit():
     return render_template('Advertiser module/ad-submit.html', name=session['adv_charge_name'])
 
+
 @adv_bp.route('/advs_submit')
 @advter_check_login
 def advs_submit():
-    return render_template('Advertiser module/ad-submit3.html', name=session['adv_charge_name'])
+    return render_template('Advertiser module/advs-submit.html', name=session['adv_charge_name'])
 
 
 @adv_bp.route('/login')
@@ -304,7 +306,7 @@ def check_change_pay_pwd():
     driver = adv_account.query.get(session['driver_account_id'])
     if (driver.check_pay_pwd(old_pwd)):
         driver.change_pay_pwd(new_pwd)
-        return '<script>alert("修改支付密码成功!");location.href="/driver/home"</script>'
+        return '<script>alert("修改支付密码成功!");location.href="/adv/home"</script>'
     else:
         return '<script>alert("密码有误,请重试");location.reload();</script>'
 
@@ -334,22 +336,74 @@ def check_forgot_pay_code(phone):
     if (driver.user_ID == ID and forgot_code == session['forget_code']):
         return render_template('Advertiser module/')
     else:
-        return '<script>alert("验证码或身份证号码有误,请重试");location.href="/driver/security";</script>'
+        return '<script>alert("验证码或身份证号码有误,请重试");location.href="/adv/security";</script>'
 
 
 @adv_bp.route('/ad_list/')
+@adv_bp.route('/ad_history/')
+@adv_bp.route('/delete_adv/')
+@adv_bp.route('/ad_details/')
 @advter_check_login
 def ad_list():
     return render_template('Advertiser module/ad-list.html', name=session['adv_charge_name'])
 
 
+@adv_bp.route('/ad_list_ajax/')
+@advter_check_login
+def ad_list_ajax():
+    advter_ID = session['adv_account_id']
+    advs = adv_info.query.filter_by(advter_account_ID=advter_ID).all()
+    advs.reverse()
+    ajax = []
+    for adv in advs:
+        history = adv_history.query.filter_by(adv_ID=adv.adv_ID).first()
+        dic = adv.to_json()
+        dic['post_time'] = str(history.post_time)
+        ajax.append(dic)
+    return json.dumps(ajax)
+
+
+@adv_bp.route('/delete_adv/<int:adv_ID>/')
+@advter_check_login
+def delete_adv(adv_ID):
+    adv = adv_info.query.get(adv_ID)
+    if adv == None or adv.advter_account_ID != session['adv_account_id']:
+        return redirect(url_for('adv.ad_list'))
+    session['money'] = adv.del_adv()
+    return '<script>alert("广告已被删除,余款已退回");location.href="/adv/ad_list/";</script>'
+
+
 @adv_bp.route('/ad_history/<int:adv_ID>/')
 @advter_check_login
 def ad_history(adv_ID):
+    adv = adv_info.query.get(adv_ID)
+    if adv == None or adv.advter_account_ID != session['adv_account_id']:
+        return redirect(url_for('adv.ad_list'))
     return render_template('Advertiser module/ad-history.html', name=session['adv_charge_name'])
+
+
+@adv_bp.route('/ad_history_ajax/<int:adv_ID>/')
+@advter_check_login
+def ad_history_ajax(adv_ID):
+    adv = adv_info.query.get(adv_ID)
+    if adv == None or adv.advter_account_ID != session['adv_account_id']:
+        return json.dumps({'error': '无权限'})
 
 
 @adv_bp.route('/ad_details/<int:adv_ID>/')
 @advter_check_login
 def ad_details(adv_ID):
-    return render_template('Advertiser module/ad-details.html', name=session['adv_charge_name'])
+    adv = adv_info.query.get(adv_ID)
+    if adv == None or adv.advter_account_ID != session['adv_account_id']:
+        return redirect(url_for('adv.ad_list'))
+    return render_template('Advertiser module/ad-details.html', name=session['adv_charge_name'], adv_ID=adv_ID)
+
+
+@adv_bp.route('/ad_details_ajax/<int:adv_ID>/')
+@advter_check_login
+def ad_details_ajax(adv_ID):
+    adv = adv_info.query.get(adv_ID)
+    if adv == None or adv.advter_account_ID != session['adv_account_id']:
+        return json.dumps({'error': '无权限'})
+    else:
+        return json.dumps(adv.get_details())

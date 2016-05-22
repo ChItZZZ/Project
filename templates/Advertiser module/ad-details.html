@@ -131,8 +131,7 @@
                         <div style="float: left;"><img src="/static/images/head2.png" alt=""
                                                        style="width: 60px;height: 60px;"></div>
                         <h4 style="float: left;margin-left: 30px">
-                            <strong>name<span></span></strong>
-                            <span style="display: block;margin-top: 10px">联系方式:123123123</span>
+                            <strong>{{ name }}<span></span></strong>
                         </h4>
                         <div style="clear: both;"></div>
                     </div>
@@ -254,7 +253,7 @@
         strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
         fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
         strokeStyle: 'solid' //边线的样式，solid或dashed。
-    }
+    };
     function clearAll() {
         for (var i = 0; i < overlays.length; i++) {
             map.removeOverlay(overlays[i]);
@@ -265,55 +264,34 @@
         console.log(e.point.lng + "," + e.point.lat);
     });
 
-    function ad_submit() {
-        var loc = [];
-        var lays = overlays[0]['ro'];
-        for (var i = 0; i < lays.length; i++) {
-            var one_loc = [];
-            one_loc[0] = lays[i].lng;
-            one_loc[1] = lays[i].lat;
-            loc.push(one_loc);
-        }
-        loc = JSON.stringify(loc);
-        document.getElementById('location').value = loc;
-        //alert(document.getElementById('location').value);
-        document.getElementById('form1').submit()
-    }
 
-
-    //    百度地图双击事件
-
-
-</script>
-
-<script>
-
-    function get_rec() {
-        var lat = 0, lng = 0;
-        if (overlays.length == 0) {
-            alert('请先选择范围!');
-            document.getElementById("num").focus();
-            document.getElementById("num").select();
-            //$('#cost').blur();
-            return null;
-        }
-        else {
-            var lays = overlays[0]['ro'];
-            for (var i = 0; i < lays.length; i++) {
-                lat += lays[i].lat;
-                lng += lays[i].lng;
-            }
-            lat /= lays.length;
-            lng /= lays.length;
-            var url = '/adv/get_rec_price/' + lat + '/' + lng + '/';
-            $.get(url, function (data, status) {
-                if (status == 'success') {
-                    $('#cost').attr('data-content', data);
-                    $("[data-toggle='popover']").popover();
+    $(document).ready(function () {
+        var adv_ID = '{{ adv_ID }}';
+        $.get('/adv/ad_details_ajax/' + adv_ID + '/', function (data, status) {
+            if (status = 'success') {
+                var json = JSON.parse(data);
+                var center_point = JSON.parse(json['center']);
+                center_point = new BMap.Point(center_point[0], center_point[1]);
+                map.centerAndZoom(center_point, 14);
+                if (json['type'] == '1') {
+                    var points = JSON.parse(json['location']);
+                    var secRing = [];
+                    for (var i = 0; i < points.length; i++) {
+                        var point = new BMap.Point(points[i][0], points[i][1]);
+                        secRing.push(point)
+                    }
+                    var secRingPolygon = new BMap.Polygon(secRing, {
+                        strokeColor: "blue",
+                        strokeWeight: 5,
+                        strokeOpacity: 0.5
+                    });
+                    map.addOverlay(secRingPolygon);
                 }
-            })
-        }
-    }
+
+            }
+        })
+    })
+
 </script>
 </body>
 </html>

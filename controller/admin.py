@@ -97,6 +97,7 @@ def check_driver():
 
 
 @admin_bp.route('/show_advs')
+@admin_bp.route('/adv/')
 @admin_check_login
 @admin_check_message
 def show_advs():
@@ -120,23 +121,19 @@ def advs_ajax():
 @admin_check_login
 @admin_check_message
 def show_adv(adv_ID):
-    if adv_ID == None:
-        return redirect(url_for('admin.show_advs'))
-    else:
-        adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
-        result = adv.get_details()
-        if result['img_flag']:
-            content = result['img_src']
-            img_flag = 1
-        else:
-            content = result['adv_text']
-            img_flag = 0
-        return render_template('Management module/ad.html', adv_ID=result['adv_ID'], content=content,
-                               datetime=result['time'],
-                               location=result['location'], company=result['company_name'],
-                               adm_name=session['admin_account_name'],
-                               admin_message=session['admin_message'], remark=result['remark'],
-                               img_flag=img_flag)
+    return render_template('Management module/ad.html', adm_name=session['admin_account_name'],
+                           admin_message=session['admin_message'], adv_ID=adv_ID)
+
+
+@admin_bp.route('/adv_ajax/<int:adv_ID>/')
+@admin_check_login
+@admin_check_message
+def adv_ajax(adv_ID):
+    adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
+    if adv == None:
+        return json.dumps({'error': '无此广告'})
+    result = adv.get_details()
+    return json.dumps(result)
 
 
 @admin_bp.route('/show_advters')
