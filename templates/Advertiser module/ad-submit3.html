@@ -7,7 +7,6 @@
     <title>MovingAD</title>
     <meta name="description" content="">
 
-
     <link href="/Project/static/css/font-awesome.min.css" rel="stylesheet">
     <link href="/Project/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/Project/static/css/style-home.css" rel="stylesheet">
@@ -119,10 +118,7 @@
                 </nav>
             </div>
         </div>
-        <div class="ad-info white-bg" style="padding: 30px 30px 100px 30px ; border-radius: 10px;
-         position: relative;
-         margin: 20px;
-         box-shadow: 0px 0px 1px 1px rgba(161, 159, 159, 0.1);">
+        <div class="ad-info white-bg">
             <form role="form" class="advertisement-summit " action="/adv/check_adv_submit" method="post"
                   enctype="multipart/form-data" id="form1">
                 <div class="form-inner">
@@ -183,16 +179,19 @@
                     <div class="form-group">
                         <div class="col-md-12" style="margin-top: 10px">
                             <label for="allmap">广告播放位置</label>
+                            <div id="result">
+                                <input type="button" id="getKey" class="btn btn-primary" value="选择地区">
+                                <input type="text" placeholder="输入关键词" id="key">
+                                <input type="button" id="clear" class="btn btn-primary" style="margin-left: 15px;"
+                                       value="清楚所有">
+                            </div>
                             <div id="allmap" style="overflow:hidden;zoom:1;position:relative;">
                                 <div id="map"
-                                     style="border: 1px solid darkgray;border-radius:5px;height:95%;width: 88%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;">
+                                     style="border: 1px solid darkgray;border-radius:5px;height:95%;-webkit-transition: all 0.5s ease-in-out;transition: all 0.5s ease-in-out;">
                                 </div>
                             </div>
                             <input type="text" name="location" style="display: none;" id="location"/>
-                            <div id="result">
-                                <input type="button" class="btn btn-primary" style="margin-left: 15px;" value="重新标记"
-                                       onclick="clearAll();"/>
-                            </div>
+
                         </div>
                     </div>
 
@@ -207,7 +206,8 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <input type="button" class="btn btn-primary" id="btn-ad-summit" data-toggle="modal"
-                                   data-target="#Modal" value="提交广告">
+                                   data-target="#Modal" onclick="ad_submit()"
+                                   value="提交广告">
                         </div>
                         <div class="modal fade" id="Modal" tabindex="-1" role="dialog"
                              aria-labelledby="myModalLabel" aria-hidden="true">
@@ -226,8 +226,7 @@
                                     <div class="modal-body">
                                         <form>
                                             <div class="form-group">
-                                                <input type="password" name="pay-password" class="form-control "
-                                                       style="margin-top: 10px;">
+                                                <input type="password" class="form-control " style="margin-top: 10px;">
                                             </div>
                                         </form>
                                     </div>
@@ -235,80 +234,35 @@
                                         <button type="button" class="btn btn-default"
                                                 data-dismiss="modal">关闭
                                         </button>
-                                        <button type="button" class="btn btn-primary" onclick="ad_submit()">
+                                        <button type="button" class="btn btn-primary">
                                             确定
                                         </button>
+
                                     </div>
                                 </div><!-- /.modal-content -->
                             </div><!-- /.modal -->
                         </div>
                         <div style="clear: both;"></div>
+                        <div id="r-result"></div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 <!-- JS -->
-<script src="/Project/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
-<script src="/Project/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+<!--<script src="/Project/static/js/jquery-1.11.1.min.js"></script>      &lt;!&ndash; jQuery &ndash;&gt;-->
+<!--<script src="/Project/static/js/jquery-migrate-1.2.1.min.js"></script> &lt;!&ndash;  jQuery Migrate Plugin &ndash;&gt;-->
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="/Project/static/js/bootstrap-filestyle.min.js"></script>
 <script src="/Project/static/js/bootstrap.min.js"></script>
 <script src="/Project/static/js/jquery-ui.js"></script>
 <script src="/Project/static/js/bootstrap-datetimepicker.js"></script>
 <script src="/Project/static/js/jquery-ui-slide.min.js"></script>
 <script src="/Project/static/js/jquery-ui-timepicker-addon.js"></script>
+<script src="/Project/static/js/SearchInRectangle.js"></script>
+<!--<script src="http://api.map.baidu.com/library/SearchInRectangle/1.2/src/SearchInRectangle_min.js"></script>-->
 <script>
-    // 百度地图API功能
-    var map = new BMap.Map('map');
-    var poi = new BMap.Point(121.480237, 31.236305);
-    map.centerAndZoom(poi, 12);
-    var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
-    var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
-    //右上角，仅包含平移和缩放按钮
-    /*缩放控件type有四种类型:
-     BMAP_NAVIGATION_CONTROL_SMALL：仅包含平移和缩放按钮；BMAP_NAVIGATION_CONTROL_PAN:仅包含平移按钮；BMAP_NAVIGATION_CONTROL_ZOOM：仅包含缩放按钮*/
-
-    //添加控件和比例尺
-    map.addControl(top_left_control);
-    map.addControl(top_left_navigation);
-
-    //    map.enableScrollWheelZoom();
-    var overlays = [];
-    var overlaycomplete = function (e) {
-        overlays.push(e.overlay);
-    };
-    var styleOptions = {
-        strokeColor: "red",    //边线颜色。
-        fillColor: "red",      //填充颜色。当参数为空时，圆形将没有填充效果。
-        strokeWeight: 3,       //边线的宽度，以像素为单位。
-        strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
-        fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
-        strokeStyle: 'solid' //边线的样式，solid或dashed。
-    }
-    //实例化鼠标绘制工具
-    var drawingManager = new BMapLib.DrawingManager(map, {
-        isOpen: false, //是否开启绘制模式
-        enableDrawingTool: true, //是否显示工具栏
-        drawingToolOptions: {
-            anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
-            offset: new BMap.Size(5, 5) //偏离值
-        },
-        circleOptions: styleOptions, //圆的样式
-        polylineOptions: styleOptions, //线的样式
-        polygonOptions: styleOptions, //多边形的样式
-        rectangleOptions: styleOptions //矩形的样式
-    });
-    //添加鼠标绘制工具监听事件，用于获取绘制结果
-    drawingManager.addEventListener('overlaycomplete', overlaycomplete);
-    function clearAll() {
-        for (var i = 0; i < overlays.length; i++) {
-            map.removeOverlay(overlays[i]);
-        }
-        overlays.length = 0
-    }
-
     function ad_submit() {
         var loc = [];
         var lays = overlays[0]['ro'];
@@ -320,14 +274,8 @@
         }
         loc = JSON.stringify(loc);
         document.getElementById('location').value = loc;
-        //alert(document.getElementById('location').value);
         document.getElementById('form1').submit()
     }
-
-
-    //    百度地图双击事件
-
-
 </script>
 
 <script>
@@ -392,11 +340,58 @@
         })
         $(".BMapLib_circle").remove();
         $(".BMapLib_polyline").remove();
-        $(".BMapLib_rectangle").remove();
         $(".BMapLib_marker").remove();
-
+        $(".BMapLib_polygon").remove();
 
     });
+</script>
+<script type="text/javascript">
+    var map = new BMap.Map("allmap");
+    var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+    var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+    //右上角，仅包含平移和缩放按钮
+    /*缩放控件type有四种类型:
+     BMAP_NAVIGATION_CONTROL_SMALL：仅包含平移和缩放按钮；BMAP_NAVIGATION_CONTROL_PAN:仅包含平移按钮；BMAP_NAVIGATION_CONTROL_ZOOM：仅包含缩放按钮*/
+
+    //添加控件和比例尺
+    map.addControl(top_left_control);
+    map.addControl(top_left_navigation);
+
+    var keyword;
+    var poi = new BMap.Point(121.480237, 31.236305);
+    map.centerAndZoom(poi, 12);
+    var getKey = document.getElementById("getKey");
+    getKey.addEventListener("click", function () {
+        if (!document.getElementById("key").value) {
+            alert("输入关键词");
+        }
+
+        keyword = document.getElementById("key").value;
+        console.log(keyword);
+
+        var pullBox = new BMapLib.SearchInRectangle(map, keyword, {
+            renderOptions: {
+                map: map,
+                strokeWeight: 3,
+                strokeColor: "red",
+                fillColor: "white",
+                opacity: 0.5,
+                followText: "拖拽鼠标搜索" + keyword + "",
+                autoClose: true,
+                autoViewport: false,
+                alwaysShowOverlay: false
+            }
+        });
+        pullBox.setLineStyle("dashed");
+        pullBox.open();
+    })
+
+    $("#clear").click(function () {
+        map.clearOverlays();
+
+    })
+
+
 </script>
 </body>
 </html>

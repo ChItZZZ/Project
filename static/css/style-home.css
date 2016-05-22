@@ -962,3 +962,6 @@ a {
     margin: 10px;
     border-left: 1px dotted #DDD;
 }
+#ui-datepicker-div{
+    z-index: 1000 !important;
+}
