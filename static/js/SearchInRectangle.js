@@ -748,7 +748,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
                         myGeo.getPoint(add, function (point) {
                             //document.getElementById("r-result").innerHTML = "<br/>"
                             if (point) {
-                                document.getElementById("r-result").innerHTML += index + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
+                                console.log(add + ":" + point.lng + "," + point.lat + "</br>");
                                 var point_str = JSON.stringify([point.lng, point.lat]);
                                 if (advs_submit_hash[point_str] == null) {
                                     advs_submit_result.push([point.lng, point.lat]);

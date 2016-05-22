@@ -41,10 +41,14 @@ class adv_info(db.Model):
         self.img_src = img_src
         lat_all = 0
         lng_all = 0
-        for point in location:
-            lng_all += point[0]
-            lat_all += point[1]
-        center = [lng_all / len(location), lat_all / len(location)]
+        if location['type'] == '1':
+            location = location['points']
+            for point in location:
+                lng_all += point[0]
+                lat_all += point[1]
+            center = [lng_all / len(location), lat_all / len(location)]
+        else:
+            center = location['points'][0]
         self.center = str(center)
         self.remark = remark
 
@@ -73,7 +77,7 @@ class adv_info(db.Model):
         dic['date'] = str(self.start_date)
         advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
         dic['company'] = advter.company_name
-        check_flag = {None: '未审核', True: '审核通过', False: '被封禁'}
+        check_flag = {None: '未审核', True: '审核通过', False: '审核不通过'}
         dic['check_flag'] = check_flag[self.check_flag]
         if self.remark == None:
             dic['remark'] = '无'
@@ -91,13 +95,20 @@ class adv_info(db.Model):
             dic['adv_text'] = self.adv_text
         dic['time'] = str(self.start_time) + '-' + str(self.end_time)
         dic['adv_amounts'] = self.amounts
-        location = []
         location_json = json.loads(self.location)
-        for point in location_json:
-            location.append(gcj02tobd09(point[0], point[1]))
-        dic['location'] = json.dumps(location)
+        points = location_json['points']
+        dic['type'] = location_json['type']
+        if location_json['type'] == '1':
+            location = []
+            for point in points:
+                location.append(gcj02tobd09(point[0], point[1]))
+            dic['location'] = json.dumps(location)
+        else:
+            dic['range'] = points[1]
         advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
         dic['company_name'] = advter.company_name
+        center = json.loads(self.center)
+        dic['center'] = json.dumps(gcj02tobd09(center[0], center[1]))
         if self.remark == None:
             dic['remark'] = '无'
         else:
@@ -114,6 +125,14 @@ class adv_info(db.Model):
             return True
         else:
             return False  # 已经被审核过的不能再改变
+
+    def del_adv(self):
+        advter = adv_account.query.get(self.advter_account_ID)
+        if self.check_flag != False:
+            advter.money_change(self.cost * self.amounts)
+        db.session.delete(self)
+        db.session.commit()
+        return float(advter.account_money)
 
 
 class adv_account(db.Model):
