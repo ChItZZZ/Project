@@ -7,12 +7,18 @@
     <title>MovingAD</title>
     <meta name="description" content="">
 
-    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/style-home.css" rel="stylesheet">
+    <link href="/Project/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/Project/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/Project/static/css/style-home.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <style>
+        .security-list li:hover{
+            background-color: lightgray;
+            cursor: pointer;
+        }
+    </style>
 
 </head>
 <body>
@@ -26,7 +32,7 @@
             </div>
         </header>
         <div class="profile-photo-container">
-            <img src="/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
+            <img src="/Project/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
             <div class="profile-photo-overlay"></div>
         </div>
         <div class="mobile-menu-icon">
@@ -35,9 +41,9 @@
         <nav class="left-nav">
             <ul>
                 <li><a href="/adv/home" ><i class="fa fa-home fa-fw"></i>用户主页</a></li>
-                <li><a href="/adv/security" class="active"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
+                <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
                 <li><a href="/adv/ad_details"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
-                <li><a href="/adv/adv_submit"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
+                <li><a href="/adv/adv_submit" class="active"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
                 <li><a href="/adv/notice"><i class="fa fa-list fa-fw"></i>系统通知</a></li>
                 <li><a href="/adv/logout"><i class="fa fa-eject fa-fw"></i>退出登录</a></li>
             </ul>
@@ -68,20 +74,16 @@
                             <span>你可以通过以下方式找回登录密码</span>
                         </h4>
                     </li>
-                    <li style="border-bottom: 1px solid lightgray;padding: 20px">
-                        <div style="float: left;margin-left: 30px;margin-top: 20px"><i class="fa fa-key" style="font-size: 35px;top: 39%;left: 20px;"></i></div>
-                        <h4 style="margin-left: 100px">
-                            <strong style="display: block;line-height: 50px">验证原始密码<span></span></strong>
-                            <span>如果您已设置并记得交易密码，且记得注册时的证件号码，请选择此方式</span>
-                            <a href="sec-modify-pwd-bypwd.html" class="pull-right">验证 ></a>
+                    <li style="border: 1px solid lightgray;padding: 20px">
+                        <h4 >
+                            <strong style="display: block;line-height: 50px">多边形区域<span></span></strong>
+                            <a href="#" class="pull-right">选择 ></a>
                         </h4>
                     </li>
                     <li style="border-bottom: 1px solid lightgray;padding: 20px">
-                        <div style="float: left;margin-left: 30px;margin-top: 20px"><i class="fa fa-mobile" style="font-size: 50px;top: 39%;left: 24px;"></i></div>
-                        <h4 style="margin-left: 100px">
-                            <strong style="display: block;line-height: 50px">验证手机+身份证<span></span></strong>
-                            <span>如果您的注册号码123******12可正常使用，且记得身份证号码，请选择此方式</span>
-                            <a href="sec-modify-pwd-bypho.html" class="pull-right">修改 ></a>
+                        <h4>
+                            <strong style="display: block;line-height: 50px">多块区域+关键字<span></span></strong>
+                            <a href="#" class="pull-right">选择 ></a>
                         </h4>
                     </li>
 
@@ -92,7 +94,7 @@
 </div>
 
 <!-- JS -->
-<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
-<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+<script src="/Project/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
+<script src="/Project/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
 </body>
 </html>
