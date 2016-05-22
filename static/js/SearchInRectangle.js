@@ -727,7 +727,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
                     //}
                     var adds = [];
                     for (var i = 0; i < results.getCurrentNumPois(); i++) {
-                        adds.push(results.getPoi(i).address);
+                        adds.push(results.getPoi(i).title + "," + results.getPoi(i).address);
                     }
                     //document.getElementById("r-result").innerHTML = adds.join("<br/>");
 
@@ -746,6 +746,7 @@ var BMapLib = window.BMapLib = BMapLib || {};
                         //    setTimeout(window.bdGEO, 400);
                         //}
                         myGeo.getPoint(add, function (point) {
+                            //document.getElementById("r-result").innerHTML = "<br/>"
                             if (point) {
                                 document.getElementById("r-result").innerHTML += index + "、" + add + ":" + point.lng + "," + point.lat + "</br>";
                                 var point_str = JSON.stringify([point.lng, point.lat]);
