@@ -76,7 +76,7 @@ def check_register():
     filename.append(company_img_filename)
     filename.append(ID_filename)
     for f in filename:
-        if '.' not in f or f.rspilt('.', 1)[1] not in app.config['ALLOW_FILE']:
+        if '.' not in f or f.rsplit('.', 1)[1] not in app.config['ALLOW_FILE']:
             return '<script>alert("非法后缀!");location.href="/adv/login"</script>'
     ID_card_image.save(os.path.join(app.root_path, 'static/image/ID_card', ID_filename))
     company_img.save(os.path.join(app.root_path, 'static/image/company', company_img_filename))
@@ -150,16 +150,16 @@ def check_adv_submit():
     if flag:
         img = request.files['adv_img']
         img_filename = secure_filename(img.filename)
-        if '.' not in img_filename or img_filename.rspilt('.', 1)[1] not in app.config['ALLOW_FILE']:
+        if '.' not in img_filename or img_filename.rsplit('.', 1)[1] not in app.config['ALLOW_FILE']:
             return '<script>alert("非法后缀!");location.href="/adv/adv_submit"</script>'
         img.save(os.path.join(app.root_path, 'static/image/adv_img', img_filename))
         adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_sum, flag,
-                       img_filename)
+                       img_src=img_filename)
     else:
         adv_text = request.form['adv_text']
         adv = adv_info(cost, adv_count, date, start_time, end_time, gcj02_loc, session['adv_account_id'], adv_sum, flag,
                        adv_text)
-    if not advter.change_money(-1 * cost * adv_count):
+    if not advter.money_change(-1 * cost * adv_count):
         return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
     else:
         session['money'] = float(advter.account_money.real)
@@ -175,6 +175,11 @@ def check_adv_submit():
 @advter_check_login
 def adv_submit():
     return render_template('Advertiser module/ad-submit.html', name=session['adv_charge_name'])
+
+@adv_bp.route('/advs_submit')
+@advter_check_login
+def advs_submit():
+    return render_template('Advertiser module/ad-submit3.html', name=session['adv_charge_name'])
 
 
 @adv_bp.route('/login')
@@ -280,7 +285,7 @@ def task_details():
 @advter_check_login
 def pay(money):
     advter = adv_account.query.filter_by(account_ID=session['adv_account_id']).first()
-    advter.change_money(money)
+    advter.money_change(money)
     session['money'] = float(advter.account_money.real)
     return '<script>alert("充值成功!");location.href="/adv/home"</script>'
 
@@ -330,3 +335,21 @@ def check_forgot_pay_code(phone):
         return render_template('Advertiser module/')
     else:
         return '<script>alert("验证码或身份证号码有误,请重试");location.href="/driver/security";</script>'
+
+
+@adv_bp.route('/ad_list/')
+@advter_check_login
+def ad_list():
+    return render_template('Advertiser module/ad-list.html', name=session['adv_charge_name'])
+
+
+@adv_bp.route('/ad_history/<int:adv_ID>/')
+@advter_check_login
+def ad_history(adv_ID):
+    return render_template('Advertiser module/ad-history.html', name=session['adv_charge_name'])
+
+
+@adv_bp.route('/ad_details/<int:adv_ID>/')
+@advter_check_login
+def ad_details(adv_ID):
+    return render_template('Advertiser module/ad-details.html', name=session['adv_charge_name'])

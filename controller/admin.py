@@ -125,11 +125,18 @@ def show_adv(adv_ID):
     else:
         adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
         result = adv.get_details()
-        return render_template('Management module/ad.html', adv_ID=result['adv_ID'], text=result['adv_text'],
+        if result['img_flag']:
+            content = result['img_src']
+            img_flag = 1
+        else:
+            content = result['adv_text']
+            img_flag = 0
+        return render_template('Management module/ad.html', adv_ID=result['adv_ID'], content=content,
                                datetime=result['time'],
                                location=result['location'], company=result['company_name'],
                                adm_name=session['admin_account_name'],
-                               admin_message=session['admin_message'], remark=result['remark'])
+                               admin_message=session['admin_message'], remark=result['remark'],
+                               img_flag=img_flag)
 
 
 @admin_bp.route('/show_advters')

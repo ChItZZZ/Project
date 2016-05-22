@@ -109,7 +109,7 @@ class adv_info(db.Model):
             self.check_flag = check_flag
             if not check_flag:  # 审核不过要退费
                 advter = adv_account.query.get(self.advter_account_ID)
-                advter.change_money(self.cost * self.amounts)
+                advter.money_change(self.cost * self.amounts)
             db.session.commit()
             return True
         else:
@@ -180,8 +180,8 @@ class adv_account(db.Model):
         return dic
 
     def money_change(self, money):  # 正为增加钱 负为扣费
-        if float(self.account_money.real) + money > 0:
-            self.account_money = float(self.account_money.real) + money
+        if float(self.account_money) + float(money) > 0:
+            self.account_money = float(self.account_money) + float(money)
             db.session.commit()
             return True
         else:

@@ -11,22 +11,7 @@
     <link href="/static/css/styles.css" rel="stylesheet">
     <link href="/static/css/jquery-ui.min.css" rel="stylesheet">
     <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
-    <script language="javascript" type="text/javascript">
-    function show_content(flag, content) { //*********************************此处需要flag
-        //var flag;
-        //flag=0;
-        if (flag == "0") {  //*********************************  文字广告！根据实际flag调整
-            var strS = '<label class="col-md-4 control-label" for="adtext">广告内容</label><div class="col-md-4"><textarea class="form-control" readonly id="adtetx" name="adtext" placeholder="' + content + '" rows="10"></textarea></div>';
-            //↑具体请修改
-            document.getElementById("adcontent").innerHTML += strS;
-        }
-        else if (flag == "1") {  //*********************************  图片广告！根据实际flag调整
-            var strS = '<label class="col-md-4 control-label" for="adphoto">广告图片</label><div class="col-md-4"><img id="driverphoto" src="/static/image/permit_card/' + content + '" height="150" width="200"/></div>';
-            //↑具体请修改
-            document.getElementById("adcontent").innerHTML += strS;
-        }
-    }
-</script>
+
 </head>
 
 <body>
@@ -139,10 +124,26 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" id="adcontent">
-                                <!-- 此处根据flag生成img或者text -->
-                            </div>
+                            <div class="form-group" id="advcontent">
 
+                            </div>
+                            <script language="javascript" type="text/javascript">
+                                function show_content(flag, content) { //*********************************此处需要flag
+                                    //var flag;
+                                    //flag = 0;
+                                    //var content = '123';
+                                    if (flag == '0') {  //*********************************  文字广告！根据实际flag调整
+                                        var strS = '<label class="col-md-4 control-label" for="adtext">广告内容</label><div class="col-md-4"><textarea class="form-control" readonly id="adtetx" name="adtext" placeholder="' + content + '" rows="10"></textarea></div>';
+                                        //↑具体请修改
+                                        document.getElementById("advcontent").innerHTML += strS;
+                                    }
+                                    else if (flag == '1') {  //*********************************  图片广告！根据实际flag调整
+                                        var strS = '<label class="col-md-4 control-label" for="adphoto">广告图片</label><div class="col-md-4"><img id="driverphoto" src="/static/image/adv_img/' + content + '" height="150" width="200"/></div>';
+                                        //↑具体请修改
+                                        document.getElementById("advcontent").innerHTML += strS;
+                                    }
+                                }
+                            </script>
 
                             <div class="form-group">
                                 <label class="col-md-4 control-label" for="adtime">广告时间</label>
@@ -257,7 +258,9 @@
 
     //生成广告内容标签js在第131行
     $(document).ready(function () {
+        var flag = '{{ img_flag }}';
 
+        show_content(flag, '{{ content }}')
     });
 </script>
 <script type="text/javascript">
