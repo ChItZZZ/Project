@@ -179,7 +179,7 @@ def adv_submit():
 @adv_bp.route('/advs_submit')
 @advter_check_login
 def advs_submit():
-    return render_template('Advertiser module/ad-submit3.html', name=session['adv_charge_name'])
+    return render_template('Advertiser module/advs-submit.html', name=session['adv_charge_name'])
 
 
 @adv_bp.route('/login')
