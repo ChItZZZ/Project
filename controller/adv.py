@@ -164,7 +164,7 @@ def check_adv_submit():
     if not advter.money_change(-1 * cost * adv_count):
         return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
     else:
-        session['money'] = float(advter.account_money.real)
+        session['money'] = float(advter.account_money)
     db.session.add(adv)
     db.session.commit()
     his = adv_history(adv.adv_ID, session['adv_account_id'], cost * adv_count)
@@ -176,13 +176,65 @@ def check_adv_submit():
 @adv_bp.route('/adv_submit')
 @advter_check_login
 def adv_submit():
+    return render_template('Advertiser module/ad-sub-sel.html', name=session['adv_charge_name'])
+
+
+@adv_bp.route('/adv_submit_one/')
+@advter_check_login
+def adv_submit_one():
     return render_template('Advertiser module/ad-submit.html', name=session['adv_charge_name'])
 
 
-@adv_bp.route('/advs_submit')
+@adv_bp.route('/advs_submit_many/')
 @advter_check_login
-def advs_submit():
+def advs_submit_many():
     return render_template('Advertiser module/advs-submit.html', name=session['adv_charge_name'])
+
+
+@adv_bp.route('/check_advs_submit_many/', methods=['POST', 'GET'])
+@advter_check_login
+def check_advs_submit_many():
+    flag = request.form['select'] == 'true'
+    adv_count = int(request.form['adv_count'])
+    location = json.loads(request.form['location'])
+    gcj02_loc = []
+    for point in location:
+        gcj02_loc.append(bd09togcj02(point[0], point[1]))
+    range = request.form['range']
+    remark = request.form['remark']
+    loc = {'type': '0', 'points': gcj02_loc, 'range': range}  # type为1为多边形
+    date = datetime.strptime(request.form['date'], '%m/%d/%Y')
+    start_time = time.strptime(request.form['start_time'], '%H:%M')
+    end_time = time.strptime(request.form['end_time'], '%H:%M')
+    cost = float(request.form['cost'])
+    adv_sum = request.form['adv_sum']
+    advter = adv_account.query.filter_by(account_ID=session['adv_account_id']).first()
+    if not advter.check_pay_pwd(request.form['pay-password']):
+        return '<script>alert("交易密码输入有误");location.href="/adv/adv_submit"</script>'
+    if advter.check_flag == None or advter.check_flag == False:
+        return '<script>alert("尚未通过验证");location.href="/adv/home"</script>'
+    if flag:
+        img = request.files['adv_img']
+        img_filename = secure_filename(img.filename)
+        if '.' not in img_filename or img_filename.rsplit('.', 1)[1] not in app.config['ALLOW_FILE']:
+            return '<script>alert("非法后缀!");location.href="/adv/adv_submit"</script>'
+        img.save(os.path.join(app.root_path, 'static/image/adv_img', img_filename))
+        adv = adv_info(cost, adv_count, date, start_time, end_time, loc, session['adv_account_id'], adv_sum, flag,
+                       img_src=img_filename, remark=remark)
+    else:
+        adv_text = request.form['adv_text']
+        adv = adv_info(cost, adv_count, date, start_time, end_time, loc, session['adv_account_id'], adv_sum, flag,
+                       adv_text, remark=remark)
+    if not advter.money_change(-1 * cost * adv_count):
+        return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
+    else:
+        session['money'] = float(advter.account_money)
+    db.session.add(adv)
+    db.session.commit()
+    his = adv_history(adv.adv_ID, session['adv_account_id'], cost * adv_count)
+    db.session.add(his)
+    db.session.commit()
+    return '<script>alert("发布成功");location.href="/adv/home"</script>'
 
 
 @adv_bp.route('/login')

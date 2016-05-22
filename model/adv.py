@@ -104,7 +104,11 @@ class adv_info(db.Model):
                 location.append(gcj02tobd09(point[0], point[1]))
             dic['location'] = json.dumps(location)
         else:
-            dic['range'] = points[1]
+            location = []
+            for point in points:
+                location.append(gcj02tobd09(point[0], point[1]))
+            dic['points'] = json.dumps(location)
+            dic['range']=location_json['range']
         advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
         dic['company_name'] = advter.company_name
         center = json.loads(self.center)

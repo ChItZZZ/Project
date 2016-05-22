@@ -287,7 +287,7 @@
                 var json = JSON.parse(data);
                 var center_point = JSON.parse(json['center']);
                 center_point = new BMap.Point(center_point[0], center_point[1]);
-                map.centerAndZoom(center_point, 14);
+                map.centerAndZoom(center_point, 12);
                 if (json['type'] == '1') {
                     var points = JSON.parse(json['location']);
                     var secRing = [];
@@ -301,6 +301,19 @@
                         strokeOpacity: 0.5
                     });
                     map.addOverlay(secRingPolygon);
+                } else {
+                    var points = JSON.parse(json['points']);
+                    for (var i = 0; i < points.length; i++) {
+                        var point = new BMap.Point(points[i][0], points[i][1]);
+                        var circle = new BMap.Circle(point, 500, {
+                            strokeColor: "blue",
+                            strokeWeight: 2,
+                            strokeOpacity: 0.5
+                        });
+                        map.addOverlay(circle);
+                    }
+
+
                 }
                 if (json['img_flag']) {
                     $(".sel-img").show();
