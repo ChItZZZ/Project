@@ -42,6 +42,7 @@ var newMessageRemind = {
 
 function clearNewMessageRemind() {    //**********************取消新消息标题栏闪烁提示 调用此函数
     newMessageRemind.clear();
+    location.href='/admin/show_drivers';
 }
 
 //管理员ID旁边小红点
