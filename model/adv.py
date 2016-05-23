@@ -50,12 +50,43 @@ class adv_info(db.Model):
         self.center = json.dumps(center)
         self.remark = remark
 
-    def check_in(self, lat, lng, meter):
-        points = json.loads(self.location)
+    def check_in_polygon(self, lat, lng, meter):
+        location = json.loads(self.location)
+        points = location['points']
         for point in points:
             if get_distance(lat, lng, point[1], point[0]) < meter / 1000.0:
                 return True
         return False
+
+    def check_in_round(self, lat, lng, meter):
+        location = json.loads(self.location)
+        points = location['points']
+        range = int(location['range'])
+        ajax = []
+        for point in points:
+            if get_distance(lat, lng, point[1], point[0]) < (range + meter) / 1000.0:
+                ajax.append(self.app_details(point))
+        return ajax
+
+    def app_details(self, round_center=None):
+        dic = {}
+        location = json.loads(self.location)
+        dic["adv_ID"] = self.adv_ID
+        dic['type'] = location['type']
+        if location['type'] == '1':
+            dic["points"] = location['points']
+        else:
+            dic['range'] = location['range']
+            dic['center_point'] = round_center
+        dic['flag'] = self.img_flag
+        dic['start_time'] = str(self.start_time)
+        dic['end_time'] = str(self.end_time)
+        dic['money'] = float(self.cost)
+        if self.img_flag:
+            dic['img_src'] = self.img_src
+        else:
+            dic['text'] = self.adv_text
+        return dic
 
     def check_time(self):
         now = time.strptime(time.strftime('%H:%M:%S'), '%H:%M:%S')

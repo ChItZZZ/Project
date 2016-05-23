@@ -301,13 +301,10 @@ def get_money(money):
     driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
     pay_password = request.values.get('pay_pwd')
     if driver.check_pay_pwd(pay_password):
-        if float(driver.account_money.real) >= money:
-            driver.account_money = float(driver.account_money.real) - money
-            db.session.commit()
+        if driver.money_change(-1 * money):
             session['driver_account'] = driver.to_json()
             return json.dumps({'status': '600'})  # 取款成功
         else:
-            session['driver_account'] = driver.to_json()
             return json.dumps({'status': '610'})  # 余额不足
     else:
         return json.dumps({'status': '620'})  # 交易密码输入错误
@@ -361,4 +358,3 @@ def check_forgot_pay_code(phone):
         return render_template('Drivers module/')
     else:
         return '<script>alert("验证码或身份证号码有误,请重试");location.href="/driver/security";</script>'
-
