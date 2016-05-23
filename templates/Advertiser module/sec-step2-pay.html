@@ -36,8 +36,9 @@
         </div>
         <nav class="left-nav">
             <ul>
-                <li><a href="/adv/home" ><i class="fa fa-home fa-fw"></i>用户主页</a></li>
-                <li><a href="/adv/security" class="active"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
+                <li><a href="/adv/home"><i class="fa fa-home fa-fw"></i>用户主页</a></li>
+                <li><a href="/adv/security" class="active"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a>
+                </li>
                 <li><a href="/adv/ad_list"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/adv/adv_submit"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
                 <li><a href="/adv/notice"><i class="fa fa-list fa-fw"></i>系统通知</a></li>
@@ -86,11 +87,12 @@
 
             <!--身份验证-->
             <div class="col-md-12 modify-box" id="step1" data-index="1">
-                <form action="" class="col-md-12">
+                <form action="/adv/check_forgot_pay_pwd/" method="post" class="col-md-12" id="form1">
                     <div class="form-group">
                         <div class="col-md-12">
-                            <label for="con-pwd" class="col-md-4" style="text-align: right">新的登录密码:</label>
-                            <input type="password" id="con-pwd" class="col-md-5 " placeholder="New Password">
+                            <label for="con-pwd" class="col-md-4" style="text-align: right">新的交易密码:</label>
+                            <input type="password" id="con-pwd" class="col-md-5 " placeholder="New Password"
+                                   id="new_pay_pwd" name="new_pay_pwd">
                         </div>
                         <div style="clear: both"></div>
 
@@ -98,14 +100,16 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <label for="IDCard" class="col-md-4 " style="text-align: right">确认输入:</label>
-                            <input type="text" id="IDCard" placeholder="Confirm Password" class="col-md-5 ">
+                            <input type="password" id="IDCard" placeholder="Confirm Password" class="col-md-5 "
+                                   id="new_pay_pwd_repeat">
                         </div>
                         <div style="clear: both"></div>
 
                     </div>
                     <div class="form-group">
                         <div class="col-md-12" style="text-align: center;margin-top: 20px">
-                            <input type="submit" value="下一步" class="btn btn-primary" style="width: 180px;height: 40px;">
+                            <input type="button" id="sub_button" value="下一步" class="btn btn-primary"
+                                   style="width: 180px;height: 40px;">
                         </div>
                     </div>
 
@@ -125,26 +129,12 @@
 <script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
 <script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
 <script>
-    var wait = 60;
-    function time(o) {
-        if (wait == 0) {
-            o.removeAttribute("disabled");
-            o.value = "免费获取验证码";
-            wait = 60;
+    $('#sub_button').click(function () {
+        if ($('#new_pay_pwd').val() == $('#new_pay_pwd_repeat').val()) {
+            $('form#form1').submit()
         } else {
-            o.setAttribute("disabled", true);
-            o.value = wait + "秒后可以重新发送";
-            wait--;
-            setTimeout(function () {
-                        time(o)
-                    },
-                    1000)
+            alert('两次输入密码不一致');
         }
-    }
-    $(document).ready(function () {
-        $("#getID").click(function () {
-            time(this);
-        })
     })
 </script>
 </body>
