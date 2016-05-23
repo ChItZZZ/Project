@@ -122,9 +122,9 @@
                         <tr>
                             <th style="width:100px; text-align:center;">编号</th>
                             <th style="width:120px; text-align:center;">广告ID</th>
-                            <th style="width:300px; text-align:center;">广告内容</th>
+                            <th style="width:300px; text-align:center;">广告摘要</th>
                             <th style="width:120px; text-align:center;">价格</th>
-                            <th style="width:120px; text-align:center;">发布时间</th>
+                            <th style="width:120px; text-align:center;">开始时间</th>
                             <th style="width:120px; text-align:center;">广告商</th>
                             <th style="width:120px; text-align:center;">领取用户记录</th>
                         </tr>
@@ -165,12 +165,12 @@
     });
 
     $(document).ready(function () {
-        $.get("advs_ajax", function (data, status) {
+        $.get("/admin/advs_ajax", function (data, status) {
             if (status == 'success') {
                 var json = eval(data);
                 for (var i = 0; i < json.length; i++) {
                     var adv = json[i];
-                    show(adv['adv_ID'], adv['adv_amounts'], adv['adv_text'], adv['cost'], adv['date'], adv['company'])
+                    show(adv['adv_ID'], adv['adv_amounts'], adv['adv_sum'], adv['cost'], adv['date'], adv['company'])
                 }
             }
         });
