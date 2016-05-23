@@ -123,24 +123,17 @@ def check_login():
 @app_bp.route('/get_advs/<int:meter>/<float:lng>/<float:lat>/')
 @app_check_login
 def get_adv(meter, lat, lng):
+    meter = max(meter, 30000)  # 最大30公里的范围
     now = time.localtime(time.time())
     advs = adv_info.query.filter(
         and_(adv_info.amounts > 0, adv_info.start_date < now, adv_info.check_flag == True)).all()
     ajax = []
     for adv in advs:
-        if adv.check_in(lat, lng, meter):
-            dic = {}
-            dic["adv_ID"] = adv.adv_ID
-            dic["points"] = adv.location
-            dic['flag'] = adv.img_flag
-            dic['start_time'] = adv.start_time
-            dic['end_time'] = adv.end_time
-            dic['money'] = adv.cost
-            if adv.img_flag:
-                dic['img_src'] = adv.img_src
-            else:
-                dic['text'] = adv.adv_text
-            ajax.append(dic)
+        type = json.loads(adv.location)['type']
+        if type == '1' and adv.check_in_polygon(lat, lng, meter):
+            ajax.append(adv.app_details())
+        elif type == '0':
+            ajax += adv.check_in_round(lat, lng, meter)
     return json.dumps(ajax)
 
 
@@ -150,6 +143,8 @@ def post_adv(adv_ID):
     driver_account_ID = session['driver_account_id']
     driver = driver_account.query.filter_by(account_ID=driver_account_ID).first()
     adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
+    if adv == None or adv.check_flag != True:
+        return json.dumps({'status': '440'})  # 广告不存在或尚未经过审核
     if adv.amounts > 0:
         if not adv.check_time():
             return json.dumps({'status': '430'})  # 时间不对
@@ -196,18 +191,19 @@ def get_records():
     return json.dumps(ajax)
 
 
-@app_bp.route('/get_money/<float:money>/')
+@app_bp.route('/get_money/<float:money>/', methods=['POST', 'GET'])
 @app_check_login
 def get_money(money):
     driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
-    if float(driver.account_money.real) >= money:
-        driver.account_money = float(driver.account_money.real) - money
-        db.session.commit()
-        session['driver_account'] = driver.to_json()
-        return json.dumps({'status': '500'})  # 成功
+    pay_password = request.values.get('pay_pwd')
+    if driver.check_pay_pwd(pay_password):
+        if driver.money_change(-1 * money):
+            session['driver_account'] = driver.to_json()
+            return json.dumps({'status': '600'})  # 取款成功
+        else:
+            return json.dumps({'status': '610'})  # 余额不足
     else:
-        session['driver_account'] = driver.to_json()
-        return json.dumps({'status': '510'})  # 账号余额不足
+        return json.dumps({'status': '620'})  # 交易密码输入错误
 
 
 @app_bp.route('/logout/')

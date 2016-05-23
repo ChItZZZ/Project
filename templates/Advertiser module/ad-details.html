@@ -7,11 +7,11 @@
     <title>MovingAD</title>
     <meta name="description" content="">
 
-    <link href="/Project/static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/Project/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/Project/static/css/style-home.css" rel="stylesheet">
-    <link href="/Project/static/css/jquery-ui.min.css" rel="stylesheet">
-    <link href="/Project/static/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style-home.css" rel="stylesheet">
+    <link href="/static/css/jquery-ui.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-datetimepicker.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -91,7 +91,7 @@
             </div>
         </header>
         <div class="profile-photo-container">
-            <img src="/Project/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
+            <img src="/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
             <div class="profile-photo-overlay"></div>
         </div>
         <div class="mobile-menu-icon">
@@ -128,7 +128,7 @@
                 <div class="form-inner">
 
                     <div class="form-group">
-                        <div style="float: left;"><img src="/Project/static/images/head2.png" alt=""
+                        <div style="float: left;"><img src="/static/images/head2.png" alt=""
                                                        style="width: 60px;height: 60px;"></div>
                         <h4 style="float: left;margin-left: 30px">
                             <strong>{{ name }}<span></span></strong>
@@ -139,7 +139,7 @@
                         <div class="col-md-8">
                             <label for="brief" class="label-item">广告简介</label>
                             <textarea name="adv_sum" class="form-control" id="brief" rows="1" required
-                                      style="margin-bottom: 10px" readonly>dsadasndoqwnodasm</textarea>
+                                      style="margin-bottom: 10px" readonly></textarea>
                         </div>
                         <div style="clear: both;"></div>
                     </div>
@@ -148,8 +148,8 @@
                         <div class="col-md-12">
                             <label style="margin-top: 10px" class=" label-item">广告内容</label>
                             <div style="margin-top: 15px">
-                                <input type="radio" id="con" name="select" checked="checked" value="false">文字内容
-                                <input type="radio" id="img" name="select" value="true">广告图片
+                                <input type="radio" id="con" name="select" value="false" disabled>文字内容
+                                <input type="radio" id="img" name="select" value="true" disabled>广告图片
                             </div>
                         </div>
                         <div style="clear: both;"></div>
@@ -158,11 +158,12 @@
                         <div class="col-md-12 sel-con">
                             <textarea name="adv_text" class="form-control" id="content" rows="3" required
                                       style="margin-bottom: 2px"
-                                      readonly>dasobdqwwqeioasndoqwiasndwpsandoadoai</textarea>
+                                      readonly></textarea>
                         </div>
                         <div class="col-md-12 sel-img" style="display: none;margin: 5px 0">
                             <p>
-                                <img src="/Project/static/images/bicycle.jpg" alt="" style="width: 200px;height: 160px">
+                                <img id="adv_img" alt=""
+                                     style="width: 200px;height: 160px">
                             </p>
                         </div>
                     </div>
@@ -170,7 +171,8 @@
                     <div class="form-group" style="margin-top: 30px">
                         <label class="col-md-2 label-item" style="font-size: 18px;margin-top: 30px">播放时间</label>
                         <div class="col-md-12">
-                            <div class="col-md-3" style="margin-top: 23px;padding-top: 10px;padding-right: 0px;margin-left: -15px">
+                            <div class="col-md-3"
+                                 style="margin-top: 23px;padding-top: 10px;padding-right: 0px;margin-left: -15px">
                                 <input type="text" id="datepicker" class="form-control" placeholder="" name="date"
                                        value="05/04/2016" readonly>
                             </div>
@@ -199,7 +201,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-5">
-                            <label for="allmon" class="label-item">总支出:</label>
+                            <label for="allmon" class="label-item">当前剩余条数:</label>
                             <input type="text" id="allmon" value="112323" class="form-control" readonly>
                         </div>
                     </div>
@@ -225,14 +227,14 @@
 </div>
 
 <!-- JS -->
-<script src="/Project/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
-<script src="/Project/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
-<script src="/Project/static/js/bootstrap-filestyle.min.js"></script>
-<script src="/Project/static/js/bootstrap.min.js"></script>
-<script src="/Project/static/js/jquery-ui.js"></script>
-<script src="/Project/static/js/bootstrap-datetimepicker.js"></script>
-<script src="/Project/static/js/jquery-ui-slide.min.js"></script>
-<script src="/Project/static/js/jquery-ui-timepicker-addon.js"></script>
+<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
+<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+<script src="/static/js/bootstrap-filestyle.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery-ui.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.js"></script>
+<script src="/static/js/jquery-ui-slide.min.js"></script>
+<script src="/static/js/jquery-ui-timepicker-addon.js"></script>
 <script>
     // 百度地图API功能
     var map = new BMap.Map('map');
@@ -285,7 +287,7 @@
                 var json = JSON.parse(data);
                 var center_point = JSON.parse(json['center']);
                 center_point = new BMap.Point(center_point[0], center_point[1]);
-                map.centerAndZoom(center_point, 14);
+                map.centerAndZoom(center_point, 12);
                 if (json['type'] == '1') {
                     var points = JSON.parse(json['location']);
                     var secRing = [];
@@ -299,8 +301,37 @@
                         strokeOpacity: 0.5
                     });
                     map.addOverlay(secRingPolygon);
-                }
+                } else {
+                    var points = JSON.parse(json['points']);
+                    for (var i = 0; i < points.length; i++) {
+                        var point = new BMap.Point(points[i][0], points[i][1]);
+                        var circle = new BMap.Circle(point, 500, {
+                            strokeColor: "blue",
+                            strokeWeight: 2,
+                            strokeOpacity: 0.5
+                        });
+                        map.addOverlay(circle);
+                    }
 
+
+                }
+                if (json['img_flag']) {
+                    $(".sel-img").show();
+                    $(".sel-con").hide();
+                    $("#img").attr('checked', true);
+                    $('#adv_img').attr('src', '/static/image/adv_img/' + json['img_src'])
+                } else {
+                    $(".sel-img").hide();
+                    $(".sel-con").show();
+                    $("#con").attr('checked', true);
+                    $('#content').text(json['adv_text'])
+                }
+                $('#brief').text(json['adv_sum']);
+                $('#datepicker').attr('value', json['date']);
+                $('#time1').attr('value', json['start_time']);
+                $('#time2').attr('value', json['end_time']);
+                $('#sin-mon').attr('value', json['cost']);
+                $('#allmon').attr('value', json['adv_amounts']);
             }
         })
     })

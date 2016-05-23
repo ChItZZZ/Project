@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, current_app
 from model.adv import *
+from model.driver import *
 from tools.LBS import *
 from tools.security import *
 from ali_config import tool
@@ -120,9 +121,9 @@ def check_forgot_code():
     code = request.form['code']
     phone = session['phone_change']
     if code == session['forget_code']:
-        driver = adv_account.query.filter_by(phone=phone).first()
+        advter = adv_account.query.filter_by(phone=phone).first()
         pwd = get_salt(8)
-        driver.change_pwd(pwd)
+        advter.change_pwd(pwd)
         return '<script>alert("您的新密码为{0},请登陆后尽快修改");location.href="/adv/login"</script>'.format(pwd)
     else:
         return '<script>alert("手机号或验证码有误,请重试");location.href="/adv/forgot_pwd"</script>'
@@ -138,6 +139,8 @@ def check_adv_submit():
     for point in location:
         gcj02_loc.append(bd09togcj02(point[0], point[1]))
     loc = {'type': '1', 'points': gcj02_loc}  # type为1为多边形
+    if len(json.dumps(loc)) > 500:
+        return '<script>alert("选择点过多请重试");location.href="/adv/adv_submit_one/"</script>'
     date = datetime.strptime(request.form['date'], '%m/%d/%Y')
     start_time = time.strptime(request.form['start_time'], '%H:%M')
     end_time = time.strptime(request.form['end_time'], '%H:%M')
@@ -163,7 +166,7 @@ def check_adv_submit():
     if not advter.money_change(-1 * cost * adv_count):
         return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
     else:
-        session['money'] = float(advter.account_money.real)
+        session['money'] = float(advter.account_money)
     db.session.add(adv)
     db.session.commit()
     his = adv_history(adv.adv_ID, session['adv_account_id'], cost * adv_count)
@@ -175,13 +178,69 @@ def check_adv_submit():
 @adv_bp.route('/adv_submit')
 @advter_check_login
 def adv_submit():
+    return render_template('Advertiser module/ad-sub-sel.html', name=session['adv_charge_name'])
+
+
+@adv_bp.route('/adv_submit_one/')
+@advter_check_login
+def adv_submit_one():
     return render_template('Advertiser module/ad-submit.html', name=session['adv_charge_name'])
 
 
-@adv_bp.route('/advs_submit')
+@adv_bp.route('/advs_submit_many/')
 @advter_check_login
-def advs_submit():
+def advs_submit_many():
     return render_template('Advertiser module/advs-submit.html', name=session['adv_charge_name'])
+
+
+@adv_bp.route('/check_advs_submit_many/', methods=['POST', 'GET'])
+@advter_check_login
+def check_advs_submit_many():
+    flag = request.form['select'] == 'true'
+    adv_count = int(request.form['adv_count'])
+    location = json.loads(request.form['location'])
+    gcj02_loc = []
+    for point in location:
+        gcj02_loc.append(bd09togcj02(point[0], point[1]))
+    range = request.form['range']
+    remark = request.form['remark']
+    center = json.loads(request.form['center'])
+    center = bd09togcj02(center[0], center[1])
+    loc = {'type': '0', 'points': gcj02_loc, 'range': range}  # type为1为多边形
+    if len(json.dumps(loc)) > 500:
+        return '<script>alert("选择地点过多请重试");location.href="/adv/advs_submit_many/"</script>'
+    date = datetime.strptime(request.form['date'], '%m/%d/%Y')
+    start_time = time.strptime(request.form['start_time'], '%H:%M')
+    end_time = time.strptime(request.form['end_time'], '%H:%M')
+    cost = float(request.form['cost'])
+    adv_sum = request.form['adv_sum']
+    advter = adv_account.query.filter_by(account_ID=session['adv_account_id']).first()
+    if not advter.check_pay_pwd(request.form['pay-password']):
+        return '<script>alert("交易密码输入有误");location.href="/adv/advs_submit_many/"</script>'
+    if advter.check_flag == None or advter.check_flag == False:
+        return '<script>alert("尚未通过验证");location.href="/adv/home"</script>'
+    if flag:
+        img = request.files['adv_img']
+        img_filename = secure_filename(img.filename)
+        if '.' not in img_filename or img_filename.rsplit('.', 1)[1] not in app.config['ALLOW_FILE']:
+            return '<script>alert("非法后缀!");location.href="/adv/advs_submit_many/"</script>'
+        img.save(os.path.join(app.root_path, 'static/image/adv_img', img_filename))
+        adv = adv_info(cost, adv_count, date, start_time, end_time, loc, session['adv_account_id'], adv_sum, flag,
+                       img_src=img_filename, remark=remark, center=center)
+    else:
+        adv_text = request.form['adv_text']
+        adv = adv_info(cost, adv_count, date, start_time, end_time, loc, session['adv_account_id'], adv_sum, flag,
+                       adv_text, remark=remark, center=center)
+    if not advter.money_change(-1 * cost * adv_count):
+        return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
+    else:
+        session['money'] = float(advter.account_money)
+    db.session.add(adv)
+    db.session.commit()
+    his = adv_history(adv.adv_ID, session['adv_account_id'], cost * adv_count)
+    db.session.add(his)
+    db.session.commit()
+    return '<script>alert("发布成功");location.href="/adv/home"</script>'
 
 
 @adv_bp.route('/login')
@@ -207,12 +266,12 @@ def get_rec_price(lat, lng):
         center = json.loads(adv.center)
         dis = get_distance(lat, lng, center[1], center[0])
         if dis < 1:
-            rec_price += dis * float(adv.cost.real)
+            rec_price += dis * float(adv.cost)
             times += dis
     if times == 0:
         return '0.05'
     else:
-        return str(rec_price / max(times, 1))
+        return str(round(rec_price / times, 3))
 
 
 @adv_bp.route('/security')
@@ -224,8 +283,7 @@ def security():
 @adv_bp.route('/get_history')
 @advter_check_login
 def get_history():
-    historys = adv_history.query.filter_by(advter_ID=session['adv_account_id']).all()
-    historys.reverse()
+    historys = adv_history.query.filter_by(advter_ID=session['adv_account_id']).order_by(adv_history.adv_ID.desc()).all()
     ajax = []
     for h in historys:
         ajax.append(h.to_json())
@@ -237,7 +295,7 @@ def get_history():
 @adv_bp.route('/change_pwd')
 @advter_check_login
 def change_pwd():
-    return render_template('Advertiser module/sec-modify-pwd-bypwd.html')
+    return render_template('Advertiser module/sec-modify-pwd-bypwd.html', name=session['adv_charge_name'])
 
 
 @adv_bp.route('/check_change_pwd/', methods=['POST'])
@@ -277,12 +335,6 @@ def change_phone():
     return render_template('Advertiser module/sec-phone.html')
 
 
-@adv_bp.route('/adv_details')
-@advter_check_login
-def task_details():
-    return render_template('Advertiser module/')
-
-
 @adv_bp.route('/pay/<float:money>/')
 @advter_check_login
 def pay(money):
@@ -295,7 +347,7 @@ def pay(money):
 @adv_bp.route('/change_pay_pwd/', methods=['POST', 'GET'])
 @advter_check_login
 def change_pay_pwd():
-    return render_template('Advertiser module/sec-modify-pay-pwd-bypwd.html', name=session['driver_user_name'])
+    return render_template('Advertiser module/sec-modify-pay-pwd-bypwd.html', name=session['adv_charge_name'])
 
 
 @adv_bp.route('/check_change_pay_pwd/', methods=['POST'])
@@ -303,9 +355,9 @@ def change_pay_pwd():
 def check_change_pay_pwd():
     old_pwd = request.form['old']
     new_pwd = request.form['new']
-    driver = adv_account.query.get(session['driver_account_id'])
-    if (driver.check_pay_pwd(old_pwd)):
-        driver.change_pay_pwd(new_pwd)
+    advter = adv_account.query.get(session['adv_account_id'])
+    if (advter.check_pay_pwd(old_pwd)):
+        advter.change_pay_pwd(new_pwd)
         return '<script>alert("修改支付密码成功!");location.href="/adv/home"</script>'
     else:
         return '<script>alert("密码有误,请重试");location.reload();</script>'
@@ -314,8 +366,8 @@ def check_change_pay_pwd():
 @adv_bp.route('/find_pay_pwd/', methods=['POST', 'GET'])
 @advter_check_login
 def find_pay_pwd():
-    return render_template('Advertiser module/sec-find-pay-pwd.html', name=session['driver_user_name'],
-                           count=session['message_count'], phone=session['phone'])
+    return render_template('Advertiser module/sec-find-pay-pwd.html', name=session['adv_charge_name'],
+                           phone=session['phone'])
 
 
 @adv_bp.route('/get_forgot_pay_code/<int:phone>/')
@@ -332,8 +384,8 @@ def get_forgot_pay_code(phone):
 def check_forgot_pay_code(phone):
     forgot_code = request.form['forget_code']
     ID = request.form['ID']
-    driver = adv_account.query.get(session['driver_account_id'])
-    if (driver.user_ID == ID and forgot_code == session['forget_code']):
+    advter = adv_account.query.get(session['adv_account_id'])
+    if (advter.user_ID == ID and forgot_code == session['forget_code']):
         return render_template('Advertiser module/')
     else:
         return '<script>alert("验证码或身份证号码有误,请重试");location.href="/adv/security";</script>'
@@ -379,15 +431,27 @@ def ad_history(adv_ID):
     adv = adv_info.query.get(adv_ID)
     if adv == None or adv.advter_account_ID != session['adv_account_id']:
         return redirect(url_for('adv.ad_list'))
-    return render_template('Advertiser module/ad-history.html', name=session['adv_charge_name'])
+    return render_template('Advertiser module/ad-history.html', name=session['adv_charge_name'], adv_ID=adv_ID)
 
 
-@adv_bp.route('/ad_history_ajax/<int:adv_ID>/')
+@adv_bp.route('/ad_history_ajax/<int:adv_ID>/<int:record_ID>/')
 @advter_check_login
-def ad_history_ajax(adv_ID):
+def ad_history_ajax(adv_ID, record_ID):
     adv = adv_info.query.get(adv_ID)
     if adv == None or adv.advter_account_ID != session['adv_account_id']:
         return json.dumps({'error': '无权限'})
+    else:
+        records = adv_record.query.filter(
+            and_(adv_record.adv_ID == adv_ID, adv_record.record_ID > record_ID)).order_by(
+            adv_record.record_ID.desc()).limit(10).all()
+        ajax = []
+        for record in records:
+            driver = driver_account.query.get(record.driver_account_ID)
+            dic = record.to_json()
+            dic['phone'] = driver.phone
+            dic['user_name'] = driver.user_name
+            ajax.append(dic)
+        return json.dumps(ajax)
 
 
 @adv_bp.route('/ad_details/<int:adv_ID>/')

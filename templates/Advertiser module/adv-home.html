@@ -139,9 +139,9 @@
         $.get('/adv/get_history', function (data, status) {
             if (status = 'success') {
                 json = JSON.parse(data);
-                var page = 1
+                var page = 1;
                 for (var i = json.length; i > 0; i -= 5) {
-                    document.getElementById('page_tab').innerHTML += '<li><a href="" onclick="show_page(' + page + ')">' + page + '</a></li>';
+                    document.getElementById('page_tab').innerHTML += '<li><a href="#" onclick="show_page(' + page + ')">' + page + '</a></li>';
                     page++;
                 }
                 for (var i = 0; i < json.length && i < 5; i += 1) {
@@ -154,7 +154,8 @@
     function show_page(page) {
         document.getElementById('history').innerHTML = '';
         var end = page * 5;
-        for (var i = 0; i < json.length && i < end; i += 1) {
+        var start = (page - 1) * 5;
+        for (var i = start; i < json.length && i < end; i += 1) {
             show_table(json[i]['history'], json[i]['adv_ID'], json[i]['post_time'], json[i]['cost']);
         }
     }

@@ -26,7 +26,7 @@ class adv_info(db.Model):
     remark = db.Column('remark', db.String(50))
 
     def __init__(self, cost, amounts, start_date, start_time, end_time, location, advter_account_ID, adv_sum, img_flag,
-                 adv_text=None, img_src=None, remark=None):
+                 adv_text=None, img_src=None, remark=None, center=None):
         self.cost = cost
         self.amounts = amounts
         self.start_date = start_date
@@ -47,17 +47,46 @@ class adv_info(db.Model):
                 lng_all += point[0]
                 lat_all += point[1]
             center = [lng_all / len(location), lat_all / len(location)]
-        else:
-            center = location['points'][0]
-        self.center = str(center)
+        self.center = json.dumps(center)
         self.remark = remark
 
-    def check_in(self, lat, lng, meter):
-        points = json.loads(self.location)
+    def check_in_polygon(self, lat, lng, meter):
+        location = json.loads(self.location)
+        points = location['points']
         for point in points:
             if get_distance(lat, lng, point[1], point[0]) < meter / 1000.0:
                 return True
         return False
+
+    def check_in_round(self, lat, lng, meter):
+        location = json.loads(self.location)
+        points = location['points']
+        range = int(location['range'])
+        ajax = []
+        for point in points:
+            if get_distance(lat, lng, point[1], point[0]) < (range + meter) / 1000.0:
+                ajax.append(self.app_details(point))
+        return ajax
+
+    def app_details(self, round_center=None):
+        dic = {}
+        location = json.loads(self.location)
+        dic["adv_ID"] = self.adv_ID
+        dic['type'] = location['type']
+        if location['type'] == '1':
+            dic["points"] = location['points']
+        else:
+            dic['range'] = location['range']
+            dic['center_point'] = round_center
+        dic['flag'] = self.img_flag
+        dic['start_time'] = str(self.start_time)
+        dic['end_time'] = str(self.end_time)
+        dic['money'] = float(self.cost)
+        if self.img_flag:
+            dic['img_src'] = self.img_src
+        else:
+            dic['text'] = self.adv_text
+        return dic
 
     def check_time(self):
         now = time.strptime(time.strftime('%H:%M:%S'), '%H:%M:%S')
@@ -73,7 +102,7 @@ class adv_info(db.Model):
         dic['adv_ID'] = self.adv_ID
         dic['adv_amounts'] = self.amounts
         dic['adv_sum'] = self.adv_sum
-        dic['cost'] = float(self.cost.real)
+        dic['cost'] = float(self.cost)
         dic['date'] = str(self.start_date)
         advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
         dic['company'] = advter.company_name
@@ -104,11 +133,20 @@ class adv_info(db.Model):
                 location.append(gcj02tobd09(point[0], point[1]))
             dic['location'] = json.dumps(location)
         else:
-            dic['range'] = points[1]
+            location = []
+            for point in points:
+                location.append(gcj02tobd09(point[0], point[1]))
+            dic['points'] = json.dumps(location)
+            dic['range'] = location_json['range']
         advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
         dic['company_name'] = advter.company_name
         center = json.loads(self.center)
         dic['center'] = json.dumps(gcj02tobd09(center[0], center[1]))
+        dic['adv_sum'] = self.adv_sum
+        dic['start_time'] = str(self.start_time)
+        dic['end_time'] = str(self.end_time)
+        dic['date'] = str(self.start_date)
+        dic['cost'] = float(self.cost)
         if self.remark == None:
             dic['remark'] = '无'
         else:
@@ -219,13 +257,21 @@ class adv_record(db.Model):
         self.driver_account_ID = driver_account_ID
         self.play_time = time.localtime()
 
-    def check_play(self, second):
+    def check_play(self, second):  # 判断是否可以再次播放这条广告
         now = datetime.datetime.now()
         record_time = self.play_time.tm_hour + datetime.timedelta(seconds=second)
         if now <= record_time:
             return False
         else:
             return True
+
+    def to_json(self):
+        dic = {}
+        dic['record_ID'] = self.record_ID
+        dic['adv_ID'] = self.adv_ID
+        dic['driver_account_ID'] = self.driver_account_ID
+        dic['play_time'] = str(self.play_time)
+        return dic
 
 
 class adv_history(db.Model):

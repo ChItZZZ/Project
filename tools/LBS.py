@@ -66,6 +66,9 @@ def bd09togcj02(bd_lon, bd_lat):
     theta = math.atan2(y, x) - 0.000003 * math.cos(x * x_pi)
     gg_lng = z * math.cos(theta)
     gg_lat = z * math.sin(theta)
+
+    gg_lng=round(gg_lng,8)
+    gg_lat=round(gg_lat,8)
     return [gg_lng, gg_lat]
 
 

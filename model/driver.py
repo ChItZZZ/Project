@@ -79,7 +79,15 @@ class driver_account(db.Model):
         db.session.commit()
         return True
 
-    def check_driver(self,flag):
-        self.check_flag=flag
+    def money_change(self, money):
+        if float(self.account_money) + float(money) > 0:
+            self.account_money = float(self.account_money) + float(money)
+            db.session.commit()
+            return True
+        else:
+            return False
+
+    def check_driver(self, flag):
+        self.check_flag = flag
         db.session.commit()
         return True

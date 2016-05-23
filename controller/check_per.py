@@ -2,6 +2,7 @@ from functools import wraps
 from flask import redirect, url_for, session
 from model.message import message
 from sqlalchemy import *
+import json
 
 
 def admin_check_login(f):
@@ -71,7 +72,7 @@ def app_check_login(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'driver_account_id' not in session:
-            return '100'  # 尚未登录
+            return json.dumps({'status': '100'})  # 尚未登录
         else:
             return f(*args, **kwargs)
 

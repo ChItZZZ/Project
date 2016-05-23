@@ -7,14 +7,14 @@
     <title>MovingAD</title>
     <meta name="description" content="">
 
-    <link href="/Project/static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/Project/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/Project/static/css/style-home.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/style-home.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <style>
-        .security-list li:hover{
+        .security-list li:hover {
             background-color: lightgray;
             cursor: pointer;
         }
@@ -32,7 +32,7 @@
             </div>
         </header>
         <div class="profile-photo-container">
-            <img src="/Project/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
+            <img src="/static/images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">
             <div class="profile-photo-overlay"></div>
         </div>
         <div class="mobile-menu-icon">
@@ -40,7 +40,7 @@
         </div>
         <nav class="left-nav">
             <ul>
-                <li><a href="/adv/home" ><i class="fa fa-home fa-fw"></i>用户主页</a></li>
+                <li><a href="/adv/home"><i class="fa fa-home fa-fw"></i>用户主页</a></li>
                 <li><a href="/adv/security"><i class="fa fa-lock fa-fw" style="font-size: 17px"></i>安全中心</a></li>
                 <li><a href="/adv/ad_list"><i class="fa fa-list fa-fw"></i>广告明细</a></li>
                 <li><a href="/adv/adv_submit" class="active"><i class="fa fa-file fa-fw"></i>广告提交</a></li>
@@ -63,27 +63,23 @@
             </div>
         </div>
         <div class="indivisual-security-main">
-            <div class="indivisual-security-info col-md-12" style="padding: 40px 40px">
-                <p><strong >修改密码</strong></p>
-                <p>建议您启用全部安全设置,以保障账户安全</p>
-            </div>
             <div class="indivisual-security-body col-md-12">
                 <ul class="security-list">
                     <li>
                         <h4>
-                            <span>你可以通过以下方式找回登录密码</span>
+                            <span>你可以通过以下方式发布广告</span>
                         </h4>
                     </li>
                     <li style="border: 1px solid lightgray;padding: 20px">
-                        <h4 >
+                        <h4>
                             <strong style="display: block;line-height: 50px">多边形区域<span></span></strong>
-                            <a href="#" class="pull-right">选择 ></a>
+                            <a href="/adv/adv_submit_one/" class="pull-right">选择 ></a>
                         </h4>
                     </li>
                     <li style="border-bottom: 1px solid lightgray;padding: 20px">
                         <h4>
                             <strong style="display: block;line-height: 50px">多块区域+关键字<span></span></strong>
-                            <a href="#" class="pull-right">选择 ></a>
+                            <a href="/adv/advs_submit_many/" class="pull-right">选择 ></a>
                         </h4>
                     </li>
 
@@ -94,7 +90,7 @@
 </div>
 
 <!-- JS -->
-<script src="/Project/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
-<script src="/Project/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
+<script src="/static/js/jquery-1.11.1.min.js"></script>      <!-- jQuery -->
+<script src="/static/js/jquery-migrate-1.2.1.min.js"></script> <!--  jQuery Migrate Plugin -->
 </body>
 </html>
