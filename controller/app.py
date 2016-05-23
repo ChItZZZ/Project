@@ -121,7 +121,7 @@ def check_login():
 
 
 @app_bp.route('/get_advs/<int:meter>/<float:lng>/<float:lat>/')
-@app_check_login
+#@app_check_login
 def get_adv(meter, lat, lng):
     meter = max(meter, 30000)  # 最大30公里的范围
     now = time.localtime(time.time())
@@ -133,7 +133,7 @@ def get_adv(meter, lat, lng):
         if type == '1' and adv.check_in_polygon(lat, lng, meter):
             ajax.append(adv.app_details())
         elif type == '0':
-            ajax += adv.check_in_round(lat, lng, meter)
+            ajax.append(adv.check_in_round(lat, lng, meter))
     return json.dumps(ajax)
 
 

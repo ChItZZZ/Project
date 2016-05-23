@@ -62,13 +62,13 @@ class adv_info(db.Model):
         location = json.loads(self.location)
         points = location['points']
         range = int(location['range'])
-        ajax = []
+        dic = self.app_details()
         for point in points:
             if get_distance(lat, lng, point[1], point[0]) < (range + meter) / 1000.0:
-                ajax.append(self.app_details(point))
-        return ajax
+                dic['center_points'].append(point)
+        return dic
 
-    def app_details(self, round_center=None):
+    def app_details(self):
         dic = {}
         location = json.loads(self.location)
         dic["adv_ID"] = self.adv_ID
@@ -77,8 +77,8 @@ class adv_info(db.Model):
             dic["points"] = location['points']
         else:
             dic['range'] = location['range']
-            dic['center_point'] = round_center
-        dic['flag'] = self.img_flag
+            dic['center_points'] = []
+        dic['is_img'] = self.img_flag
         dic['start_time'] = str(self.start_time)
         dic['end_time'] = str(self.end_time)
         dic['money'] = float(self.cost)

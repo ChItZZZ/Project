@@ -338,6 +338,14 @@ def find_pay_pwd():
     return render_template('Drivers module/sec-find-pay-pwd.html', name=session['driver_user_name'],
                            count=session['message_count'], phone=session['phone'])
 
+#
+# @driver_bp.route('/change_phone/', methods=['POST', 'GET'])
+# @driver_check_login
+# @driver_check_message
+# def change_phone():
+#     return render_template('Drivers module/sec-phone.html', name=session['driver_user_name'],
+#                            count=session['message_count'], phone=session['phone'])
+
 
 @driver_bp.route('/get_forgot_pay_code/<int:phone>/')
 @driver_check_login
