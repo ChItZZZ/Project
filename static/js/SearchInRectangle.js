@@ -21,6 +21,8 @@
 
 var advs_submit_result = [];
 var advs_submit_hash = {};
+var center_lng = [];
+var center_lat = [];
 
 var BMapLib = window.BMapLib = BMapLib || {};
 
@@ -536,6 +538,9 @@ var BMapLib = window.BMapLib = BMapLib || {};
 
                 var pt1 = map.pixelToPoint(px1);
                 var pt2 = map.pixelToPoint(px2);
+                center_lng.push((pt1.lng + pt2.lng) / 2);
+                center_lat.push((pt1.lat + pt2.lat) / 2);//存储一个中心点坐标
+
                 var bds = new BMap.Bounds(pt1, pt2);
 
                 delete me._bind.dx;

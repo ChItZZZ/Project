@@ -196,6 +196,7 @@
                             </div>
                             <input type="text" name="location" style="display: none;" id="location"/>
                             <input type="text" name="remark" style="display: none;" id="remark"/>
+                            <input type="text" name="center" style="display: none;" id="center"/>
 
                         </div>
                     </div>
@@ -287,26 +288,26 @@
 <script>
 
     function get_rec() {
-        var lat = 0, lng = 0;
-        if (overlays.length == 0) {
+        if (center_lng.length == 0) {
             alert('请先选择范围!');
             document.getElementById("num").focus();
             document.getElementById("num").select();
-            //$('#cost').blur();
             return null;
         }
         else {
-            var lays = overlays[0]['ro'];
-            for (var i = 0; i < lays.length; i++) {
-                lat += lays[i].lat;
-                lng += lays[i].lng;
+
+            var centerlng = 0;
+            var centerlat = 0;
+            for (var i = 0; i < center_lng.length; i++) {
+                centerlng += center_lng[i];
+                centerlat += center_lat[i];
             }
-            lat /= lays.length;
-            lng /= lays.length;
-            var url = '/adv/get_rec_price/' + lat + '/' + lng + '/';
+            centerlng /= center_lng.length;
+            centerlat /= center_lat.length;//计算多个选区的中心
+            var url = '/adv/get_rec_price/' + centerlat + '/' + centerlng + '/';
             $.get(url, function (data, status) {
                 if (status == 'success') {
-                    $('#cost').attr('data-content', data);
+                    $('#cost').attr('data-content', data * Math.sqrt(center_lng.length));
                     $("[data-toggle='popover']").popover();
                 }
             })
@@ -396,6 +397,9 @@
         map.clearOverlays();
         advs_submit_hash = {};
         advs_submit_result = [];
+        remarks = {};
+        center_lng = [];
+        center_lat = [];
     });
 
     var remarks = {};
@@ -413,6 +417,15 @@
         }
         remark = remark.substring(0, remark.length - 1);
         remark = remark + '附近' + $('#distance').val() + '米';
+        var centerlng = 0;
+        var centerlat = 0;
+        for (var i = 0; i < center_lng.length; i++) {
+            centerlng += center_lng[i];
+            centerlat += center_lat[i];
+        }
+        centerlng /= center_lng.length;
+        centerlat /= center_lat.length;//计算多个选区的中心
+        document.getElementById('center').value = JSON.stringify([centerlng, centerlat]);
         document.getElementById('remark').value = remark;
         document.getElementById('location').value = JSON.stringify(advs_submit_result);
         document.getElementById('form1').submit();

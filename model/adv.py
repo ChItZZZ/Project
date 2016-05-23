@@ -26,7 +26,7 @@ class adv_info(db.Model):
     remark = db.Column('remark', db.String(50))
 
     def __init__(self, cost, amounts, start_date, start_time, end_time, location, advter_account_ID, adv_sum, img_flag,
-                 adv_text=None, img_src=None, remark=None):
+                 adv_text=None, img_src=None, remark=None, center=None):
         self.cost = cost
         self.amounts = amounts
         self.start_date = start_date
@@ -47,9 +47,7 @@ class adv_info(db.Model):
                 lng_all += point[0]
                 lat_all += point[1]
             center = [lng_all / len(location), lat_all / len(location)]
-        else:
-            center = location['points'][0]
-        self.center = str(center)
+        self.center = json.dumps(center)
         self.remark = remark
 
     def check_in(self, lat, lng, meter):
@@ -108,7 +106,7 @@ class adv_info(db.Model):
             for point in points:
                 location.append(gcj02tobd09(point[0], point[1]))
             dic['points'] = json.dumps(location)
-            dic['range']=location_json['range']
+            dic['range'] = location_json['range']
         advter = adv_account.query.filter_by(account_ID=self.advter_account_ID).first()
         dic['company_name'] = advter.company_name
         center = json.loads(self.center)

@@ -139,6 +139,8 @@ def check_adv_submit():
     for point in location:
         gcj02_loc.append(bd09togcj02(point[0], point[1]))
     loc = {'type': '1', 'points': gcj02_loc}  # type为1为多边形
+    if len(json.dumps(loc)) > 500:
+        return '<script>alert("选择点过多请重试");location.href="/adv/adv_submit_one/"</script>'
     date = datetime.strptime(request.form['date'], '%m/%d/%Y')
     start_time = time.strptime(request.form['start_time'], '%H:%M')
     end_time = time.strptime(request.form['end_time'], '%H:%M')
@@ -202,7 +204,11 @@ def check_advs_submit_many():
         gcj02_loc.append(bd09togcj02(point[0], point[1]))
     range = request.form['range']
     remark = request.form['remark']
+    center = json.loads(request.form['center'])
+    center = bd09togcj02(center[0], center[1])
     loc = {'type': '0', 'points': gcj02_loc, 'range': range}  # type为1为多边形
+    if len(json.dumps(loc)) > 500:
+        return '<script>alert("选择地点过多请重试");location.href="/adv/advs_submit_many/"</script>'
     date = datetime.strptime(request.form['date'], '%m/%d/%Y')
     start_time = time.strptime(request.form['start_time'], '%H:%M')
     end_time = time.strptime(request.form['end_time'], '%H:%M')
@@ -210,21 +216,21 @@ def check_advs_submit_many():
     adv_sum = request.form['adv_sum']
     advter = adv_account.query.filter_by(account_ID=session['adv_account_id']).first()
     if not advter.check_pay_pwd(request.form['pay-password']):
-        return '<script>alert("交易密码输入有误");location.href="/adv/adv_submit"</script>'
+        return '<script>alert("交易密码输入有误");location.href="/adv/advs_submit_many/"</script>'
     if advter.check_flag == None or advter.check_flag == False:
         return '<script>alert("尚未通过验证");location.href="/adv/home"</script>'
     if flag:
         img = request.files['adv_img']
         img_filename = secure_filename(img.filename)
         if '.' not in img_filename or img_filename.rsplit('.', 1)[1] not in app.config['ALLOW_FILE']:
-            return '<script>alert("非法后缀!");location.href="/adv/adv_submit"</script>'
+            return '<script>alert("非法后缀!");location.href="/adv/advs_submit_many/"</script>'
         img.save(os.path.join(app.root_path, 'static/image/adv_img', img_filename))
         adv = adv_info(cost, adv_count, date, start_time, end_time, loc, session['adv_account_id'], adv_sum, flag,
-                       img_src=img_filename, remark=remark)
+                       img_src=img_filename, remark=remark, center=center)
     else:
         adv_text = request.form['adv_text']
         adv = adv_info(cost, adv_count, date, start_time, end_time, loc, session['adv_account_id'], adv_sum, flag,
-                       adv_text, remark=remark)
+                       adv_text, remark=remark, center=center)
     if not advter.money_change(-1 * cost * adv_count):
         return '<script>alert("账号余额不足");location.href="/adv/home"</script>'
     else:
@@ -260,12 +266,12 @@ def get_rec_price(lat, lng):
         center = json.loads(adv.center)
         dis = get_distance(lat, lng, center[1], center[0])
         if dis < 1:
-            rec_price += dis * float(adv.cost.real)
+            rec_price += dis * float(adv.cost)
             times += dis
     if times == 0:
         return '0.05'
     else:
-        return str(rec_price / max(times, 1))
+        return str(round(rec_price / times, 3))
 
 
 @adv_bp.route('/security')
@@ -277,8 +283,7 @@ def security():
 @adv_bp.route('/get_history')
 @advter_check_login
 def get_history():
-    historys = adv_history.query.filter_by(advter_ID=session['adv_account_id']).all()
-    historys.reverse()
+    historys = adv_history.query.filter_by(advter_ID=session['adv_account_id']).order_by(adv_history.adv_ID.desc()).all()
     ajax = []
     for h in historys:
         ajax.append(h.to_json())
@@ -328,12 +333,6 @@ def get_notice():
 @advter_check_login
 def change_phone():
     return render_template('Advertiser module/sec-phone.html')
-
-
-@adv_bp.route('/adv_details')
-@advter_check_login
-def task_details():
-    return render_template('Advertiser module/')
 
 
 @adv_bp.route('/pay/<float:money>/')
