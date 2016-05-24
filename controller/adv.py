@@ -283,7 +283,8 @@ def security():
 @adv_bp.route('/get_history')
 @advter_check_login
 def get_history():
-    historys = adv_history.query.filter_by(advter_ID=session['adv_account_id']).order_by(adv_history.adv_ID.desc()).all()
+    historys = adv_history.query.filter_by(advter_ID=session['adv_account_id']).order_by(
+        adv_history.adv_ID.desc()).all()
     ajax = []
     for h in historys:
         ajax.append(h.to_json())
@@ -308,7 +309,7 @@ def check_change_pwd():
         advter.change_pwd(new_pwd)
         return '<script>alert("修改密码成功,请重新登录");location.href="/adv/logout"</script>'
     else:
-        return '<script>alert("密码有误,请重试");location.reload();</script>'
+        return '<script>alert("密码有误,请重试");location.href="/adv/change_pwd";</script>'
 
 
 @adv_bp.route('/notice')
@@ -360,7 +361,7 @@ def check_change_pay_pwd():
         advter.change_pay_pwd(new_pwd)
         return '<script>alert("修改支付密码成功!");location.href="/adv/home"</script>'
     else:
-        return '<script>alert("密码有误,请重试");location.reload();</script>'
+        return '<script>alert("密码有误,请重试");location.home="/adv/change_pay_pwd/"</script>'
 
 
 @adv_bp.route('/find_pay_pwd/', methods=['POST', 'GET'])
@@ -381,14 +382,27 @@ def get_forgot_pay_code(phone):
 
 @adv_bp.route('/check_forgot_pay_code/', methods=['POST', 'GET'])
 @advter_check_login
-def check_forgot_pay_code(phone):
-    forgot_code = request.form['forget_code']
-    ID = request.form['ID']
+def check_forgot_pay_code():
+    forgot_code = request.form['check_code']
+    ID = request.form['user_ID']
     advter = adv_account.query.get(session['adv_account_id'])
     if (advter.user_ID == ID and forgot_code == session['forget_code']):
-        return render_template('Advertiser module/')
+        session['forgot_pay_check_flag'] = True
+        return render_template('Advertiser module/sec-step2-pay.html', name=session['adv_charge_name'])
     else:
         return '<script>alert("验证码或身份证号码有误,请重试");location.href="/adv/security";</script>'
+
+
+@adv_bp.route('/check_forgot_pay_pwd/', methods=['POST', 'GET'])
+@advter_check_login
+def check_forgot_pay_pwd():
+    if 'forgot_pay_check_flag' in session and session['forgot_pay_check_flag'] == True:
+        new = request.form['new_pay_pwd']
+        advter = adv_account.query.get(session['adv_account_id'])
+        advter.change_pay_pwd(new)
+        return '<script>alert("修改支付密码成功!");location.href="/adv/home"</script>'
+    else:
+        return '<script>alert("非法访问!");location.href="/adv/home";</script>'
 
 
 @adv_bp.route('/ad_list/')

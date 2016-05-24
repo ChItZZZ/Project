@@ -70,7 +70,7 @@ def check_register():
     filename.append(car_pic_filename)
     for f in filename:
         if '.' not in f or f.rsplit('.', 1)[1] not in app.config['ALLOW_FILE']:
-            return '<script>alert("非法后缀!");location.href="/adv/login"</script>'
+            return '<script>alert("非法后缀!");location.href="/driver/register"</script>'
     ID_card_image.save(os.path.join(app.root_path, 'static/image/ID_card', ID_filename))
     permit_card_image.save(os.path.join(app.root_path, 'static/image/permit_card', permit_filename))
     car_image.save(os.path.join(app.root_path, 'static/image/car', car_pic_filename))
@@ -194,7 +194,7 @@ def check_change_pwd():
         driver.change_pwd(new_pwd)
         return '<script>alert("修改密码成功,请重新登录");location.href="/driver/logout"</script>'
     else:
-        return '<script>alert("密码有误,请重试");location.reload();</script>'
+        return '<script>alert("密码有误,请重试");location.href="/driver/change_pwd/";</script>'
 
 
 @driver_bp.route('/get_message')
@@ -328,7 +328,7 @@ def check_change_pay_pwd():
         driver.change_pay_pwd(new_pwd)
         return '<script>alert("修改支付密码成功!");location.href="/driver/home"</script>'
     else:
-        return '<script>alert("密码有误,请重试");location.reload();</script>'
+        return '<script>alert("密码有误,请重试");location.href="/driver/change_pay_pwd/";</script>'
 
 
 @driver_bp.route('/find_pay_pwd/', methods=['POST', 'GET'])
@@ -337,6 +337,14 @@ def check_change_pay_pwd():
 def find_pay_pwd():
     return render_template('Drivers module/sec-find-pay-pwd.html', name=session['driver_user_name'],
                            count=session['message_count'], phone=session['phone'])
+
+#
+# @driver_bp.route('/change_phone/', methods=['POST', 'GET'])
+# @driver_check_login
+# @driver_check_message
+# def change_phone():
+#     return render_template('Drivers module/sec-phone.html', name=session['driver_user_name'],
+#                            count=session['message_count'], phone=session['phone'])
 
 
 @driver_bp.route('/get_forgot_pay_code/<int:phone>/')
@@ -350,11 +358,27 @@ def get_forgot_pay_code(phone):
 
 @driver_bp.route('/check_forgot_pay_code/', methods=['POST', 'GET'])
 @driver_check_login
-def check_forgot_pay_code(phone):
-    forgot_code = request.form['forget_code']
-    ID = request.form['ID']
+@driver_check_message
+def check_forgot_pay_code():
+    forgot_code = request.form['check_code']
+    ID = request.form['user_ID']
     driver = driver_account.query.get(session['driver_account_id'])
     if (driver.user_ID == ID and forgot_code == session['forget_code']):
-        return render_template('Drivers module/')
+        session['forgot_pay_check_flag'] = True
+        return render_template('Drivers module/sec-step2-pay.html', name=session['driver_user_name'],
+                               count=session['message_count'])
     else:
         return '<script>alert("验证码或身份证号码有误,请重试");location.href="/driver/security";</script>'
+
+
+@driver_bp.route('/check_forgot_pay_pwd/', methods=['POST', 'GET'])
+@driver_check_login
+@driver_check_message
+def check_forgot_pay_pwd():
+    if 'forgot_pay_check_flag' in session and session['forgot_pay_check_flag'] == True:
+        new = request.form['new_pay_pwd']
+        driver = driver_account.query.get(session['driver_account_id'])
+        driver.change_pay_pwd(new)
+        return '<script>alert("修改支付密码成功!");location.href="/driver/home"</script>'
+    else:
+        return '<script>alert("非法访问!");location.href="/driver/security";</script>'
