@@ -259,7 +259,7 @@ class adv_record(db.Model):
 
     def check_play(self, second):  # 判断是否可以再次播放这条广告
         now = datetime.datetime.now()
-        record_time = self.play_time.tm_hour + datetime.timedelta(seconds=second)
+        record_time = self.play_time + datetime.timedelta(seconds=second)
         if now <= record_time:
             return False
         else:
