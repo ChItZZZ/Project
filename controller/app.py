@@ -121,7 +121,7 @@ def check_login():
 
 
 @app_bp.route('/get_advs/<int:meter>/<float:lng>/<float:lat>/')
-#@app_check_login
+@app_check_login
 def get_adv(meter, lat, lng):
     meter = max(meter, 30000)  # 最大30公里的范围
     now = time.localtime(time.time())
