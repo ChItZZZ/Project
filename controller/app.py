@@ -211,3 +211,11 @@ def get_money(money):
 def logout():
     session.clear()
     return json.dumps({'status': '205'})
+
+
+@app_bp.route('/del_by_phone/<int:phone>')
+def del_by_phone(phone):
+    driver = driver_account.query.filter_by(phone=phone).first()
+    db.session.delete(driver)
+    db.session.commit()
+    return json.dumps({'status': '700'})  # 删除成功
