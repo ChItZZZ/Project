@@ -124,7 +124,8 @@ def check_forgot_code():
         advter = adv_account.query.filter_by(phone=phone).first()
         pwd = get_salt(8)
         advter.change_pwd(pwd)
-        return '<script>alert("您的新密码为{0},请登陆后尽快修改");location.href="/adv/login"</script>'.format(pwd)
+        tool.send_new_password(pwd, advter.charge_name, phone)
+        return '<script>alert("您的新密码为已发送至手机,请登陆后尽快修改");location.href="/adv/login"</script>'
     else:
         return '<script>alert("手机号或验证码有误,请重试");location.href="/adv/forgot_pwd"</script>'
 

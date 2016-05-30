@@ -43,3 +43,8 @@ class ali_message_tools:
         sms_param = {"product": "MovineAD", "code": code}
         self.set_para("登录验证", sms_param, phone, "SMS_7495115")
         return self.send_message()
+
+    def send_new_password(self, password, username, phone):
+        sms_param = {"product": "MovineAD", "password": password, 'name': username}
+        self.set_para("变更通知", sms_param, phone, "SMS_9666578")
+        return self.send_message()
