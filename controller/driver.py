@@ -124,7 +124,8 @@ def check_forgot_pwd():
         driver = driver_account.query.filter_by(phone=phone).first()
         pwd = get_salt(8)
         driver.change_pwd(pwd)
-        return '<script>alert("您的新密码为{0},请登陆后尽快修改");location.href="/driver/login"</script>'.format(pwd)
+        tool.send_new_password(pwd, driver.user_name, phone)
+        return '<script>alert("您的新密码为已发送至手机,请登陆后尽快修改");location.href="/driver/login"</script>'
     else:
         return '<script>alert("手机号或验证码有误,请重试")</script>'
 
@@ -337,6 +338,7 @@ def check_change_pay_pwd():
 def find_pay_pwd():
     return render_template('Drivers module/sec-find-pay-pwd.html', name=session['driver_user_name'],
                            count=session['message_count'], phone=session['phone'])
+
 
 #
 # @driver_bp.route('/change_phone/', methods=['POST', 'GET'])
