@@ -19,6 +19,9 @@ app_bp = Blueprint('app', __name__)
 
 @app_bp.route('/check_register/', methods=['POST', 'GET'])
 def check_register():
+    driver = driver_account.query.filter(driver_account.phone == session['register_phone'])
+    if driver == []:
+        return json.dumps({'status': '310'})
     try:
         user_id = request.values.get('userID')  # 身份证号
         phone = session['register_phone']
