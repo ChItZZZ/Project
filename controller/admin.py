@@ -327,7 +327,7 @@ def send_notice():
     title = request.form['title']
     text = request.form['text']
     type = request.form['optionsRadios']
-    date = request.form['date']
+    date = request.form['date'].spilt('至')[1]
     type_dic = {'allusers': 1, 'adusers': 2, 'drivers': 3}
     n = sys_notice(title, text, type_dic[type], date)
     db.session.add(n)

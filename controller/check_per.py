@@ -48,7 +48,7 @@ def admin_check_message(f):
     def decorated_function(*args, **kwargs):
         admin_ID = session['admin_account_id']
         number = message.query.filter(
-            and_(message.receiver_ID == admin_ID, message.flag == False, message.read_flag == False)).all()
+            and_(message.flag == False, message.read_flag == False)).all()
         length = len(number)
         session['admin_message'] = length > 0
 

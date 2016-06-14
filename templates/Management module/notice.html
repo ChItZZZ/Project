@@ -113,7 +113,7 @@
         <div class="panel panel-default">
             <div class="panel-heading"><span class="glyphicon glyphicon-envelope"></span> 发送系统通知</div>
             <div class="panel-body">
-                <form class="form-horizontal" action="/admin/send_notice" method="post">
+                <form class="form-horizontal" action="/admin/send_notice" method="post" id="form1">
                     <fieldset>
                         <!-- Name input-->
                         <div class="form-group">
@@ -147,6 +147,7 @@
                             <div class="col-md-9">
                                 <div class="ta_date" id="div_date_demo3">
                                     <span class="date_title" id="date_demo3"></span>
+                                    <input name="date" id="date_a" type="text" style="display:none">
                                     <a class="opt_sel" id="input_trigger_demo3" href="#">
                                         <i class="i_orderd"></i>
                                     </a>
@@ -157,7 +158,9 @@
                         <!-- Form actions -->
                         <div class="form-group">
                             <div class="col-md-12 widget-right">
-                                <button type="submit" class="btn btn-default btn-md pull-right">发送通知</button>
+                                <button type="button" class="btn btn-default btn-md pull-right"
+                                        onclick="submit_notice()">发送通知
+                                </button>
                             </div>
                         </div>
                     </fieldset>
@@ -289,6 +292,11 @@
             $("#dCon_demo3").html('开始时间 : ' + obj.startDate + '<br/>结束时间 : ' + obj.endDate);
         }
     });
+
+    function submit_notice() {
+        document.getElementById('date_a').value = document.getElementById('date_demo3').innerText;
+        document.getElementById('form1').submit();
+    }
 
 </script>
 
