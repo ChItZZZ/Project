@@ -143,14 +143,14 @@ def post_adv(adv_ID):
     driver_account_ID = session['driver_account_id']
     driver = driver_account.query.filter_by(account_ID=driver_account_ID).first()
     adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
-    if adv == None or adv.check_flag != True:
+    if adv == None or adv.check_flag != True or driver.check != True:
         return json.dumps({'status': '440'})  # 广告不存在或尚未经过审核
     if adv.amounts > 0:
         if not adv.check_time():
             return json.dumps({'status': '430'})  # 时间不对
         records = adv_record.query.filter(
             and_(adv_record.driver_account_ID == driver_account_ID, adv_record.adv_ID == adv_ID)).all()
-        if records == [] or records[-1].check_play(3600):  # 同一条广告3600秒内同一个人最多发布一次
+        if records == [] or records[-1].check_play(36):  # 同一条广告3600秒内同一个人最多发布一次
             adv.amounts -= 1
             driver.account_money += adv.cost
             record = adv_record(adv_ID, driver_account_ID)

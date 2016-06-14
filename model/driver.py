@@ -36,6 +36,7 @@ class driver_account(db.Model):
         self.card_pic = card_pic
         self.permit_pic = permit_pic
         self.car_pic = car_pic
+        self.pay_password = hashlib.md5((password + self.salt).encode('ascii')).hexdigest()
 
     def check(self, password):
         password = hashlib.md5((password + self.salt).encode('ascii')).hexdigest()
