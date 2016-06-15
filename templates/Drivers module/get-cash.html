@@ -268,10 +268,10 @@
                 data = JSON.parse(data);
                 if (data['status'] == '600') {
                     alert('取现成功!');
-                    location.href = '/driver/home/'
+                    location.href = '/driver/home'
                 } else if (data['status'] == '610') {
                     alert('余额不足!');
-                    location.href = '/driver/get_cash/'
+                    location.href = '/driver/get_cash'
                 } else if (data['status'] == '620') {
                     alert('密码错误!');
                 }
