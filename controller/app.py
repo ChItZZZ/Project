@@ -200,6 +200,7 @@ def get_records():
 def get_money(money):
     driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
     pay_password = request.values.get('pay_pwd')
+    print(driver.phone, pay_password)
     if driver.check_pay_pwd(pay_password):
         if driver.money_change(-1 * money):
             session['driver_account'] = driver.to_json()
