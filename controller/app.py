@@ -194,6 +194,7 @@ def get_records():
     return json.dumps(ajax)
 
 
+@app_bp.route('/get_money/<int:money>/', methods=['POST', 'GET'])
 @app_bp.route('/get_money/<float:money>/', methods=['POST', 'GET'])
 @app_check_login
 def get_money(money):
