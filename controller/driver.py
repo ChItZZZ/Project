@@ -283,6 +283,7 @@ def get_records_by_page(page):
     records = records[10 * page:10 * page + 10]
     for record in records:
         dic = {}
+        i += 1
         adv = adv_info.query.filter_by(adv_ID=record.adv_ID).first()
         dic['NO'] = i
         dic['adv_text'] = adv.adv_sum
