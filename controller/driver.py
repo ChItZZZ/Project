@@ -278,8 +278,8 @@ def get_records_by_page(page):
     account_ID = session['driver_account_id']
     records = adv_record.query.filter_by(driver_account_ID=account_ID).all()
     ajax = []
-    i = 0
     page -= 1
+    i = page*10
     records = records[10 * page:10 * page + 10]
     for record in records:
         dic = {}
