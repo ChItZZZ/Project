@@ -19,6 +19,9 @@ app_bp = Blueprint('app', __name__)
 
 @app_bp.route('/check_register/', methods=['POST', 'GET'])
 def check_register():
+    driver = driver_account.query.filter(driver_account.phone == session['register_phone'])
+    if driver != []:
+        return json.dumps({'status': '310'})
     try:
         user_id = request.values.get('userID')  # 身份证号
         phone = session['register_phone']
@@ -143,14 +146,14 @@ def post_adv(adv_ID):
     driver_account_ID = session['driver_account_id']
     driver = driver_account.query.filter_by(account_ID=driver_account_ID).first()
     adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
-    if adv == None or adv.check_flag != True:
+    if adv == None or adv.check_flag != True or driver.check_flag != True:
         return json.dumps({'status': '440'})  # 广告不存在或尚未经过审核
     if adv.amounts > 0:
         if not adv.check_time():
             return json.dumps({'status': '430'})  # 时间不对
         records = adv_record.query.filter(
             and_(adv_record.driver_account_ID == driver_account_ID, adv_record.adv_ID == adv_ID)).all()
-        if records == [] or records[-1].check_play(3600):  # 同一条广告3600秒内同一个人最多发布一次
+        if records == [] or records[-1].check_play(36):  # 同一条广告3600秒内同一个人最多发布一次
             adv.amounts -= 1
             driver.account_money += adv.cost
             record = adv_record(adv_ID, driver_account_ID)
@@ -191,11 +194,13 @@ def get_records():
     return json.dumps(ajax)
 
 
+@app_bp.route('/get_money/<int:money>/', methods=['POST', 'GET'])
 @app_bp.route('/get_money/<float:money>/', methods=['POST', 'GET'])
 @app_check_login
 def get_money(money):
     driver = driver_account.query.filter_by(account_ID=session['driver_account_id']).first()
     pay_password = request.values.get('pay_pwd')
+    #print(driver.phone, pay_password)
     if driver.check_pay_pwd(pay_password):
         if driver.money_change(-1 * money):
             session['driver_account'] = driver.to_json()
