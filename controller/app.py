@@ -146,7 +146,7 @@ def post_adv(adv_ID):
     driver_account_ID = session['driver_account_id']
     driver = driver_account.query.filter_by(account_ID=driver_account_ID).first()
     adv = adv_info.query.filter_by(adv_ID=adv_ID).first()
-    if adv == None or adv.check_flag != True or driver.check != True:
+    if adv == None or adv.check_flag != True or driver.check_flag != True:
         return json.dumps({'status': '440'})  # 广告不存在或尚未经过审核
     if adv.amounts > 0:
         if not adv.check_time():
